@@ -21,7 +21,7 @@ const Navbar = () => {
     { name: 'Accueil', href: '/#hero' },
     { name: 'À Propos', href: '/#about' },
     { name: 'Collection', href: '/#collection' },
-    { name: 'Sur-Mesure', href: '/sur-mesure' },
+    { name: 'Sur-mesure', href: '/sur-mesure' },
     { name: 'Services', href: '/#services' },
     { name: 'Tarifs', href: '/#pricing' },
     { name: 'Contact', href: '/#contact' },
@@ -33,7 +33,7 @@ const Navbar = () => {
       <motion.div
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className={`fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 text-white transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night text-white transition-all duration-300 ${
           isScrolled ? 'py-1.5 md:py-2' : 'py-2 md:py-2'
         }`}
       >
@@ -43,14 +43,14 @@ const Navbar = () => {
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <Sparkles size={14} className="text-yellow-300 flex-shrink-0" />
+            <Sparkles size={14} className="text-brand-gold flex-shrink-0" />
             <span className="font-semibold text-[10px] md:text-sm">
-              <span className="hidden sm:inline">Location 60€ • Achat dès 180€ • Sur-Mesure dès 220€ 🎉</span>
-              <span className="sm:hidden">60€ • 180€ • 220€ 🎉</span>
+              <span className="hidden sm:inline">Location 60€ - Achat dès 180€ - Sur-mesure dès 220€</span>
+              <span className="sm:hidden">60€ - 180€ - 220€</span>
             </span>
           </motion.div>
           <div className="hidden md:flex items-center space-x-4">
-            <a href="tel:+33612345678" className="flex items-center space-x-2 hover:text-yellow-300 transition-colors">
+            <a href="tel:+33612345678" className="flex items-center space-x-2 hover:text-brand-gold transition-colors">
               <Phone size={16} />
               <span>+33 6 12 34 56 78</span>
             </a>
@@ -65,7 +65,7 @@ const Navbar = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className={`fixed left-0 right-0 z-40 transition-all duration-700 ${
           isSolid
-            ? 'top-6 md:top-6 bg-white/95 backdrop-blur-2xl shadow-2xl border-b border-pink-100'
+            ? 'top-6 md:top-6 bg-brand-ivory/95 backdrop-blur-2xl shadow-2xl border-b border-brand-goldSoft/60'
             : 'top-5 md:top-6 bg-transparent'
         }`}
       >
@@ -86,11 +86,11 @@ const Navbar = () => {
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 rounded-full blur-md opacity-75"
+                  className="absolute inset-0 bg-gradient-to-r from-brand-gold via-brand-goldSoft to-brand-forest rounded-full blur-md opacity-75"
                 />
                 <div className={`relative w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center overflow-hidden transition-all duration-500 ${
                   isSolid 
-                    ? 'bg-gradient-to-br from-rose-600 via-pink-600 to-purple-600 shadow-lg' 
+                    ? 'bg-gradient-to-br from-brand-forest via-brand-forestLight to-brand-night shadow-lg' 
                     : 'bg-white/10 backdrop-blur-xl border-2 border-white/30 shadow-2xl'
                 }`}>
                   <motion.span 
@@ -120,7 +120,7 @@ const Navbar = () => {
                 <motion.span
                   className={`text-lg md:text-2xl font-bold font-serif transition-all duration-500 ${
                     isSolid 
-                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600' 
+                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-brand-forest to-brand-gold' 
                       : 'text-white drop-shadow-lg'
                   }`}
                 >
@@ -131,7 +131,7 @@ const Navbar = () => {
                     isSolid ? 'text-gray-600' : 'text-white/90'
                   }`}
                 >
-                  ✨ LOCATION & VENTE
+                  LOCATION & VENTE
                 </motion.span>
               </div>
             </motion.a>
@@ -147,8 +147,8 @@ const Navbar = () => {
                   transition={{ delay: 0.1 * index, duration: 0.5 }}
                   className={`relative px-5 py-2.5 font-medium transition-all duration-300 rounded-lg group ${
                     isSolid 
-                      ? 'text-gray-700 hover:text-rose-600' 
-                      : 'text-white hover:text-yellow-300'
+                      ? 'text-brand-ink hover:text-brand-forest' 
+                      : 'text-brand-ivory hover:text-brand-gold'
                   }`}
                 >
                   <span className="relative z-10">{link.name}</span>
@@ -157,7 +157,7 @@ const Navbar = () => {
                   <motion.div
                     className={`absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
                       isSolid
-                        ? 'bg-gradient-to-r from-rose-50 to-pink-50'
+                        ? 'bg-gradient-to-r from-brand-goldSoft/40 to-brand-sand/40'
                         : 'bg-white/10 backdrop-blur-sm'
                     }`}
                     whileHover={{ scale: 1.05 }}
@@ -165,7 +165,7 @@ const Navbar = () => {
                   
                   {/* Ligne animée en dessous */}
                   <motion.span 
-                    className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-rose-600 to-purple-600 ${
+                    className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-brand-gold to-brand-forest ${
                       isSolid ? '' : 'opacity-80'
                     }`}
                     initial={{ width: 0 }}
@@ -184,8 +184,8 @@ const Navbar = () => {
                 whileTap={{ scale: 0.95 }}
                 className={`relative px-6 md:px-8 py-2.5 md:py-3.5 rounded-full font-semibold overflow-hidden group transition-all duration-500 text-sm md:text-base ${
                   isSolid
-                    ? 'bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 text-white shadow-lg hover:shadow-2xl'
-                    : 'bg-white text-rose-600 shadow-2xl'
+                    ? 'bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night text-white shadow-lg hover:shadow-2xl'
+                    : 'bg-brand-ivory text-brand-forest shadow-2xl'
                 }`}
               >
                 <span className="relative z-10 flex items-center space-x-2">
@@ -210,7 +210,7 @@ const Navbar = () => {
             >
               <div className={`p-1.5 md:p-2 rounded-lg transition-all duration-300 ${
                 isSolid 
-                  ? 'bg-gradient-to-r from-rose-100 to-pink-100' 
+                  ? 'bg-gradient-to-r from-brand-goldSoft/40 to-brand-sand/40' 
                   : 'bg-white/10 backdrop-blur-sm'
               }`}>
                 <AnimatePresence mode="wait">
@@ -232,7 +232,7 @@ const Navbar = () => {
                       exit={{ rotate: -90, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <Menu className={isSolid ? 'text-rose-600' : 'text-white'} size={24} />
+                      <Menu className={isSolid ? 'text-brand-forest' : 'text-brand-ivory'} size={24} />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -256,7 +256,7 @@ const Navbar = () => {
               initial={{ backdropFilter: 'blur(0px)' }}
               animate={{ backdropFilter: 'blur(20px)' }}
               exit={{ backdropFilter: 'blur(0px)' }}
-              className="absolute inset-0 bg-gradient-to-br from-rose-900/95 via-pink-900/95 to-purple-900/95"
+              className="absolute inset-0 bg-gradient-to-br from-brand-night/95 via-[#16191f]/95 to-brand-forest/95"
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
@@ -271,7 +271,7 @@ const Navbar = () => {
               <div className="p-8 pt-20">
                 {/* Logo dans le menu mobile */}
                 <div className="mb-12 text-center">
-                  <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-purple-600">
+                  <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-forest to-brand-gold">
                     SO Caftan
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">Location & Vente</p>
@@ -287,16 +287,16 @@ const Navbar = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.1 * index }}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-6 py-4 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-rose-50 hover:to-pink-50 hover:text-rose-600 font-medium transition-all duration-300 group"
+                      className="block px-6 py-4 rounded-xl text-brand-ink hover:bg-gradient-to-r hover:from-brand-goldSoft/40 hover:to-brand-sand/40 hover:text-brand-forest font-medium transition-all duration-300 group"
                     >
                       <div className="flex items-center justify-between">
                         <span>{link.name}</span>
                         <motion.span
                           initial={{ x: -10, opacity: 0 }}
                           whileHover={{ x: 0, opacity: 1 }}
-                          className="text-rose-600"
+                          className="text-brand-forest"
                         >
-                          →
+                          >
                         </motion.span>
                       </div>
                     </motion.a>
@@ -310,7 +310,7 @@ const Navbar = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="mt-8 block w-full bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 text-white text-center py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300"
+                  className="mt-8 block w-full bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night text-white text-center py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transition-all duration-300"
                 >
                   <span className="flex items-center justify-center space-x-2">
                     <Sparkles size={20} />
@@ -326,7 +326,7 @@ const Navbar = () => {
                   className="mt-8 pt-8 border-t border-gray-200 text-center"
                 >
                   <p className="text-sm text-gray-600 mb-2">Une question ?</p>
-                  <a href="tel:+33612345678" className="text-rose-600 font-semibold flex items-center justify-center space-x-2">
+                  <a href="tel:+33612345678" className="text-brand-forest font-semibold flex items-center justify-center space-x-2">
                     <Phone size={18} />
                     <span>+33 6 12 34 56 78</span>
                   </a>

@@ -22,7 +22,7 @@ function Loader() {
   return (
     <Html center>
       <div className="flex flex-col items-center gap-4">
-        <Loader2 className="animate-spin text-rose-600" size={48} />
+        <Loader2 className="animate-spin text-brand-gold" size={48} />
         <div className="text-center">
           <p className="text-white font-bold text-lg">{Math.round(progress)}%</p>
           <p className="text-gray-400 text-sm">Chargement du mannequin...</p>
@@ -98,9 +98,9 @@ function MannequinWithCaftan({ configuration }) {
   }, [configuration.fabric, configuration.colorHex])
 
   // Calcul de la longueur
-  const lengthScale = configuration.length === 'Courte (120cm)' ? 0.7 :
-                      configuration.length === 'Standard (150cm)' ? 1 :
-                      configuration.length === 'Longue (160cm)' ? 1.1 : 1.15
+  const lengthScale = configuration.length === 'Courte (120 cm)' ? 0.7 :
+                      configuration.length === 'Standard (150 cm)' ? 1 :
+                      configuration.length === 'Longue (160 cm)' ? 1.1 : 1.15
   const broderieCount = configuration.broderies === 'Sans broderie'
     ? 0
     : configuration.broderies === 'Broderie Luxe'
@@ -289,7 +289,7 @@ const Custom3D = () => {
     col: 'Col Rond',
     manches: 'Manches Longues',
     coupe: 'Droite',
-    length: 'Standard (150cm)',
+    length: 'Standard (150 cm)',
     broderies: 'Sans broderie',
     couleurBroderie: '#FFD700',
     finitions: [],
@@ -298,30 +298,30 @@ const Custom3D = () => {
   })
 
   const categories = [
-    { id: 'style', name: 'Style', icon: <Package size={18} />, color: 'from-rose-600 to-pink-600' },
-    { id: 'tissu', name: 'Tissu', icon: <Scissors size={18} />, color: 'from-purple-600 to-indigo-600' },
-    { id: 'couleur', name: 'Couleur', icon: <Palette size={18} />, color: 'from-amber-600 to-yellow-600' },
-    { id: 'forme', name: 'Forme', icon: <Shirt size={18} />, color: 'from-blue-600 to-cyan-600' },
-    { id: 'details', name: 'Détails', icon: <Sparkles size={18} />, color: 'from-emerald-600 to-teal-600' },
-    { id: 'finitions', name: 'Finitions', icon: <Gem size={18} />, color: 'from-pink-600 to-rose-600' },
+    { id: 'style', name: 'Style', icon: <Package size={18} />, color: 'from-brand-forest to-brand-night' },
+    { id: 'tissu', name: 'Tissu', icon: <Scissors size={18} />, color: 'from-brand-clay to-brand-gold' },
+    { id: 'couleur', name: 'Couleur', icon: <Palette size={18} />, color: 'from-brand-gold to-brand-sand' },
+    { id: 'forme', name: 'Forme', icon: <Shirt size={18} />, color: 'from-brand-forestLight to-brand-night' },
+    { id: 'details', name: 'Détails', icon: <Sparkles size={18} />, color: 'from-brand-clay to-brand-forest' },
+    { id: 'finitions', name: 'Finitions', icon: <Gem size={18} />, color: 'from-brand-forest to-brand-gold' },
   ]
 
   const options = {
     style: {
       type: [
-        { name: 'Caftan', image: '🥻', desc: 'Traditionnel élégant' },
-        { name: 'Karakou', image: '👘', desc: 'Style moderne' },
-        { name: 'Takchita', image: '👗', desc: 'Deux pièces luxe' },
+        { name: 'Caftan', image: 'CF', desc: 'Traditionnel élégant' },
+        { name: 'Karakou', image: 'KR', desc: 'Style moderne' },
+        { name: 'Takchita', image: 'TK', desc: 'Deux pièces luxe' },
       ]
     },
     tissu: {
       fabric: [
-        { name: 'Satin', description: 'Élégant et fluide', icon: '✨', price: 0 },
-        { name: 'Velours', description: 'Noble et luxueux', icon: '👑', price: 30 },
-        { name: 'Soie', description: 'Premium et délicat', icon: '💎', price: 80 },
-        { name: 'Brocart', description: 'Tissage royal', icon: '🏆', price: 100 },
-        { name: 'Organza', description: 'Transparent et léger', icon: '🌸', price: 60 },
-        { name: 'Dentelle', description: 'Romantique et raffiné', icon: '🦋', price: 70 },
+        { name: 'Satin', description: 'Élégant et fluide', icon: 'SA', price: 0 },
+        { name: 'Velours', description: 'Noble et luxueux', icon: 'VE', price: 30 },
+        { name: 'Soie', description: 'Premium et délicat', icon: 'SO', price: 80 },
+        { name: 'Brocart', description: 'Tissage royal', icon: 'BR', price: 100 },
+        { name: 'Organza', description: 'Transparent et léger', icon: 'OR', price: 60 },
+        { name: 'Dentelle', description: 'Romantique et raffiné', icon: 'DE', price: 70 },
       ]
     },
     couleur: {
@@ -329,11 +329,11 @@ const Custom3D = () => {
         { name: 'Bordeaux', hex: '#800020' },
         { name: 'Or', hex: '#FFD700' },
         { name: 'Émeraude', hex: '#50C878' },
-        { name: 'Bleu Royal', hex: '#002366' },
-        { name: 'Rose Poudré', hex: '#F4C2C2' },
+        { name: 'Bleu royal', hex: '#002366' },
+        { name: 'Rose poudré', hex: '#F4C2C2' },
         { name: 'Noir', hex: '#000000' },
-        { name: 'Blanc Ivoire', hex: '#FFFFF0' },
-        { name: 'Violet Impérial', hex: '#5F0F8B' },
+        { name: 'Blanc ivoire', hex: '#FFFFF0' },
+        { name: 'Violet impérial', hex: '#5F0F8B' },
         { name: 'Turquoise', hex: '#40E0D0' },
         { name: 'Corail', hex: '#FF7F50' },
         { name: 'Argent', hex: '#C0C0C0' },
@@ -365,10 +365,10 @@ const Custom3D = () => {
         { name: 'Ajustée', desc: 'Coupe près du corps' },
       ],
       length: [
-        { name: 'Courte (120cm)', price: -15 },
-        { name: 'Standard (150cm)', price: 0 },
-        { name: 'Longue (160cm)', price: 20 },
-        { name: 'Très longue (170cm)', price: 30 },
+        { name: 'Courte (120 cm)', price: -15 },
+        { name: 'Standard (150 cm)', price: 0 },
+        { name: 'Longue (160 cm)', price: 20 },
+        { name: 'Très longue (170 cm)', price: 30 },
       ]
     },
     details: {
@@ -443,35 +443,35 @@ const Custom3D = () => {
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-[#fafafa] via-white to-[#f8f8f8] pt-36 pb-16">
+    <section id="custom" className="min-h-screen bg-gradient-to-b from-brand-ivory via-brand-mist to-brand-ivory pt-36 pb-16">
       <div className="container mx-auto px-4">
         
         {/* Banner */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-5xl mx-auto mb-8 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-2 border-amber-200 rounded-3xl p-6 shadow-xl"
+          className="max-w-5xl mx-auto mb-8 bg-gradient-to-r from-brand-ivory via-brand-goldSoft/30 to-brand-ivory border-2 border-brand-gold/30 rounded-3xl p-6 shadow-xl"
         >
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 bg-brand-gold rounded-full flex items-center justify-center flex-shrink-0">
               <Info className="text-white" size={24} />
             </div>
             <div className="flex-1">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">🎨 Configurateur 3D Professionnel</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Configurateur 3D professionnel</h3>
               <p className="text-gray-700 leading-relaxed mb-3">
-                Créez votre caftan unique avec notre système de personnalisation avancé. Plus de <strong>100 combinaisons</strong> possibles !
+                Créez votre caftan unique avec notre système de personnalisation avancé. Plus de <strong>100 combinaisons</strong> possibles.
               </p>
               <div className="flex flex-wrap gap-3 text-sm">
                 <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full">
-                  <Clock size={14} className="text-amber-600" />
+                  <Clock size={14} className="text-brand-forest" />
                   <span className="text-gray-700">4-6 semaines</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full">
-                  <Award size={14} className="text-amber-600" />
-                  <span className="text-gray-700">100% Sur-Mesure</span>
+                  <Award size={14} className="text-brand-forest" />
+                  <span className="text-gray-700">100% sur-mesure</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full">
-                  <Sparkles size={14} className="text-amber-600" />
+                  <Sparkles size={14} className="text-brand-forest" />
                   <span className="text-gray-700">Acompte 50%</span>
                 </div>
               </div>
@@ -485,8 +485,8 @@ const Custom3D = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-3">Atelier Sur-Mesure</h2>
-          <p className="text-gray-600 text-lg">Plus de 6 catégories de personnalisation • Rendu 3D temps réel</p>
+          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-3">Atelier sur-mesure</h2>
+          <p className="text-gray-600 text-lg">Plus de 6 catégories de personnalisation - Rendu 3D temps réel</p>
         </motion.div>
 
         {/* Navigation par catégories */}
@@ -499,7 +499,7 @@ const Custom3D = () => {
                 className={`flex-shrink-0 flex items-center gap-2 px-5 py-3 rounded-2xl font-semibold transition-all ${
                   currentCategory === cat.id
                     ? `bg-gradient-to-r ${cat.color} text-white shadow-lg scale-105`
-                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-gray-300'
+                    : 'bg-white/80 text-brand-ink border-2 border-brand-gold/20 hover:border-brand-gold/50'
                 }`}
               >
                 {cat.icon}
@@ -522,7 +522,7 @@ const Custom3D = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
-                    className="rounded-3xl bg-white p-6 shadow-xl border border-gray-100"
+                    className="rounded-3xl bg-white p-6 shadow-xl border border-brand-gold/20"
                   >
                     <h3 className="text-lg font-bold text-gray-900 mb-4 capitalize">{optKey}</h3>
                     <div className={`grid gap-3 ${optKey === 'color' || optKey === 'couleurBroderie' || optKey === 'couleurCeinture' ? 'grid-cols-4' : optKey === 'type' ? 'grid-cols-3' : 'grid-cols-1'}`}>
@@ -532,8 +532,8 @@ const Custom3D = () => {
                           onClick={() => handleOptionSelect(optKey, opt.name, opt.hex)}
                           className={`p-3 rounded-2xl border-2 transition-all ${
                             (Array.isArray(configuration[optKey]) ? configuration[optKey].includes(opt.name) : configuration[optKey] === opt.name)
-                              ? 'border-rose-500 bg-gradient-to-br from-rose-50 to-pink-50 shadow-lg'
-                              : 'border-gray-200 bg-gray-50 hover:border-rose-300'
+                              ? 'border-brand-gold bg-gradient-to-br from-brand-goldSoft/30 to-brand-sand/30 shadow-lg'
+                              : 'border-gray-200 bg-gray-50 hover:border-brand-gold/60'
                           }`}
                         >
                           {opt.hex ? (
@@ -543,22 +543,29 @@ const Custom3D = () => {
                             </div>
                           ) : opt.image ? (
                             <div className="flex flex-col items-center gap-2">
-                              <span className="text-3xl">{opt.image}</span>
+                              <span className="text-xl font-bold tracking-[0.3em] text-brand-forest">{opt.image}</span>
                               <span className="text-xs font-bold text-gray-900">{opt.name}</span>
                               <span className="text-[10px] text-gray-500">{opt.desc}</span>
                             </div>
                           ) : (
-                            <div className="text-left">
-                              <div className="flex items-center justify-between mb-1">
-                                <span className="text-sm font-bold text-gray-900">{opt.name}</span>
-                                {opt.price !== undefined && opt.price !== 0 && (
-                                  <span className={`text-xs font-bold ${opt.price > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                                    {opt.price > 0 ? '+' : ''}{opt.price}€
-                                  </span>
-                                )}
+                            <div className="flex items-start gap-3 text-left">
+                              {opt.icon && (
+                                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-ivory text-brand-forest text-[10px] font-bold tracking-[0.2em] border border-brand-gold/30">
+                                  {opt.icon}
+                                </div>
+                              )}
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-sm font-bold text-gray-900">{opt.name}</span>
+                                  {opt.price !== undefined && opt.price !== 0 && (
+                                    <span className={`text-xs font-bold ${opt.price > 0 ? 'text-brand-forest' : 'text-brand-clay'}`}>
+                                      {opt.price > 0 ? '+' : ''}{opt.price}€
+                                    </span>
+                                  )}
+                                </div>
+                                {opt.desc && <div className="text-xs text-gray-500">{opt.desc}</div>}
+                                {opt.description && <div className="text-xs text-gray-500">{opt.description}</div>}
                               </div>
-                              {opt.desc && <div className="text-xs text-gray-500">{opt.desc}</div>}
-                              {opt.description && <div className="text-xs text-gray-500">{opt.description}</div>}
                             </div>
                           )}
                         </button>
@@ -574,15 +581,15 @@ const Custom3D = () => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative h-[900px] rounded-[32px] bg-gradient-to-b from-[#1a1a1f] via-[#12121a] to-[#0a0a10] border border-white/10 shadow-[0_50px_150px_rgba(0,0,0,0.5)] overflow-hidden"
+            className="relative h-[900px] rounded-[32px] bg-gradient-to-b from-brand-night via-[#15161b] to-[#0d0f14] border border-white/10 shadow-[0_50px_150px_rgba(0,0,0,0.5)] overflow-hidden"
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.1),transparent_50%)] pointer-events-none" />
             <Canvas shadows dpr={[1, 1.5]} gl={{ antialias: true }}>
               <Scene configuration={configuration} />
             </Canvas>
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/40 backdrop-blur-xl px-5 py-3 rounded-full border border-white/20">
-              <RotateCw size={16} className="text-rose-400" />
-              <span className="text-white/90 text-sm font-medium">Vue 360° Interactive</span>
+              <RotateCw size={16} className="text-brand-gold" />
+              <span className="text-white/90 text-sm font-medium">Vue 360° interactive</span>
             </div>
             <div className="absolute top-6 left-6 bg-black/40 backdrop-blur-xl px-4 py-2 rounded-full border border-white/20">
               <span className="text-white/90 text-xs font-semibold">Rendu HD</span>
@@ -594,7 +601,7 @@ const Custom3D = () => {
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 p-6 shadow-2xl border border-white/10"
+              className="rounded-3xl bg-gradient-to-br from-brand-night to-[#171a20] p-6 shadow-2xl border border-white/10"
             >
               <div className="text-sm text-gray-400 mb-4">Votre configuration</div>
               <div className="space-y-3 mb-6 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 pr-2">
@@ -638,12 +645,12 @@ const Custom3D = () => {
               </div>
               
               <div className="mb-6 pt-6 border-t border-white/10">
-                <div className="text-xs text-gray-500 mb-2">Prix Estimé</div>
+                <div className="text-xs text-gray-500 mb-2">Prix estimé</div>
                 <motion.div 
                   key={calculatePrice()}
                   initial={{ scale: 1.1 }}
                   animate={{ scale: 1 }}
-                  className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-500"
+                  className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-sand"
                 >
                   {calculatePrice()}€
                 </motion.div>
@@ -652,14 +659,14 @@ const Custom3D = () => {
               
               <a
                 href="/"
-                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 text-white font-bold py-4 shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night text-white font-bold py-4 shadow-xl hover:shadow-2xl hover:scale-105 transition-all"
               >
-                <span>Commander Maintenant</span>
+                <span>Commander maintenant</span>
                 <ArrowRight size={20} />
               </a>
 
               <p className="text-xs text-gray-500 text-center mt-4">
-                Délai 4-6 semaines • Acompte 50% requis
+                Délai 4-6 semaines - Acompte 50% requis
               </p>
             </motion.div>
           </div>

@@ -3,8 +3,8 @@ import Custom3D from '../components/Custom3D'
 
 function CustomPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f2f3f5] via-white to-white">
-      <section className="bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-brand-ivory via-brand-mist to-brand-ivory">
+      <section className="bg-brand-ivory">
         <Custom3D />
       </section>
     </div>

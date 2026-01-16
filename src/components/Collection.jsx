@@ -147,12 +147,12 @@ const Collection = () => {
       : caftans.filter((caftan) => caftan.category === activeFilter)
 
   return (
-    <section id="collection" className="section-padding bg-gradient-to-b from-neutral-900 via-gray-900 to-black relative overflow-hidden">
+    <section id="collection" className="section-padding bg-gradient-to-b from-brand-night via-[#13151b] to-[#0b0d12] relative overflow-hidden">
       
       {/* Luxury Background Elements */}
       <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-rose-600 to-pink-600 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-brand-gold/30 to-brand-clay/30 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-r from-brand-forest/30 to-brand-night/30 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
       <div className="container-custom relative z-10">
@@ -164,14 +164,14 @@ const Collection = () => {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 backdrop-blur-xl border border-amber-500/30 px-8 py-4 rounded-full mb-8">
-            <Star className="text-amber-400 fill-amber-400" size={24} />
-            <span className="text-amber-400 font-bold text-lg tracking-wider">COLLECTION EXCLUSIVE</span>
-            <Star className="text-amber-400 fill-amber-400" size={24} />
+          <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-brand-gold/20 via-brand-goldSoft/20 to-brand-gold/20 backdrop-blur-xl border border-brand-gold/30 px-8 py-4 rounded-full mb-8">
+            <Star className="text-brand-gold fill-brand-gold" size={24} />
+            <span className="text-brand-gold font-bold text-lg tracking-wider">COLLECTION EXCLUSIVE</span>
+            <Star className="text-brand-gold fill-brand-gold" size={24} />
           </div>
 
           <h2 className="text-6xl md:text-7xl font-bold mb-6 text-white">
-            Nos Pièces <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400">d'Exception</span>
+            Nos Pièces <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-sand">d'Exception</span>
           </h2>
         </motion.div>
 
@@ -182,7 +182,7 @@ const Collection = () => {
               key={filter}
               onClick={() => setActiveFilter(filter)}
               className={`px-10 py-4 rounded-full font-bold transition-all ${
-                activeFilter === filter ? 'bg-amber-400 text-black' : 'bg-white/10 text-white hover:bg-white/20'
+                activeFilter === filter ? 'bg-brand-gold text-brand-ink shadow-lg' : 'bg-white/10 text-brand-ivory hover:bg-white/20'
               }`}
             >
               {filter}
@@ -204,7 +204,7 @@ const Collection = () => {
                 onHoverEnd={() => setHoveredItem(null)}
                 className="group relative"
               >
-                <div className="relative bg-gray-800 rounded-3xl overflow-hidden border border-white/10 hover:border-amber-400/50 transition-colors">
+                <div className="relative bg-[#14161c] rounded-3xl overflow-hidden border border-white/5 hover:border-brand-gold/50 transition-colors">
                   <div className="relative aspect-[3/4] overflow-hidden">
                     <img
                       src={caftan.image}
@@ -216,16 +216,16 @@ const Collection = () => {
                     <motion.div 
                       className="absolute inset-0 bg-black/40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
-                      <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-black hover:scale-110 transition-transform">
+                      <button className="w-12 h-12 bg-brand-ivory rounded-full flex items-center justify-center text-brand-ink hover:scale-110 transition-transform">
                         <Eye size={20} />
                       </button>
-                      <button className="w-12 h-12 bg-amber-400 rounded-full flex items-center justify-center text-black hover:scale-110 transition-transform">
+                      <button className="w-12 h-12 bg-brand-gold rounded-full flex items-center justify-center text-brand-ink hover:scale-110 transition-transform">
                         <ShoppingBag size={20} />
                       </button>
                     </motion.div>
 
                     {caftan.featured && (
-                      <div className="absolute top-4 left-4 bg-amber-400 text-black px-4 py-1 rounded-full text-xs font-bold shadow-lg">
+                      <div className="absolute top-4 left-4 bg-brand-gold text-brand-ink px-4 py-1 rounded-full text-xs font-bold shadow-lg">
                         PREMIUM
                       </div>
                     )}
@@ -235,8 +235,8 @@ const Collection = () => {
                     <h3 className="text-2xl font-bold text-white mb-2">{caftan.name}</h3>
                     <p className="text-gray-400 text-sm mb-4 h-10">{caftan.description}</p>
                     <div className="flex justify-between items-center border-t border-white/5 pt-4">
-                      <span className="text-3xl font-bold text-amber-400">{caftan.price}</span>
-                      <button className="bg-white/10 hover:bg-amber-400 hover:text-black text-white px-6 py-2 rounded-xl transition-all font-semibold">
+                      <span className="text-3xl font-bold text-brand-gold">{caftan.price}</span>
+                      <button className="bg-white/5 hover:bg-brand-gold hover:text-brand-ink text-brand-ivory px-6 py-2 rounded-xl transition-all font-semibold">
                         Réserver
                       </button>
                     </div>

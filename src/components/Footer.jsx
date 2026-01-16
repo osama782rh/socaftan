@@ -1,4 +1,4 @@
-import { Instagram, Facebook, Mail, Phone, Sparkles, Heart, MapPin } from 'lucide-react'
+import { Instagram, Facebook, Mail, Phone, Sparkles, Heart, MapPin, ChevronUp } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
@@ -6,17 +6,17 @@ const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   const socialLinks = [
-    { icon: <Instagram size={24} />, href: 'https://www.instagram.com/so_caftan91/', label: 'Instagram', gradient: 'from-pink-500 to-purple-500' },
-    { icon: <Facebook size={24} />, href: '#', label: 'Facebook', gradient: 'from-blue-500 to-indigo-500' },
-    { icon: <Mail size={24} />, href: 'mailto:contact@socaftan.fr', label: 'Email', gradient: 'from-rose-500 to-pink-500' },
-    { icon: <Phone size={24} />, href: 'tel:+33612345678', label: 'Téléphone', gradient: 'from-amber-500 to-yellow-500' },
+    { icon: <Instagram size={24} />, href: 'https://www.instagram.com/so_caftan91/', label: 'Instagram', gradient: 'from-brand-forest to-brand-gold' },
+    { icon: <Facebook size={24} />, href: '#', label: 'Facebook', gradient: 'from-brand-forestLight to-brand-night' },
+    { icon: <Mail size={24} />, href: 'mailto:contact@socaftan.fr', label: 'Email', gradient: 'from-brand-gold to-brand-sand' },
+    { icon: <Phone size={24} />, href: 'tel:+33612345678', label: 'Téléphone', gradient: 'from-brand-clay to-brand-gold' },
   ]
 
   const quickLinks = [
     { name: 'Accueil', href: '#hero' },
     { name: 'À Propos', href: '#about' },
     { name: 'Collection', href: '#collection' },
-    { name: 'Sur-Mesure', href: '#custom' },
+    { name: 'Sur-mesure', href: '/sur-mesure#custom' },
     { name: 'Services', href: '#services' },
     { name: 'Tarifs', href: '#pricing' },
     { name: 'Contact', href: '#contact' },
@@ -25,17 +25,17 @@ const Footer = () => {
   const services = [
     { name: 'Location de Caftans', price: 'dès 60€' },
     { name: 'Achat de Caftans', price: 'dès 180€' },
-    { name: 'Création Sur-Mesure', price: 'dès 220€' },
+    { name: 'Création sur-mesure', price: 'dès 220€' },
   ]
 
   const legalLinks = [
-    { name: 'Mentions l‚gales', to: '/mentions-legales' },
+    { name: 'Mentions légales', to: '/mentions-legales' },
     { name: 'CGV', to: '/cgv' },
     { name: 'Confidentialité', to: '/confidentialite' },
   ]
 
   return (
-    <footer className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
+    <footer className="relative bg-gradient-to-br from-brand-night via-[#171a20] to-brand-night text-white overflow-hidden">
       
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -76,7 +76,7 @@ const Footer = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                className="w-12 h-12 bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 rounded-full flex items-center justify-center"
+                className="w-12 h-12 bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night rounded-full flex items-center justify-center"
               >
                 <Sparkles className="text-white" size={24} />
               </motion.div>
@@ -118,7 +118,7 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <h3 className="text-xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-pink-400">
+            <h3 className="text-xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-sand">
               Navigation
             </h3>
             <ul className="space-y-3">
@@ -132,7 +132,7 @@ const Footer = () => {
                     href={link.href}
                     className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center space-x-2 group"
                   >
-                    <span className="w-1 h-1 bg-rose-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="w-1 h-1 bg-brand-gold rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                     <span>{link.name}</span>
                   </a>
                 </motion.li>
@@ -147,14 +147,14 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <h3 className="text-xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400">
+            <h3 className="text-xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-sand">
               Nos Services
             </h3>
             <ul className="space-y-4">
               {services.map((service, index) => (
                 <li key={index} className="text-gray-400">
                   <div className="font-medium text-white text-sm">{service.name}</div>
-                  <div className="text-xs text-amber-400">{service.price}</div>
+                  <div className="text-xs text-brand-gold">{service.price}</div>
                 </li>
               ))}
             </ul>
@@ -167,22 +167,22 @@ const Footer = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <h3 className="text-xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">
+            <h3 className="text-xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-brand-forest to-brand-gold">
               Contact
             </h3>
             <ul className="space-y-4 text-gray-400 text-sm">
               <li className="flex items-start space-x-3">
-                <MapPin className="text-rose-500 flex-shrink-0 mt-0.5" size={18} />
+                <MapPin className="text-brand-gold flex-shrink-0 mt-0.5" size={18} />
                 <span>Île-de-France, France</span>
               </li>
               <li className="flex items-start space-x-3">
-                <Phone className="text-rose-500 flex-shrink-0 mt-0.5" size={18} />
+                <Phone className="text-brand-gold flex-shrink-0 mt-0.5" size={18} />
                 <a href="tel:+33612345678" className="hover:text-white transition-colors">
                   +33 6 12 34 56 78
                 </a>
               </li>
               <li className="flex items-start space-x-3">
-                <Mail className="text-rose-500 flex-shrink-0 mt-0.5" size={18} />
+                <Mail className="text-brand-gold flex-shrink-0 mt-0.5" size={18} />
                 <a href="mailto:contact@socaftan.fr" className="hover:text-white transition-colors break-all">
                   contact@socaftan.fr
                 </a>
@@ -190,9 +190,9 @@ const Footer = () => {
             </ul>
 
             {/* Availability Badge */}
-            <div className="mt-6 inline-flex items-center space-x-2 bg-green-500/10 border border-green-500/20 px-4 py-2 rounded-full">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-green-400 text-xs font-semibold">Disponible maintenant</span>
+            <div className="mt-6 inline-flex items-center space-x-2 bg-brand-gold/10 border border-brand-gold/30 px-4 py-2 rounded-full">
+              <div className="w-2 h-2 bg-brand-gold rounded-full animate-pulse" />
+              <span className="text-brand-gold text-xs font-semibold">Disponible maintenant</span>
             </div>
           </motion.div>
         </div>
@@ -212,7 +212,7 @@ const Footer = () => {
             <span className="hidden md:inline">•</span>
             <span className="flex items-center space-x-1">
               <span>Fait avec</span>
-              <Heart className="text-rose-500 fill-rose-500" size={14} />
+              <Heart className="text-brand-gold fill-brand-gold" size={14} />
               <span>en France</span>
             </span>
           </motion.p>
@@ -238,9 +238,9 @@ const Footer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           whileHover={{ y: -5 }}
-          className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-rose-600 to-pink-600 rounded-full flex items-center justify-center shadow-2xl hover:shadow-rose-500/50 transition-all duration-300 z-50"
+          className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-brand-forest to-brand-night rounded-full flex items-center justify-center shadow-2xl hover:shadow-brand-gold/40 transition-all duration-300 z-50"
         >
-          <span className="text-2xl text-white">↑</span>
+          <ChevronUp className="text-white" size={22} />
         </motion.a>
 
       </div>

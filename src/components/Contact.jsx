@@ -22,7 +22,7 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     // Ici tu pourrais ajouter l'envoi du formulaire vers un backend
-    alert('Merci pour votre message ! Nous vous recontacterons très bientôt.')
+    alert('Merci pour votre message. Nous vous recontacterons très bientôt.')
     setFormData({ name: '', email: '', phone: '', service: '', date: '', message: '' })
   }
 
@@ -32,30 +32,30 @@ const Contact = () => {
       title: 'Téléphone',
       content: '+33 6 12 34 56 78',
       link: 'tel:+33612345678',
-      gradient: 'from-rose-500 to-pink-500',
+      gradient: 'from-brand-forest to-brand-forestLight',
     },
     {
       icon: <Mail size={28} />,
       title: 'Email',
       content: 'contact@socaftan.fr',
       link: 'mailto:contact@socaftan.fr',
-      gradient: 'from-purple-500 to-indigo-500',
+      gradient: 'from-brand-clay to-brand-gold',
     },
     {
       icon: <MapPin size={28} />,
       title: 'Localisation',
       content: 'Île-de-France, France',
       link: '#',
-      gradient: 'from-amber-500 to-yellow-500',
+      gradient: 'from-brand-gold to-brand-sand',
     },
   ]
 
   return (
-    <section id="contact" className="section-padding bg-gradient-to-b from-white via-rose-50/30 to-white relative overflow-hidden">
+    <section id="contact" className="section-padding bg-gradient-to-b from-brand-ivory via-brand-mist to-brand-ivory relative overflow-hidden">
       
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-rose-200/30 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-0 w-96 h-96 bg-brand-gold/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-forest/15 rounded-full blur-3xl" />
 
       <div className="container-custom relative z-10">
         
@@ -71,18 +71,18 @@ const Contact = () => {
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-rose-100 to-pink-100 px-6 py-3 rounded-full mb-6"
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-brand-goldSoft/50 to-brand-sand/50 px-6 py-3 rounded-full mb-6"
           >
-            <MessageCircle className="text-rose-600" size={20} />
-            <span className="text-rose-600 font-semibold">Parlons-en</span>
+            <MessageCircle className="text-brand-forest" size={20} />
+            <span className="text-brand-forest font-semibold">Parlons-en</span>
           </motion.div>
           
           <h2 className="section-title mb-6">
-            Contactez-Nous
+            Contactez-nous
           </h2>
           
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Une question ? Un projet de location ou d'achat ? On est là pour vous aider
+            Une question ? Un projet de location ou d'achat ? On est là pour vous aider.
           </p>
         </motion.div>
 
@@ -162,7 +162,7 @@ const Contact = () => {
 
               <div className="relative">
                 <div className="flex items-center space-x-3 mb-4">
-                  <Clock className="text-amber-400" size={28} />
+                  <Clock className="text-brand-gold" size={28} />
                   <h4 className="font-bold text-white text-xl">
                     Disponibilité
                   </h4>
@@ -178,7 +178,7 @@ const Contact = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Dimanche</span>
-                    <span className="font-semibold text-amber-400">Sur RDV</span>
+                    <span className="font-semibold text-brand-gold">Sur RDV</span>
                   </div>
                 </div>
               </div>
@@ -195,7 +195,7 @@ const Contact = () => {
           >
             <div className="relative">
               {/* Glow Background */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 rounded-3xl blur-2xl opacity-20" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night rounded-3xl blur-2xl opacity-20" />
               
               <form
                 onSubmit={handleSubmit}
@@ -206,7 +206,7 @@ const Contact = () => {
                     animate={{ rotate: 360 }}
                     transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
                   >
-                    <Sparkles className="text-rose-600" size={32} />
+                    <Sparkles className="text-brand-forest" size={32} />
                   </motion.div>
                   <h3 className="text-3xl font-bold text-gray-900">
                     Envoyez-nous un Message
@@ -229,7 +229,7 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-600 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent transition-all"
                       placeholder="Votre nom"
                     />
                   </div>
@@ -249,7 +249,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-600 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent transition-all"
                       placeholder="votre@email.com"
                     />
                   </div>
@@ -269,7 +269,7 @@ const Contact = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-600 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent transition-all"
                       placeholder="+33 6 12 34 56 78"
                     />
                   </div>
@@ -288,7 +288,7 @@ const Contact = () => {
                       value={formData.service}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-600 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent transition-all"
                     >
                       <option value="">Sélectionnez...</option>
                       <option value="location">Location</option>
@@ -312,7 +312,7 @@ const Contact = () => {
                       name="date"
                       value={formData.date}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-600 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -331,7 +331,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       rows="5"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-rose-600 focus:border-transparent transition-all resize-none"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-gold focus:border-transparent transition-all resize-none"
                       placeholder="Décrivez-nous votre projet..."
                     ></textarea>
                   </div>
@@ -344,7 +344,7 @@ const Contact = () => {
                   whileTap={{ scale: 0.98 }}
                   className="mt-8 w-full relative overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night" />
                   
                   {/* Shimmer Effect */}
                   <motion.div
@@ -361,7 +361,7 @@ const Contact = () => {
 
                 {/* Trust Badge */}
                 <p className="mt-6 text-center text-sm text-gray-500">
-                  🔒 Vos données sont sécurisées et ne seront jamais partagées
+                  Vos données sont sécurisées et ne seront jamais partagées
                 </p>
               </form>
             </div>

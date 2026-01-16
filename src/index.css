@@ -2,9 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --brand-ink: #1f1a17;
+  --brand-night: #0f1115;
+  --brand-forest: #0f3d3e;
+  --brand-forest-light: #1f5246;
+  --brand-gold: #c9a46b;
+  --brand-gold-soft: #e5d2b2;
+  --brand-sand: #f2e6d6;
+  --brand-ivory: #fdf9f2;
+  --brand-mist: #f7f1e8;
+  --brand-clay: #b26a4c;
+}
+
 @layer base {
   body {
-    @apply font-sans antialiased bg-neutral-50;
+    @apply font-sans antialiased;
+    background-color: var(--brand-ivory);
+    color: var(--brand-ink);
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -17,25 +32,25 @@
     @apply px-10 py-4 text-white rounded-full font-semibold text-lg
            transition-all duration-500 hover:shadow-2xl hover:scale-110
            transform relative overflow-hidden;
-    background: linear-gradient(to right, #e11d48, #ec4899, #a855f7);
+    background: linear-gradient(135deg, var(--brand-forest), var(--brand-forest-light));
   }
   
   .btn-primary:hover {
-    background: linear-gradient(to right, #be123c, #db2777, #9333ea);
-    box-shadow: 0 20px 40px rgba(236, 72, 153, 0.5);
+    background: linear-gradient(135deg, #145047, #2a5a4e);
+    box-shadow: 0 20px 40px rgba(15, 61, 62, 0.35);
   }
   
   .btn-secondary {
     @apply px-10 py-4 border-2 text-lg rounded-full 
            font-semibold transition-all duration-500 hover:shadow-xl hover:scale-105
            backdrop-blur-sm;
-    border-color: #ec4899;
-    color: #ec4899;
+    border-color: var(--brand-forest);
+    color: var(--brand-forest);
   }
 
   .btn-secondary:hover {
-    background-color: #ec4899;
-    color: white;
+    background-color: var(--brand-forest);
+    color: var(--brand-ivory);
   }
   
   .section-padding {
@@ -48,23 +63,23 @@
 
   .glass-effect {
     @apply backdrop-blur-xl border shadow-2xl;
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(253, 249, 242, 0.65);
+    border-color: rgba(31, 26, 23, 0.08);
   }
 
   .text-gradient {
     @apply text-transparent bg-clip-text;
-    background-image: linear-gradient(to right, #f472b6, #ec4899, #a855f7);
+    background-image: linear-gradient(to right, var(--brand-forest), var(--brand-gold));
   }
 
   .gold-gradient {
     @apply text-transparent bg-clip-text;
-    background-image: linear-gradient(to right, #fbbf24, #fcd34d, #fbbf24);
+    background-image: linear-gradient(to right, var(--brand-gold), var(--brand-gold-soft), var(--brand-gold));
   }
 
   .section-title {
     @apply text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-transparent bg-clip-text;
-    background-image: linear-gradient(to right, #1f2937, #be185d, #6b21a8);
+    background-image: linear-gradient(to right, var(--brand-ink), var(--brand-gold));
   }
 }
 
@@ -79,20 +94,20 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: linear-gradient(to bottom, #fafafa, #f5f5f5);
+  background: linear-gradient(to bottom, var(--brand-ivory), var(--brand-mist));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #ec4899, #a855f7);
+  background: linear-gradient(to bottom, var(--brand-gold), var(--brand-forest));
   border-radius: 10px;
-  border: 2px solid #fafafa;
+  border: 2px solid var(--brand-ivory);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #db2777, #9333ea);
+  background: linear-gradient(to bottom, var(--brand-gold), var(--brand-forest-light));
 }
 
-/* Animations personnalisées */
+/* Animations personnalisees */
 @keyframes shimmer {
   0% {
     background-position: -1000px 0;
@@ -107,7 +122,7 @@ html {
   background: linear-gradient(
     to right,
     transparent 0%,
-    rgba(255, 255, 255, 0.3) 50%,
+    rgba(253, 249, 242, 0.5) 50%,
     transparent 100%
   );
   background-size: 1000px 100%;
@@ -115,14 +130,14 @@ html {
 
 /* Glow effect */
 .glow {
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.3),
-              0 0 40px rgba(168, 85, 247, 0.2);
+  box-shadow: 0 0 20px rgba(201, 164, 107, 0.35),
+              0 0 40px rgba(15, 61, 62, 0.2);
 }
 
 .glow-hover:hover {
-  box-shadow: 0 0 30px rgba(236, 72, 153, 0.5),
-              0 0 60px rgba(168, 85, 247, 0.3),
-              0 0 90px rgba(236, 72, 153, 0.2);
+  box-shadow: 0 0 30px rgba(201, 164, 107, 0.5),
+              0 0 60px rgba(15, 61, 62, 0.3),
+              0 0 90px rgba(201, 164, 107, 0.2);
   transition: box-shadow 0.3s ease;
 }
 
@@ -150,20 +165,20 @@ html {
   }
 }
 
-/* Selection personnalisée */
+/* Selection personnalisee */
 ::selection {
-  background-color: rgba(236, 72, 153, 0.3);
-  color: #1f2937;
+  background-color: rgba(201, 164, 107, 0.3);
+  color: var(--brand-ink);
 }
 
 ::-moz-selection {
-  background-color: rgba(236, 72, 153, 0.3);
-  color: #1f2937;
+  background-color: rgba(201, 164, 107, 0.3);
+  color: var(--brand-ink);
 }
 
-/* Amélioration des focus states */
+/* Amelioration des focus states */
 :focus-visible {
-  outline: 2px solid #ec4899;
+  outline: 2px solid var(--brand-gold);
   outline-offset: 2px;
   border-radius: 0.5rem;
 }
@@ -185,11 +200,11 @@ html {
 @keyframes pulse-glow {
   0%, 100% {
     opacity: 1;
-    box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+    box-shadow: 0 0 20px rgba(201, 164, 107, 0.4);
   }
   50% {
     opacity: 0.8;
-    box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 40px rgba(15, 61, 62, 0.5);
   }
 }
 

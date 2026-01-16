@@ -20,7 +20,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="bg-white">
+      <div className="bg-brand-ivory">
         <Navbar />
         <Suspense fallback={<RouteFallback />}>
           <Routes>

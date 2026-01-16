@@ -5,31 +5,31 @@ const Services = () => {
   const services = [
     {
       icon: <Sparkles size={40} />,
-      title: 'Nettoyage Inclus',
+      title: 'Nettoyage inclus',
       description: 'Chaque caftan est nettoyé et repassé avant et après location pour garantir la qualité.',
-      gradient: 'from-rose-500 to-pink-500',
-      color: 'rose',
+      gradient: 'from-brand-forest to-brand-forestLight',
+      color: 'forest',
     },
     {
       icon: <MapPin size={40} />,
-      title: 'Retrait Pratique',
+      title: 'Retrait pratique',
       description: 'Point de retrait convenu ensemble lors de la réservation pour votre confort.',
-      gradient: 'from-purple-500 to-indigo-500',
-      color: 'purple',
+      gradient: 'from-brand-clay to-brand-gold',
+      color: 'clay',
     },
     {
       icon: <MessageCircle size={40} />,
-      title: 'Conseils Disponibles',
+      title: 'Conseils disponibles',
       description: 'On vous aide à choisir le caftan qui vous correspond le mieux selon vos préférences.',
-      gradient: 'from-amber-500 to-yellow-500',
-      color: 'amber',
+      gradient: 'from-brand-gold to-brand-sand',
+      color: 'gold',
     },
     {
       icon: <RefreshCw size={40} />,
-      title: 'Échange Possible',
-      description: 'Possibilité d\'échanger de modèle jusqu\'à 48h avant votre événement.',
-      gradient: 'from-emerald-500 to-teal-500',
-      color: 'emerald',
+      title: 'Échange possible',
+      description: 'Possibilité d\'échanger de modèle jusqu\'à 48 h avant votre événement.',
+      gradient: 'from-brand-forest to-brand-night',
+      color: 'night',
     },
   ]
 
@@ -42,7 +42,7 @@ const Services = () => {
     {
       icon: <Clock size={32} />,
       title: 'Réponse Rapide',
-      value: '24h',
+      value: '24 h',
     },
     {
       icon: <Award size={32} />,
@@ -52,11 +52,11 @@ const Services = () => {
   ]
 
   return (
-    <section id="services" className="section-padding bg-gradient-to-b from-white via-rose-50/30 to-white relative overflow-hidden">
+    <section id="services" className="section-padding bg-gradient-to-b from-brand-ivory via-brand-mist to-brand-ivory relative overflow-hidden">
       
       {/* Decorative Elements */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-rose-200/30 to-purple-200/30 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-br from-amber-200/30 to-pink-200/30 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-brand-gold/20 to-brand-sand/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-br from-brand-forest/15 to-brand-night/15 rounded-full blur-3xl" />
 
       <div className="container-custom relative z-10">
         
@@ -72,18 +72,18 @@ const Services = () => {
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-rose-100 to-pink-100 px-6 py-3 rounded-full mb-6"
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-brand-goldSoft/50 to-brand-sand/50 px-6 py-3 rounded-full mb-6"
           >
-            <Gift className="text-rose-600" size={20} />
-            <span className="text-rose-600 font-semibold">Nos Services</span>
+            <Gift className="text-brand-forest" size={20} />
+            <span className="text-brand-forest font-semibold">Nos services</span>
           </motion.div>
           
           <h2 className="section-title mb-6">
-            Simple et Sans Prise de Tête
+            Simple et sans prise de tête
           </h2>
           
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            On s'occupe de l'essentiel pour que vous profitiez de votre événement
+            On s'occupe de l'essentiel pour que vous profitiez pleinement de votre événement.
           </p>
         </motion.div>
 
@@ -114,7 +114,7 @@ const Services = () => {
                 </motion.div>
 
                 {/* Content */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-rose-600 group-hover:to-purple-600 transition-all duration-300">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-brand-forest group-hover:to-brand-gold transition-all duration-300">
                   {service.title}
                 </h3>
                 
@@ -145,11 +145,11 @@ const Services = () => {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="relative bg-gradient-to-br from-white to-rose-50/50 rounded-2xl p-8 shadow-lg text-center overflow-hidden group"
+              className="relative bg-gradient-to-br from-white to-brand-goldSoft/20 rounded-2xl p-8 shadow-lg text-center overflow-hidden group"
             >
               {/* Animated Background */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-purple-500/5"
+                className="absolute inset-0 bg-gradient-to-br from-brand-gold/10 to-brand-forest/10"
                 initial={{ scale: 0, opacity: 0 }}
                 whileHover={{ scale: 1.5, opacity: 1 }}
                 transition={{ duration: 0.5 }}
@@ -157,14 +157,14 @@ const Services = () => {
               
               <div className="relative">
                 <motion.div
-                  className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-rose-600 to-purple-600 rounded-2xl mb-4 text-white"
+                  className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-brand-forest to-brand-night rounded-2xl mb-4 text-white"
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.6 }}
                 >
                   {guarantee.icon}
                 </motion.div>
                 
-                <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-purple-600 mb-2">
+                <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-forest to-brand-gold mb-2">
                   {guarantee.value}
                 </div>
                 
@@ -185,9 +185,9 @@ const Services = () => {
           className="relative"
         >
           {/* Glow Background */}
-          <div className="absolute -inset-2 bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 rounded-[2.5rem] blur-2xl opacity-30" />
+          <div className="absolute -inset-2 bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night rounded-[2.5rem] blur-2xl opacity-30" />
           
-          <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-[2rem] p-12 md:p-16 text-center overflow-hidden shadow-2xl">
+          <div className="relative bg-gradient-to-br from-brand-night via-[#171a20] to-brand-night rounded-[2rem] p-12 md:p-16 text-center overflow-hidden shadow-2xl">
             
             {/* Animated Particles */}
             <div className="absolute inset-0 overflow-hidden">
@@ -219,8 +219,8 @@ const Services = () => {
                 transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
                 className="inline-block mb-6"
               >
-                <div className="w-20 h-20 bg-gradient-to-r from-amber-400 to-yellow-400 rounded-full flex items-center justify-center shadow-2xl shadow-amber-500/50">
-                  <Sparkles className="text-gray-900" size={36} />
+                <div className="w-20 h-20 bg-gradient-to-r from-brand-gold to-brand-sand rounded-full flex items-center justify-center shadow-2xl shadow-brand-gold/40">
+                  <Sparkles className="text-brand-ink" size={36} />
                 </div>
               </motion.div>
 
@@ -230,7 +230,7 @@ const Services = () => {
               
               <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
                 Contactez-nous pour réserver ou obtenir plus d'informations.
-                <span className="block mt-2 text-amber-400 font-semibold">
+                <span className="block mt-2 text-brand-gold font-semibold">
                   On vous répond rapidement !
                 </span>
               </p>
@@ -243,7 +243,7 @@ const Services = () => {
                   className="group relative px-12 py-5 rounded-2xl font-bold text-lg overflow-hidden shadow-2xl"
                 >
                   {/* Gradient Background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-brand-gold via-brand-goldSoft to-brand-sand" />
                   
                   {/* Shimmer Effect */}
                   <motion.div
@@ -252,13 +252,13 @@ const Services = () => {
                     transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                   />
                   
-                  <span className="relative z-10 text-gray-900 flex items-center space-x-2">
+                  <span className="relative z-10 text-brand-ink flex items-center space-x-2">
                     <span>Nous Contacter</span>
                     <motion.span
                       animate={{ x: [0, 5, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
                     >
-                      →
+                      >
                     </motion.span>
                   </span>
                 </motion.a>

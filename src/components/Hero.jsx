@@ -30,10 +30,10 @@ const Hero = () => {
       const duration = Math.random() * 10 + 10
       const delay = Math.random() * 5
       const color = i % 3 === 0
-        ? 'rgba(251, 191, 36, 0.8)'
+        ? 'rgba(201, 164, 107, 0.8)'
         : i % 3 === 1
-          ? 'rgba(236, 72, 153, 0.6)'
-          : 'rgba(168, 85, 247, 0.6)'
+          ? 'rgba(15, 61, 62, 0.55)'
+          : 'rgba(178, 106, 76, 0.55)'
 
       return {
         size,
@@ -64,8 +64,8 @@ const Hero = () => {
         </video>
         
         {/* Gradient Overlay Multiple Layers */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-rose-950/60 to-purple-950/80"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-night/85 via-brand-forest/65 to-[#1a1b20]/85"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-night/90 via-black/20 to-brand-night/40"></div>
       </div>
 
       {/* Animated Particles - Plus élégants */}
@@ -101,7 +101,7 @@ const Hero = () => {
 
       {/* Floating Elements Decoration */}
       <motion.div
-        className="absolute top-20 left-10 w-64 h-64 bg-rose-500/10 rounded-full blur-3xl"
+        className="absolute top-20 left-10 w-64 h-64 bg-brand-gold/10 rounded-full blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -109,7 +109,7 @@ const Hero = () => {
         transition={{ duration: 8, repeat: Infinity }}
       />
       <motion.div
-        className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
+        className="absolute bottom-20 right-10 w-96 h-96 bg-brand-forest/10 rounded-full blur-3xl"
         animate={{
           scale: [1.2, 1, 1.2],
           opacity: [0.5, 0.3, 0.5],
@@ -127,9 +127,9 @@ const Hero = () => {
           transition={{ duration: 0.8 }}
           className="mb-6 md:mb-8 inline-flex items-center space-x-2 bg-white/10 backdrop-blur-xl border border-white/20 px-4 md:px-6 py-2 md:py-3 rounded-full"
         >
-          <Award className="text-yellow-400 flex-shrink-0" size={18} />
-          <span className="text-white font-medium text-xs md:text-base">Service Premium de Location de Caftans</span>
-          <Star className="text-yellow-400 flex-shrink-0" size={14} fill="currentColor" />
+          <Award className="text-brand-gold flex-shrink-0" size={18} />
+          <span className="text-white font-medium text-xs md:text-base">Service premium de location de caftans</span>
+          <Star className="text-brand-gold flex-shrink-0" size={14} fill="currentColor" />
         </motion.div>
 
         {/* Main Title - Ultra Impact */}
@@ -145,18 +145,18 @@ const Hero = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            Louez Votre
+            Louez votre
           </motion.span>
           <motion.span
-            className="block text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-pink-400 to-purple-400"
+            className="block text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-brand-goldSoft to-brand-sand"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
             style={{
-              textShadow: '0 0 80px rgba(236, 72, 153, 0.5)',
+              textShadow: '0 0 80px rgba(201, 164, 107, 0.5)',
             }}
           >
-            Caftan de Rêve
+            Caftan d'exception
           </motion.span>
         </motion.h1>
 
@@ -167,7 +167,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-base md:text-2xl lg:text-3xl text-white/90 mb-4 font-light tracking-wide max-w-4xl mx-auto px-4"
         >
-          Collection exclusive • Qualité exceptionnelle • Service sur-mesure
+          Collection exclusive - Qualité exceptionnelle - Service sur-mesure
         </motion.p>
 
         {/* Price Highlight */}
@@ -179,16 +179,16 @@ const Hero = () => {
         >
           <div className="relative">
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-400 blur-xl opacity-75"
+              className="absolute inset-0 bg-gradient-to-r from-brand-gold/80 via-brand-goldSoft to-brand-sand/80 blur-xl opacity-75"
               animate={{
                 scale: [1, 1.1, 1],
               }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <div className="relative bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 text-gray-900 px-6 md:px-10 py-3 md:py-5 rounded-2xl font-bold text-xl md:text-3xl shadow-2xl border-2 border-yellow-300">
-              <span className="line-through text-gray-800 text-base md:text-lg mr-2 md:mr-3 opacity-75">100€</span>
+            <div className="relative bg-gradient-to-r from-brand-gold via-brand-goldSoft to-brand-sand text-brand-ink px-6 md:px-10 py-3 md:py-5 rounded-2xl font-bold text-xl md:text-3xl shadow-2xl border-2 border-brand-goldSoft">
+              <span className="line-through text-brand-ink text-base md:text-lg mr-2 md:mr-3 opacity-70">100€</span>
               <span className="text-3xl md:text-4xl">60€</span>
-              <span className="block md:inline ml-0 md:ml-3 text-sm md:text-lg font-medium mt-1 md:mt-0">Offre de Lancement</span>
+              <span className="block md:inline ml-0 md:ml-3 text-sm md:text-lg font-medium mt-1 md:mt-0">Offre de lancement</span>
             </div>
           </div>
         </motion.div>
@@ -207,19 +207,19 @@ const Hero = () => {
             className="group relative w-full sm:w-auto"
           >
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 rounded-2xl blur-lg opacity-75 group-hover:opacity-100 transition-opacity"
+              className="absolute inset-0 bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night rounded-2xl blur-lg opacity-75 group-hover:opacity-100 transition-opacity"
               animate={{
                 scale: [1, 1.05, 1],
               }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <div className="relative bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 text-white px-8 md:px-12 py-4 md:py-5 rounded-2xl font-bold text-base md:text-lg shadow-2xl overflow-hidden">
+            <div className="relative bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night text-white px-8 md:px-12 py-4 md:py-5 rounded-2xl font-bold text-base md:text-lg shadow-2xl overflow-hidden">
               <span className="relative z-10 flex items-center justify-center space-x-2 md:space-x-3">
-                <span>Découvrir la Collection</span>
+                <span>Découvrir la collection</span>
                 <ArrowRight className="group-hover:translate-x-2 transition-transform" size={20} />
               </span>
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600"
+                className="absolute inset-0 bg-gradient-to-r from-brand-night to-brand-forestLight"
                 initial={{ x: '-100%' }}
                 whileHover={{ x: '0%' }}
                 transition={{ duration: 0.4 }}
@@ -231,15 +231,15 @@ const Hero = () => {
             href="#contact"
             whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
-            className="group relative w-full sm:w-auto px-8 md:px-12 py-4 md:py-5 rounded-2xl font-bold text-base md:text-lg overflow-hidden border-2 border-white/40 backdrop-blur-xl bg-white/5 text-white hover:bg-white hover:text-gray-900 transition-all duration-500 shadow-2xl"
+            className="group relative w-full sm:w-auto px-8 md:px-12 py-4 md:py-5 rounded-2xl font-bold text-base md:text-lg overflow-hidden border-2 border-brand-gold/50 backdrop-blur-xl bg-white/5 text-brand-ivory hover:bg-brand-ivory hover:text-brand-ink transition-all duration-500 shadow-2xl"
           >
             <span className="flex items-center justify-center space-x-2 md:space-x-3">
-              <span>Réserver Maintenant</span>
+              <span>Réserver maintenant</span>
               <motion.span
                 animate={{ x: [0, 5, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
-                →
+                >
               </motion.span>
             </span>
           </motion.a>
@@ -254,21 +254,21 @@ const Hero = () => {
         >
           <div className="flex items-center space-x-2">
             <div className="w-8 md:w-10 h-8 md:h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <Star className="text-yellow-400" size={16} fill="currentColor" />
+              <Star className="text-brand-gold" size={16} fill="currentColor" />
             </div>
             <span className="font-medium">Service 5 étoiles</span>
           </div>
           <div className="hidden md:block w-px h-8 bg-white/20"></div>
           <div className="flex items-center space-x-2">
             <div className="w-8 md:w-10 h-8 md:h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <Award className="text-yellow-400" size={16} />
+              <Award className="text-brand-gold" size={16} />
             </div>
             <span className="font-medium">Qualité Premium</span>
           </div>
           <div className="hidden md:block w-px h-8 bg-white/20"></div>
           <div className="flex items-center space-x-2">
             <div className="w-8 md:w-10 h-8 md:h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <span className="text-yellow-400 font-bold text-base md:text-lg">✓</span>
+              <span className="text-brand-gold font-bold text-base md:text-lg">✓</span>
             </div>
             <span className="font-medium">Livraison Gratuite</span>
           </div>
@@ -284,16 +284,16 @@ const Hero = () => {
         className="absolute bottom-8 md:bottom-12 left-1/2 transform -translate-x-1/2 cursor-pointer group"
       >
         <div className="flex flex-col items-center space-y-2">
-          <span className="text-white/60 text-xs md:text-sm font-medium tracking-wider">DÉCOUVRIR</span>
+          <span className="text-white/60 text-xs md:text-sm font-medium tracking-wider">DECOUVRIR</span>
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center pt-2"
+            className="w-6 h-10 border-2 border-brand-gold/40 rounded-full flex justify-center pt-2"
           >
             <motion.div
               animate={{ y: [0, 12, 0], opacity: [1, 0, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1 h-2 bg-white rounded-full"
+              className="w-1 h-2 bg-brand-gold rounded-full"
             />
           </motion.div>
         </div>

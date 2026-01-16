@@ -6,30 +6,30 @@ const About = () => {
   const features = [
     {
       icon: <Heart size={32} />,
-      title: 'Passion & Excellence',
-      description: 'Chaque caftan est sélectionné avec amour pour sublimer votre beauté naturelle.',
-      gradient: 'from-rose-500 to-pink-500',
+      title: 'Passion & excellence',
+      description: 'Chaque caftan est sélectionné avec soin pour sublimer votre élégance naturelle.',
+      gradient: 'from-brand-forest to-brand-forestLight',
     },
     {
       icon: <Award size={32} />,
-      title: 'Qualité Garantie',
-      description: 'Tissus nobles, broderies artisanales et finitions luxueuses certifiées.',
-      gradient: 'from-amber-500 to-yellow-500',
+      title: 'Qualité garantie',
+      description: 'Tissus nobles, broderies artisanales et finitions impeccables.',
+      gradient: 'from-brand-gold to-brand-sand',
     },
     {
       icon: <Clock size={32} />,
-      title: 'Service Express',
-      description: 'Réservation en 2 min, livraison garantie 48h avant votre événement.',
-      gradient: 'from-purple-500 to-indigo-500',
+      title: 'Service express',
+      description: 'Réservation en 2 minutes, livraison garantie 48 h avant votre événement.',
+      gradient: 'from-brand-clay to-brand-forest',
     },
   ]
 
   return (
-    <section id="about" className="section-padding bg-gradient-to-b from-white via-rose-50/30 to-white relative overflow-hidden">
+    <section id="about" className="section-padding bg-gradient-to-b from-brand-ivory via-brand-mist to-brand-ivory relative overflow-hidden">
       
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-rose-200/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+      <div className="absolute top-0 left-0 w-96 h-96 bg-brand-gold/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-forest/15 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
 
       <div className="container-custom relative">
         
@@ -45,16 +45,16 @@ const About = () => {
             initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-rose-100 to-pink-100 px-6 py-3 rounded-full mb-6"
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-brand-goldSoft/50 to-brand-sand/50 px-6 py-3 rounded-full mb-6"
           >
-            <Sparkles className="text-rose-600" size={20} />
-            <span className="text-rose-600 font-semibold">Pourquoi Nous Choisir</span>
+            <Sparkles className="text-brand-forest" size={20} />
+            <span className="text-brand-forest font-semibold">Pourquoi nous choisir</span>
           </motion.div>
           <h2 className="section-title">
-            L'Excellence au Service de Votre Élégance
+            L'excellence au service de votre élégance
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
-            Plus qu'une simple location, une expérience unique qui transforme vos moments spéciaux en souvenirs inoubliables
+            Plus qu'une simple location, une expérience soignée qui transforme vos moments précieux en souvenirs inoubliables.
           </p>
         </motion.div>
 
@@ -87,7 +87,7 @@ const About = () => {
               whileInView={{ scale: 1, rotate: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
-              className="absolute -top-6 -right-6 bg-gradient-to-br from-yellow-400 to-amber-500 text-gray-900 px-6 py-4 rounded-2xl shadow-2xl z-10"
+              className="absolute -top-6 -right-6 bg-gradient-to-br from-brand-gold to-brand-sand text-brand-ink px-6 py-4 rounded-2xl shadow-2xl z-10"
             >
               <div className="flex items-center space-x-2">
                 <Star className="fill-current" size={24} />
@@ -99,8 +99,8 @@ const About = () => {
             </motion.div>
 
             {/* Decorative Blur */}
-            <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-rose-400/40 rounded-full blur-3xl group-hover:blur-2xl transition-all duration-500" />
-            <div className="absolute -top-8 -right-8 w-40 h-40 bg-purple-400/40 rounded-full blur-3xl group-hover:blur-2xl transition-all duration-500" />
+            <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-brand-gold/25 rounded-full blur-3xl group-hover:blur-2xl transition-all duration-500" />
+            <div className="absolute -top-8 -right-8 w-40 h-40 bg-brand-forest/20 rounded-full blur-3xl group-hover:blur-2xl transition-all duration-500" />
           </motion.div>
 
           {/* Right: Content */}
@@ -137,7 +137,7 @@ const About = () => {
                       </motion.div>
                       
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-rose-600 group-hover:to-purple-600 transition-all duration-300">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-brand-forest group-hover:to-brand-gold transition-all duration-300">
                           {feature.title}
                         </h3>
                         <p className="text-gray-600 leading-relaxed">
@@ -163,7 +163,7 @@ const About = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-16 relative"
         >
-          <div className="relative bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 rounded-3xl p-12 text-center overflow-hidden shadow-2xl">
+          <div className="relative bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night rounded-3xl p-12 text-center overflow-hidden shadow-2xl">
             {/* Animated Background Pattern */}
             <motion.div
               className="absolute inset-0 opacity-10"
@@ -179,18 +179,18 @@ const About = () => {
 
             <div className="relative">
               <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Prête à Briller lors de Votre Événement ?
+                Prête à briller lors de votre événement ?
               </h3>
               <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Réservez dès maintenant et profitez de notre offre exceptionnelle à 60€
+                Réservez dès maintenant et profitez de notre offre exceptionnelle à 60€.
               </p>
               <motion.a
                 href="#collection"
                 whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-block bg-white text-rose-600 px-12 py-5 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-white/50 transition-all duration-300"
+                className="inline-block bg-brand-ivory text-brand-forest px-12 py-5 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-brand-gold/40 transition-all duration-300"
               >
-                Découvrir la Collection
+                Découvrir la collection
               </motion.a>
             </div>
           </div>
