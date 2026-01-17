@@ -252,15 +252,15 @@ const Services = () => {
                     transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                   />
                   
-                  <span className="relative z-10 text-brand-ink flex items-center space-x-2">
-                    <span>Nous Contacter</span>
-                    <motion.span
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
+                    <span className="relative z-10 text-brand-ink flex items-center space-x-2">
+                      <span>Nous Contacter</span>
+                      <motion.span
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
                       >
-                    </motion.span>
-                  </span>
+                        &gt;
+                      </motion.span>
+                    </span>
                 </motion.a>
 
                 <motion.a

@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, Heart, Eye, Star, ShoppingBag } from 'lucide-react'
+import { Sparkles, Heart, Eye, Star, ShoppingBag, X } from 'lucide-react'
 
 // --- IMPORTATION DES ASSETS ---
 import imgAmbre from '../assets/CAFTAN_AMBRE.jpg'
@@ -24,6 +24,7 @@ import imgKarakouObsidienne from '../assets/KARAKOU_OBSIDIENNE.jpg'
 const Collection = () => {
   const [activeFilter, setActiveFilter] = useState('Tous')
   const [hoveredItem, setHoveredItem] = useState(null)
+  const [zoomedItem, setZoomedItem] = useState(null)
 
   const filters = ['Tous', 'Caftans', 'Karakous']
 
@@ -146,13 +147,34 @@ const Collection = () => {
       ? caftans
       : caftans.filter((caftan) => caftan.category === activeFilter)
 
+  useEffect(() => {
+    if (!zoomedItem) {
+      return undefined
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setZoomedItem(null)
+      }
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [zoomedItem])
+
   return (
-    <section id="collection" className="section-padding bg-gradient-to-b from-brand-night via-[#13151b] to-[#0b0d12] relative overflow-hidden">
+    <section id="collection" className="section-padding bg-gradient-to-b from-brand-ivory via-brand-mist to-brand-ivory relative overflow-hidden">
       
       {/* Luxury Background Elements */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-brand-gold/30 to-brand-clay/30 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-r from-brand-forest/30 to-brand-night/30 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute inset-0 opacity-35">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-brand-gold/25 to-brand-clay/20 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-r from-brand-forest/20 to-brand-night/15 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
       <div className="container-custom relative z-10">
@@ -170,7 +192,7 @@ const Collection = () => {
             <Star className="text-brand-gold fill-brand-gold" size={24} />
           </div>
 
-          <h2 className="text-6xl md:text-7xl font-bold mb-6 text-white">
+          <h2 className="text-6xl md:text-7xl font-bold mb-6 text-brand-ink">
             Nos Pièces <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-sand">d'Exception</span>
           </h2>
         </motion.div>
@@ -182,7 +204,7 @@ const Collection = () => {
               key={filter}
               onClick={() => setActiveFilter(filter)}
               className={`px-10 py-4 rounded-full font-bold transition-all ${
-                activeFilter === filter ? 'bg-brand-gold text-brand-ink shadow-lg' : 'bg-white/10 text-brand-ivory hover:bg-white/20'
+                activeFilter === filter ? 'bg-brand-gold text-brand-ink shadow-lg' : 'bg-brand-ivory text-brand-ink border border-brand-gold/30 hover:bg-brand-goldSoft/40'
               }`}
             >
               {filter}
@@ -216,7 +238,12 @@ const Collection = () => {
                     <motion.div 
                       className="absolute inset-0 bg-black/40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity"
                     >
-                      <button className="w-12 h-12 bg-brand-ivory rounded-full flex items-center justify-center text-brand-ink hover:scale-110 transition-transform">
+                      <button
+                        type="button"
+                        onClick={() => setZoomedItem(caftan)}
+                        className="w-12 h-12 bg-brand-ivory rounded-full flex items-center justify-center text-brand-ink hover:scale-110 transition-transform"
+                        aria-label={`Agrandir ${caftan.name}`}
+                      >
                         <Eye size={20} />
                       </button>
                       <button className="w-12 h-12 bg-brand-gold rounded-full flex items-center justify-center text-brand-ink hover:scale-110 transition-transform">
@@ -247,6 +274,71 @@ const Collection = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      <AnimatePresence>
+        {zoomedItem && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setZoomedItem(null)}
+          >
+            <motion.div
+              className="relative w-full max-w-5xl overflow-hidden rounded-[28px] bg-brand-ivory shadow-2xl"
+              initial={{ opacity: 0, scale: 0.96, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 20 }}
+              transition={{ duration: 0.25 }}
+              onClick={(event) => event.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+            >
+              <button
+                type="button"
+                onClick={() => setZoomedItem(null)}
+                className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 text-brand-ink shadow-lg transition hover:bg-white"
+                aria-label="Fermer"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="grid md:grid-cols-[1.1fr_0.9fr]">
+                <div className="relative bg-black/5">
+                  <img
+                    src={zoomedItem.image}
+                    alt={zoomedItem.name}
+                    className="h-full w-full object-cover md:h-[70vh]"
+                  />
+                </div>
+                <div className="p-6 md:p-8 text-brand-ink">
+                  <div className="text-[11px] uppercase tracking-[0.3em] text-brand-clay font-semibold mb-3">
+                    Apercu piece
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-bold mb-3">{zoomedItem.name}</h3>
+                  <p className="text-sm text-brand-ink/70 leading-relaxed">
+                    {zoomedItem.description}
+                  </p>
+
+                  <div className="mt-8 flex items-center justify-between">
+                    <span className="text-3xl font-bold text-brand-gold">{zoomedItem.price}</span>
+                    <button
+                      type="button"
+                      className="rounded-full bg-brand-forest px-6 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-brand-forestLight"
+                    >
+                      Reserver
+                    </button>
+                  </div>
+
+                  <p className="mt-4 text-xs text-brand-ink/60">
+                    Cliquez en dehors de l'image ou appuyez sur Esc pour fermer.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

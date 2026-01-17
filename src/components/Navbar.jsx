@@ -77,7 +77,7 @@ const Navbar = () => {
             {/* Logo Premium - Réduit sur mobile */}
             <motion.a
               href="/"
-              className="flex items-center space-x-2 md:space-x-4 group"
+              className={`flex items-center ${isSolid ? 'space-x-1.5 md:space-x-2' : 'space-x-2 md:space-x-4'} group`}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
@@ -86,15 +86,15 @@ const Navbar = () => {
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 bg-gradient-to-r from-brand-gold via-brand-goldSoft to-brand-forest rounded-full blur-md opacity-75"
+                  className={`absolute inset-0 bg-gradient-to-r from-brand-gold via-brand-goldSoft to-brand-forest rounded-full ${isSolid ? 'blur-sm opacity-60' : 'blur-md opacity-75'}`}
                 />
-                <div className={`relative w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center overflow-hidden transition-all duration-500 ${
+                <div className={`relative rounded-full flex items-center justify-center overflow-hidden transition-all duration-500 ${
                   isSolid 
-                    ? 'bg-gradient-to-br from-brand-forest via-brand-forestLight to-brand-night shadow-lg' 
-                    : 'bg-white/10 backdrop-blur-xl border-2 border-white/30 shadow-2xl'
+                    ? 'w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-brand-forest via-brand-forestLight to-brand-night shadow-lg' 
+                    : 'w-10 h-10 md:w-14 md:h-14 bg-white/10 backdrop-blur-xl border-2 border-white/30 shadow-2xl'
                 }`}>
                   <motion.span 
-                    className="text-lg md:text-2xl font-bold text-white z-10"
+                    className={`font-bold text-white z-10 ${isSolid ? 'text-sm md:text-lg' : 'text-lg md:text-2xl'}`}
                     animate={{ 
                       textShadow: [
                         "0 0 10px rgba(255,255,255,0.5)",
@@ -118,17 +118,17 @@ const Navbar = () => {
               {/* Texte Logo */}
               <div className="flex flex-col">
                 <motion.span
-                  className={`text-lg md:text-2xl font-bold font-serif transition-all duration-500 ${
+                  className={`font-bold font-serif transition-all duration-500 ${
                     isSolid 
-                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-brand-forest to-brand-gold' 
-                      : 'text-white drop-shadow-lg'
+                      ? 'text-sm md:text-lg text-transparent bg-clip-text bg-gradient-to-r from-brand-forest to-brand-gold' 
+                      : 'text-lg md:text-2xl text-white drop-shadow-lg'
                   }`}
                 >
                   SO Caftan
                 </motion.span>
                 <motion.span
-                  className={`text-[9px] md:text-xs tracking-wider transition-all duration-500 ${
-                    isSolid ? 'text-gray-600' : 'text-white/90'
+                  className={`tracking-wider transition-all duration-500 ${
+                    isSolid ? 'text-[7px] md:text-[10px] text-gray-600' : 'text-[9px] md:text-xs text-white/90'
                   }`}
                 >
                   LOCATION & VENTE
@@ -182,14 +182,14 @@ const Navbar = () => {
                 href="/#contact"
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className={`relative px-6 md:px-8 py-2.5 md:py-3.5 rounded-full font-semibold overflow-hidden group transition-all duration-500 text-sm md:text-base ${
+                className={`relative rounded-full font-semibold overflow-hidden group transition-all duration-500 ${
                   isSolid
-                    ? 'bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night text-white shadow-lg hover:shadow-2xl'
-                    : 'bg-brand-ivory text-brand-forest shadow-2xl'
+                    ? 'px-5 md:px-6 py-2 md:py-2.5 text-xs md:text-sm bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night text-white shadow-lg hover:shadow-2xl'
+                    : 'px-6 md:px-8 py-2.5 md:py-3.5 text-sm md:text-base bg-brand-ivory text-brand-forest shadow-2xl'
                 }`}
               >
-                <span className="relative z-10 flex items-center space-x-2">
-                  <Sparkles size={16} />
+                <span className={`relative z-10 flex items-center ${isSolid ? 'gap-1.5' : 'gap-2'}`}>
+                  <Sparkles size={isSolid ? 14 : 16} />
                   <span>Réserver</span>
                 </span>
                 
@@ -296,7 +296,7 @@ const Navbar = () => {
                           whileHover={{ x: 0, opacity: 1 }}
                           className="text-brand-forest"
                         >
-                          >
+                          &gt;
                         </motion.span>
                       </div>
                     </motion.a>

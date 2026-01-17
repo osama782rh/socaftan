@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --brand-ink: #1b1f2a;
-  --brand-night: #0b0f1a;
-  --brand-forest: #2d5bff;
-  --brand-forest-light: #5aa9ff;
-  --brand-gold: #f6c453;
-  --brand-gold-soft: #ffe1b3;
-  --brand-sand: #ffe9d6;
-  --brand-ivory: #fff8f1;
-  --brand-mist: #fff1e8;
-  --brand-clay: #ff7b6e;
+  --brand-ink: #2b201a;
+  --brand-night: #1a1411;
+  --brand-forest: #d05b84;
+  --brand-forest-light: #f1a0b6;
+  --brand-gold: #e8c189;
+  --brand-gold-soft: #f4dcc4;
+  --brand-sand: #fdece0;
+  --brand-ivory: #fff7f0;
+  --brand-mist: #fbeade;
+  --brand-clay: #d9826f;
 }
 
 @layer base {
@@ -36,8 +36,8 @@
   }
   
   .btn-primary:hover {
-    background: linear-gradient(135deg, #5aa9ff, #2d5bff);
-    box-shadow: 0 20px 40px rgba(45, 91, 255, 0.35);
+    background: linear-gradient(135deg, #f1a0b6, #d05b84);
+    box-shadow: 0 20px 40px rgba(208, 91, 132, 0.35);
   }
   
   .btn-secondary {
@@ -130,14 +130,14 @@ html {
 
 /* Glow effect */
 .glow {
-  box-shadow: 0 0 20px rgba(246, 196, 83, 0.35),
-              0 0 40px rgba(45, 91, 255, 0.25);
+  box-shadow: 0 0 20px rgba(232, 193, 137, 0.35),
+              0 0 40px rgba(208, 91, 132, 0.25);
 }
 
 .glow-hover:hover {
-  box-shadow: 0 0 30px rgba(246, 196, 83, 0.5),
-              0 0 60px rgba(45, 91, 255, 0.35),
-              0 0 90px rgba(246, 196, 83, 0.2);
+  box-shadow: 0 0 30px rgba(232, 193, 137, 0.5),
+              0 0 60px rgba(208, 91, 132, 0.35),
+              0 0 90px rgba(232, 193, 137, 0.2);
   transition: box-shadow 0.3s ease;
 }
 
@@ -200,11 +200,11 @@ html {
 @keyframes pulse-glow {
   0%, 100% {
     opacity: 1;
-    box-shadow: 0 0 20px rgba(246, 196, 83, 0.4);
+    box-shadow: 0 0 20px rgba(232, 193, 137, 0.4);
   }
   50% {
     opacity: 0.8;
-    box-shadow: 0 0 40px rgba(45, 91, 255, 0.45);
+    box-shadow: 0 0 40px rgba(208, 91, 132, 0.45);
   }
 }
 
