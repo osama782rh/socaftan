@@ -1,5 +1,5 @@
-// src/pages/HomePage.jsx
 import Hero from '../components/Hero'
+import Marquee from '../components/Marquee'
 import About from '../components/About'
 import Collection from '../components/Collection'
 import Services from '../components/Services'
@@ -10,6 +10,7 @@ function HomePage() {
   return (
     <>
       <Hero />
+      <Marquee />
       <About />
       <Collection />
       <Services />

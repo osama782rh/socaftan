@@ -1,31 +1,28 @@
-import { Instagram, Facebook, Mail, Phone, Sparkles, Heart, MapPin, ChevronUp } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { Instagram, Mail, Phone, MapPin, ChevronUp } from 'lucide-react'
+
+const TikTokIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.84a4.84 4.84 0 0 1-1-.15z" />
+  </svg>
+)
 import { Link } from 'react-router-dom'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   const socialLinks = [
-    { icon: <Instagram size={24} />, href: 'https://www.instagram.com/so_caftan91/', label: 'Instagram', gradient: 'from-brand-forest to-brand-gold' },
-    { icon: <Facebook size={24} />, href: '#', label: 'Facebook', gradient: 'from-brand-forestLight to-brand-night' },
-    { icon: <Mail size={24} />, href: 'mailto:contact@socaftan.fr', label: 'Email', gradient: 'from-brand-gold to-brand-sand' },
-    { icon: <Phone size={24} />, href: 'tel:+33612345678', label: 'Téléphone', gradient: 'from-brand-clay to-brand-gold' },
+    { icon: <Instagram size={18} />, href: 'https://www.instagram.com/so_caftan91/', label: 'Instagram' },
+    { icon: <TikTokIcon size={18} />, href: 'https://www.tiktok.com/@so_caftan91', label: 'TikTok' },
+    { icon: <Mail size={18} />, href: 'mailto:contact@socaftan.fr', label: 'Email' },
   ]
 
   const quickLinks = [
     { name: 'Accueil', href: '#hero' },
-    { name: 'À Propos', href: '#about' },
     { name: 'Collection', href: '#collection' },
-    { name: 'Sur-mesure', href: '/sur-mesure#custom' },
     { name: 'Services', href: '#services' },
     { name: 'Tarifs', href: '#pricing' },
+    { name: 'Sur-mesure', href: '/sur-mesure#custom' },
     { name: 'Contact', href: '#contact' },
-  ]
-
-  const services = [
-    { name: 'Location de Caftans', price: 'dès 60€' },
-    { name: 'Achat de Caftans', price: 'dès 180€' },
-    { name: 'Création sur-mesure', price: 'dès 220€' },
   ]
 
   const legalLinks = [
@@ -35,215 +32,126 @@ const Footer = () => {
   ]
 
   return (
-    <footer className="relative bg-gradient-to-br from-brand-night via-[#171a20] to-brand-night text-white overflow-hidden">
-      
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              opacity: [0, 0.5, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: Math.random() * 5 + 3,
-              repeat: Infinity,
-              delay: Math.random() * 3,
-            }}
-          />
-        ))}
-      </div>
+    <footer className="bg-brand-ink text-white">
+      <div className="container-custom px-5 md:px-10 lg:px-20 pt-16 md:pt-20 pb-8">
 
-      <div className="container-custom section-padding relative z-10">
-        
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          
+        {/* Main Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
+
           {/* Brand */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-1"
-          >
-            <div className="flex items-center space-x-3 mb-6">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                className="w-12 h-12 bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night rounded-full flex items-center justify-center"
-              >
-                <Sparkles className="text-white" size={24} />
-              </motion.div>
-              <div>
-                <span className="text-2xl font-bold font-serif text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
-                  SO Caftan
-                </span>
-                <p className="text-xs text-gray-400">Location & Vente</p>
-              </div>
+          <div className="lg:col-span-1">
+            <div className="text-2xl font-serif font-bold mb-4">
+              SO <span className="italic font-light">Caftan</span>
             </div>
-            <p className="text-gray-400 mb-6 leading-relaxed text-sm">
+            <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs">
               Votre destination pour des caftans d'exception. Location, achat ou création sur-mesure.
             </p>
-            <div className="flex space-x-3">
+            <div className="flex gap-2">
               {socialLinks.map((social, index) => (
-                <motion.a
+                <a
                   key={index}
                   href={social.href}
                   aria-label={social.label}
-                  whileHover={{ scale: 1.1, y: -3 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="relative group"
+                  className="w-10 h-10 rounded-full bg-white/8 hover:bg-white/15 flex items-center justify-center transition-colors text-white/60 hover:text-white"
                 >
-                  {/* Glow Effect */}
-                  <div className={`absolute -inset-1 bg-gradient-to-r ${social.gradient} rounded-full opacity-0 group-hover:opacity-50 blur-lg transition-opacity duration-300`} />
-                  
-                  <div className={`relative w-12 h-12 bg-gradient-to-r ${social.gradient} rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow`}>
-                    {social.icon}
-                  </div>
-                </motion.a>
+                  {social.icon}
+                </a>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Quick Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
-            <h3 className="text-xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-sand">
+          {/* Navigation */}
+          <div>
+            <h3 className="text-xs font-semibold tracking-[0.15em] uppercase text-white/30 mb-5">
               Navigation
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {quickLinks.map((link, index) => (
-                <motion.li
-                  key={index}
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <a
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors duration-300 flex items-center space-x-2 group"
-                  >
-                    <span className="w-1 h-1 bg-brand-gold rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <span>{link.name}</span>
+                <li key={index}>
+                  <a href={link.href} className="text-white/50 hover:text-white text-sm transition-colors">
+                    {link.name}
                   </a>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Services */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <h3 className="text-xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-sand">
-              Nos Services
-            </h3>
-            <ul className="space-y-4">
-              {services.map((service, index) => (
-                <li key={index} className="text-gray-400">
-                  <div className="font-medium text-white text-sm">{service.name}</div>
-                  <div className="text-xs text-brand-gold">{service.price}</div>
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </div>
 
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-          >
-            <h3 className="text-xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-brand-forest to-brand-gold">
+          {/* Services */}
+          <div>
+            <h3 className="text-xs font-semibold tracking-[0.15em] uppercase text-white/30 mb-5">
+              Nos services
+            </h3>
+            <ul className="space-y-3">
+              {[
+                { name: 'Location de Caftans', price: 'dès 60€' },
+                { name: 'Achat de Caftans', price: 'dès 180€' },
+                { name: 'Création sur-mesure', price: 'dès 220€' },
+              ].map((service, index) => (
+                <li key={index}>
+                  <div className="text-white/70 text-sm">{service.name}</div>
+                  <div className="text-brand-gold text-xs">{service.price}</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="text-xs font-semibold tracking-[0.15em] uppercase text-white/30 mb-5">
               Contact
             </h3>
-            <ul className="space-y-4 text-gray-400 text-sm">
-              <li className="flex items-start space-x-3">
-                <MapPin className="text-brand-gold flex-shrink-0 mt-0.5" size={18} />
-                <span>Île-de-France, France</span>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-start gap-2.5">
+                <MapPin size={15} className="text-brand-gold flex-shrink-0 mt-0.5" />
+                <span className="text-white/50">Île-de-France, France</span>
               </li>
-              <li className="flex items-start space-x-3">
-                <Phone className="text-brand-gold flex-shrink-0 mt-0.5" size={18} />
-                <a href="tel:+33612345678" className="hover:text-white transition-colors">
-                  +33 6 12 34 56 78
+              <li className="flex items-start gap-2.5">
+                <Phone size={15} className="text-brand-gold flex-shrink-0 mt-0.5" />
+                <a href="tel:+33699832902" className="text-white/50 hover:text-white transition-colors">
+                  06 99 83 29 02
                 </a>
               </li>
-              <li className="flex items-start space-x-3">
-                <Mail className="text-brand-gold flex-shrink-0 mt-0.5" size={18} />
-                <a href="mailto:contact@socaftan.fr" className="hover:text-white transition-colors break-all">
+              <li className="flex items-start gap-2.5">
+                <Mail size={15} className="text-brand-gold flex-shrink-0 mt-0.5" />
+                <a href="mailto:contact@socaftan.fr" className="text-white/50 hover:text-white transition-colors">
                   contact@socaftan.fr
                 </a>
               </li>
             </ul>
 
-            {/* Availability Badge */}
-            <div className="mt-6 inline-flex items-center space-x-2 bg-brand-gold/10 border border-brand-gold/30 px-4 py-2 rounded-full">
-              <div className="w-2 h-2 bg-brand-gold rounded-full animate-pulse" />
-              <span className="text-brand-gold text-xs font-semibold">Disponible maintenant</span>
+            <div className="mt-5 inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+              <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+              <span className="text-white/40 text-[10px] font-medium">Disponible</span>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-800 mb-8" />
+        <div className="border-t border-white/8 pt-6" />
 
-        {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-gray-400 text-sm flex items-center space-x-2"
-          >
-            <span>© {currentYear} SO Caftan.</span>
-            <span className="hidden md:inline">•</span>
-            <span className="flex items-center space-x-1">
-              <span>Fait avec</span>
-              <Heart className="text-brand-gold fill-brand-gold" size={14} />
-              <span>en France</span>
-            </span>
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-6"
-          >
+        {/* Bottom */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-white/25 text-xs">
+            © {currentYear} SO Caftan. Tous droits réservés.
+          </p>
+          <div className="flex flex-wrap justify-center gap-5">
             {legalLinks.map((link) => (
-              <Link key={link.to} to={link.to} className="text-gray-400 hover:text-white text-sm transition-colors">
+              <Link key={link.to} to={link.to} className="text-white/25 hover:text-white/50 text-xs transition-colors">
                 {link.name}
               </Link>
             ))}
-          </motion.div>
+          </div>
         </div>
-
-        {/* Optional: Back to top button */}
-        <motion.a
-          href="#hero"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          whileHover={{ y: -5 }}
-          className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-brand-forest to-brand-night rounded-full flex items-center justify-center shadow-2xl hover:shadow-brand-gold/40 transition-all duration-300 z-50"
-        >
-          <ChevronUp className="text-white" size={22} />
-        </motion.a>
-
       </div>
+
+      {/* Back to top */}
+      <a
+        href="#hero"
+        className="fixed bottom-6 right-6 w-11 h-11 bg-brand-ink border border-white/10 rounded-full flex items-center justify-center shadow-lg hover:bg-brand-ink/80 transition-colors z-50"
+        aria-label="Retour en haut"
+      >
+        <ChevronUp size={18} className="text-white/60" />
+      </a>
     </footer>
   )
 }

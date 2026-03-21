@@ -35,7 +35,7 @@ const PolitiqueConfidentialite = () => {
           {/* Préambule */}
           <div className="bg-green-50 border-l-4 border-green-600 p-6 rounded-lg mb-8">
             <p className="text-gray-700 leading-relaxed">
-              <strong>[NOM DE L'ENTREPRISE]</strong>, ci-après "nous" ou "le Responsable de traitement", accorde une grande importance à la protection de vos données personnelles. Cette politique de confidentialité vous informe sur la manière dont nous collectons, utilisons, stockons et protégeons vos données conformément au <strong>Règlement Général sur la Protection des Données (RGPD)</strong> et à la loi Informatique et Libertés.
+              <strong>SO Caftan</strong>, ci-après "nous" ou "le Responsable de traitement", accorde une grande importance à la protection de vos données personnelles. Cette politique de confidentialité vous informe sur la manière dont nous collectons, utilisons, stockons et protégeons vos données conformément au <strong>Règlement Général sur la Protection des Données (RGPD)</strong> et à la loi Informatique et Libertés.
             </p>
           </div>
 
@@ -49,11 +49,11 @@ const PolitiqueConfidentialite = () => {
             </div>
             <div className="text-gray-700 leading-relaxed space-y-3 ml-13">
               <div className="bg-gray-50 rounded-xl p-5">
-                <p className="mb-2"><strong>Raison sociale :</strong> [NOM DE L'ENTREPRISE]</p>
-                <p className="mb-2"><strong>Adresse :</strong> [Adresse complète]</p>
-                <p className="mb-2"><strong>Email :</strong> [contact@socaftan.fr]</p>
-                <p className="mb-2"><strong>Téléphone :</strong> [+33 X XX XX XX XX]</p>
-                <p className="mb-2"><strong>SIRET :</strong> [XXX XXX XXX XXXXX]</p>
+                <p className="mb-2"><strong>Raison sociale :</strong> SO Caftan</p>
+                <p className="mb-2"><strong>Adresse :</strong> Île-de-France, France</p>
+                <p className="mb-2"><strong>Email :</strong> contact@socaftan.fr</p>
+                <p className="mb-2"><strong>Téléphone :</strong> 06 99 83 29 02</p>
+                <p className="mb-2"><strong>SIREN :</strong> 999 110 984 </p>
               </div>
               <p className="mt-4">
                 Le Responsable de traitement est la personne qui détermine les finalités et les moyens du traitement des données personnelles.
@@ -210,7 +210,7 @@ const PolitiqueConfidentialite = () => {
             <div className="text-gray-700 leading-relaxed space-y-4 ml-13">
               
               <p>
-                Vos données personnelles sont destinées aux services internes de <strong>[NOM DE L'ENTREPRISE]</strong> et peuvent être transmises aux catégories de destinataires suivantes :
+                Vos données personnelles sont destinées aux services internes de <strong>SO Caftan</strong> et peuvent être transmises aux catégories de destinataires suivantes :
               </p>
 
               <div className="space-y-3">
@@ -226,7 +226,7 @@ const PolitiqueConfidentialite = () => {
                 <div className="bg-gray-50 rounded-xl p-5">
                   <h4 className="font-bold text-gray-900 mb-2">🔹 Prestataires de services</h4>
                   <ul className="list-disc list-inside text-sm space-y-1">
-                    <li><strong>Hébergement web :</strong> Vercel Inc. (États-Unis) - hébergement du site</li>
+                    <li><strong>Hébergement web :</strong> OVH (France) - hébergement du site</li>
                     <li><strong>Paiement :</strong> [Nom du prestataire] - traitement sécurisé des paiements</li>
                     <li><strong>Emailing :</strong> [Nom du prestataire] - envoi de newsletters (si applicable)</li>
                   </ul>
@@ -384,9 +384,9 @@ const PolitiqueConfidentialite = () => {
                   Pour exercer l'un de ces droits, contactez-nous :
                 </p>
                 <ul className="space-y-2 text-sm">
-                  <li>✉️ <strong>Par email :</strong> [contact@socaftan.fr]</li>
-                  <li>📞 <strong>Par téléphone :</strong> [+33 X XX XX XX XX]</li>
-                  <li>📮 <strong>Par courrier :</strong> [Adresse complète]</li>
+                  <li>✉️ <strong>Par email :</strong> contact@socaftan.fr</li>
+                  <li>📞 <strong>Par téléphone :</strong> 06 99 83 29 02</li>
+                  <li>📮 <strong>Par courrier :</strong> SO Caftan, Île-de-France</li>
                 </ul>
                 <p className="text-xs text-gray-600 mt-4">
                   ⏱️ Nous nous engageons à vous répondre dans un délai de <strong>1 mois</strong> maximum.
@@ -535,7 +535,7 @@ const PolitiqueConfidentialite = () => {
                 Nous vous encourageons à consulter régulièrement cette page pour prendre connaissance des éventuelles modifications.
               </p>
               <p className="font-semibold">
-                Date de dernière mise à jour : <strong>[Date]</strong>
+                Date de dernière mise à jour : <strong>17 mars 2026</strong>
               </p>
             </div>
           </section>
@@ -548,14 +548,14 @@ const PolitiqueConfidentialite = () => {
                 Pour toute question concernant cette politique de confidentialité ou le traitement de vos données :
               </p>
               <div className="space-y-2 text-gray-700">
-                <p>📧 <strong>Email :</strong> [contact@socaftan.fr]</p>
-                <p>📞 <strong>Téléphone :</strong> [+33 X XX XX XX XX]</p>
-                <p>📮 <strong>Courrier :</strong> [Adresse complète]</p>
+                <p>📧 <strong>Email :</strong> contact@socaftan.fr</p>
+                <p>📞 <strong>Téléphone :</strong> 06 99 83 29 02</p>
+                <p>📮 <strong>Courrier :</strong> SO Caftan, Île-de-France</p>
               </div>
             </div>
             
             <div className="text-center text-sm text-gray-500 mt-8">
-              <p>Dernière mise à jour : <strong>[Date]</strong></p>
+              <p>Dernière mise à jour : <strong>17 mars 2026</strong></p>
               <p className="mt-2">Version : <strong>1.0</strong></p>
             </div>
           </div>

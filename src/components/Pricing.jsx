@@ -1,30 +1,31 @@
-import { Check, Sparkles, ShoppingBag, Palette } from 'lucide-react'
+import { Check, Sparkles, ShoppingBag, Palette, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const Pricing = () => {
   const plans = [
     {
       name: 'Location',
-      icon: <Sparkles size={32} />,
-      price: 'dès 60€',
-      subtitle: 'Pour 3-5 jours',
+      icon: <Sparkles size={24} />,
+      price: '60',
+      unit: '€',
+      period: '3-5 jours',
       features: [
         'Caftans & Karakous disponibles',
         'Nettoyage inclus',
         'Retrait pratique',
-        'Échange possible sous 48 h',
-        'Conseil disponible',
+        'Échange possible sous 48h',
+        'Conseil personnalisé',
       ],
       highlighted: false,
-      gradient: 'from-brand-forest to-brand-forestLight',
-      buttonText: 'Voir la Collection',
+      buttonText: 'Voir la collection',
       link: '#collection',
     },
     {
       name: 'Achat',
-      icon: <ShoppingBag size={32} />,
-      price: 'dès 180€',
-      subtitle: 'Le caftan est à vous',
+      icon: <ShoppingBag size={24} />,
+      price: '180',
+      unit: '€',
+      period: 'à partir de',
       features: [
         'Large choix de modèles',
         'Prix variables selon qualité',
@@ -34,15 +35,15 @@ const Pricing = () => {
         'Support après-vente',
       ],
       highlighted: true,
-      gradient: 'from-brand-gold to-brand-sand',
-      buttonText: 'Acheter un Caftan',
+      buttonText: 'Acheter un caftan',
       link: '#collection',
     },
     {
       name: 'Sur-Mesure',
-      icon: <Palette size={32} />,
-      price: 'dès 220€',
-      subtitle: 'Création personnalisée',
+      icon: <Palette size={24} />,
+      price: '220',
+      unit: '€',
+      period: 'à partir de',
       features: [
         'Design 100% personnalisé',
         'Choix du tissu & couleurs',
@@ -52,208 +53,144 @@ const Pricing = () => {
         'Pièce unique garantie',
       ],
       highlighted: false,
-      gradient: 'from-brand-clay to-brand-forest',
-      buttonText: 'Créer mon Caftan',
+      buttonText: 'Créer mon caftan',
       link: '/sur-mesure#custom',
     },
   ]
 
   return (
-    <section id="pricing" className="section-padding bg-gradient-to-b from-brand-ivory via-brand-mist to-brand-ivory relative overflow-hidden">
-      
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-brand-gold/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-forest/15 rounded-full blur-3xl" />
+    <section id="pricing" className="section-padding bg-brand-ivory relative">
+      <div className="container-custom">
 
-      <div className="container-custom relative z-10">
-        
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-14"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-brand-goldSoft/50 to-brand-sand/50 px-6 py-3 rounded-full mb-6"
-          >
-            <Sparkles className="text-brand-forest" size={20} />
-            <span className="text-brand-forest font-semibold">Nos offres</span>
-          </motion.div>
-          
-          <h2 className="section-title mb-6">
-            Choisissez Votre Formule
+          <p className="section-label justify-center">Nos tarifs</p>
+          <h2 className="section-title text-center">
+            Choisissez <span className="italic font-light">votre formule</span>
           </h2>
-          
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="section-subtitle mx-auto text-center">
             Location ponctuelle, achat ou création sur-mesure : trouvez l'option qui vous correspond.
           </p>
         </motion.div>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto mb-14">
           {plans.map((plan, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="relative group"
-            >
-              {/* Glow Effect */}
-              <div className={`absolute -inset-0.5 bg-gradient-to-r ${plan.gradient} rounded-3xl opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-500`} />
-              
-              <div className={`relative h-full rounded-3xl p-8 transition-all duration-500 border-2 ${
+              transition={{ delay: index * 0.1 }}
+              className={`relative rounded-2xl p-7 md:p-8 transition-all duration-300 ${
                 plan.highlighted
-                  ? 'bg-gradient-to-br from-white to-brand-goldSoft/20 border-brand-gold/40 shadow-2xl scale-105'
-                  : 'bg-white border-gray-200 shadow-lg hover:shadow-2xl'
-              }`}>
-                
-                {/* Badge for highlighted plan */}
-                {plan.highlighted && (
-                  <motion.div
-                    initial={{ scale: 0, rotate: -45 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ type: 'spring', delay: 0.3 }}
-                    className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand-forest to-brand-gold text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg"
-                  >
-                    Populaire
-                  </motion.div>
-                )}
-
-                {/* Icon */}
-                <motion.div
-                  whileHover={{ rotate: 360, scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
-                  className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${plan.gradient} flex items-center justify-center text-white mb-6 shadow-lg`}
-                >
-                  {plan.icon}
-                </motion.div>
-
-                {/* Plan Name */}
-                <h3 className="text-3xl font-bold text-gray-900 mb-2">
-                  {plan.name}
-                </h3>
-                <p className="text-sm text-gray-500 mb-6">
-                  {plan.subtitle}
-                </p>
-
-                {/* Price */}
-                <div className="mb-8">
-                  <span className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-forest to-brand-gold">
-                    {plan.price}
-                  </span>
+                  ? 'bg-brand-ink text-white shadow-xl md:-mt-4 md:mb-[-16px] md:py-10'
+                  : 'bg-white border border-brand-sand/60 hover:shadow-md'
+              }`}
+            >
+              {plan.highlighted && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-brand-ink text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded-full">
+                  Populaire
                 </div>
+              )}
 
-                {/* Features */}
-                <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature, idx) => (
-                    <motion.li
-                      key={idx}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.1 }}
-                      className="flex items-start space-x-3"
-                    >
-                      <Check
-                        className="flex-shrink-0 mt-0.5 text-green-500"
-                        size={20}
-                      />
-                      <span className="text-gray-700">
-                        {feature}
-                      </span>
-                    </motion.li>
-                  ))}
-                </ul>
-
-                {/* CTA Button */}
-                <motion.a
-                  href={plan.link}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`block text-center py-4 px-6 rounded-2xl font-bold transition-all duration-300 ${
-                    plan.highlighted
-                      ? 'bg-gradient-to-r from-brand-forest to-brand-night text-white shadow-xl hover:shadow-2xl'
-                      : 'bg-brand-night text-white hover:bg-[#151821] shadow-lg hover:shadow-xl'
-                  }`}
-                >
-                  {plan.buttonText}
-                </motion.a>
+              {/* Icon */}
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${
+                plan.highlighted ? 'bg-white/10 text-brand-gold' : 'bg-brand-sand text-brand-ink'
+              }`}>
+                {plan.icon}
               </div>
+
+              {/* Name */}
+              <h3 className={`text-xl font-bold font-serif mb-1 ${
+                plan.highlighted ? 'text-white' : 'text-brand-ink'
+              }`}>
+                {plan.name}
+              </h3>
+              <p className={`text-xs mb-5 ${plan.highlighted ? 'text-white/40' : 'text-brand-ink/40'}`}>
+                {plan.period}
+              </p>
+
+              {/* Price */}
+              <div className="mb-6">
+                <span className={`text-4xl font-bold font-serif ${
+                  plan.highlighted ? 'text-white' : 'text-brand-ink'
+                }`}>
+                  {plan.price}
+                </span>
+                <span className={`text-lg ${plan.highlighted ? 'text-white/60' : 'text-brand-ink/40'}`}>
+                  {plan.unit}
+                </span>
+              </div>
+
+              {/* Features */}
+              <ul className="space-y-3 mb-8">
+                {plan.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <Check
+                      size={16}
+                      className={`flex-shrink-0 mt-0.5 ${
+                        plan.highlighted ? 'text-brand-gold' : 'text-brand-gold'
+                      }`}
+                    />
+                    <span className={`text-sm ${
+                      plan.highlighted ? 'text-white/70' : 'text-brand-ink/60'
+                    }`}>
+                      {feature}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Button */}
+              <a
+                href={plan.link}
+                className={`group flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-sm transition-all duration-300 ${
+                  plan.highlighted
+                    ? 'bg-brand-gold text-brand-ink hover:bg-brand-goldSoft'
+                    : 'bg-brand-ink text-white hover:bg-brand-ink/90'
+                }`}
+              >
+                {plan.buttonText}
+                <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+              </a>
             </motion.div>
           ))}
         </div>
 
-        {/* Additional Info */}
+        {/* Info Box */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 text-center"
+          className="max-w-3xl mx-auto"
         >
-          <div className="bg-gradient-to-r from-brand-ivory to-brand-goldSoft/20 rounded-2xl p-8 max-w-4xl mx-auto border border-gray-200">
-            <h4 className="text-2xl font-bold text-gray-900 mb-4">
-              Informations Importantes
+          <div className="bg-white rounded-2xl p-6 md:p-8 border border-brand-sand/60">
+            <h4 className="text-lg font-bold text-brand-ink font-serif mb-4 text-center">
+              Informations pratiques
             </h4>
-            <div className="grid md:grid-cols-2 gap-4 text-left">
-              <div className="flex items-start space-x-3">
-                <Check className="text-green-500 flex-shrink-0 mt-1" size={20} />
-                <p className="text-gray-700">
-                  <span className="font-semibold">Location :</span> Caution de 100€ remboursable
-                </p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <Check className="text-green-500 flex-shrink-0 mt-1" size={20} />
-                <p className="text-gray-700">
-                  <span className="font-semibold">Achat :</span> Prix variables selon le modèle et les finitions
-                </p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <Check className="text-green-500 flex-shrink-0 mt-1" size={20} />
-                <p className="text-gray-700">
-                  <span className="font-semibold">Sur-Mesure :</span> Acompte de 50% à la commande
-                </p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <Check className="text-green-500 flex-shrink-0 mt-1" size={20} />
-                <p className="text-gray-700">
-                  <span className="font-semibold">Paiement :</span> Espèces, CB ou virement acceptés
-                </p>
-              </div>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {[
+                { label: 'Location', info: 'Caution de 100€ remboursable' },
+                { label: 'Achat', info: 'Prix variables selon le modèle' },
+                { label: 'Sur-Mesure', info: 'Acompte de 50% à la commande' },
+                { label: 'Paiement', info: 'Espèces, CB ou virement' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-2.5 py-2">
+                  <Check size={14} className="text-brand-gold flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-brand-ink/60">
+                    <span className="font-semibold text-brand-ink">{item.label} :</span> {item.info}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </motion.div>
-
-        {/* CTA Final */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-12 text-center"
-        >
-          <p className="text-gray-600 mb-6 text-lg">
-            Une question sur nos tarifs ? Besoin d'un devis personnalisé ?
-          </p>
-          <motion.a
-            href="#contact"
-            whileHover={{ scale: 1.05, y: -3 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-block bg-gradient-to-r from-brand-forest via-brand-forestLight to-brand-night text-white px-12 py-5 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
-          >
-            Contactez-nous
-          </motion.a>
-        </motion.div>
-
       </div>
     </section>
   )

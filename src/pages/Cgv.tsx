@@ -35,7 +35,7 @@ const CGV = () => {
           {/* Préambule */}
           <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg mb-8">
             <p className="text-gray-700 leading-relaxed">
-              Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre <strong>[NOM DE L'ENTREPRISE]</strong>, ci-après dénommée "le Vendeur", et toute personne physique ou morale, ci-après dénommée "le Client", souhaitant louer, acheter ou commander un caftan sur-mesure via le site <strong>socaftan.fr</strong>.
+              Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre <strong>SO Caftan</strong> (microentreprise), ci-après dénommée "le Vendeur", et toute personne physique ou morale, ci-après dénommée "le Client", souhaitant louer, acheter ou commander un caftan sur-mesure via le site <strong>socaftan.fr</strong>.
             </p>
           </div>
 
@@ -49,7 +49,7 @@ const CGV = () => {
             </div>
             <div className="text-gray-700 leading-relaxed space-y-3 ml-13">
               <p>
-                Les présentes CGV s'appliquent à l'ensemble des services proposés par <strong>[NOM DE L'ENTREPRISE]</strong> :
+                Les présentes CGV s'appliquent à l'ensemble des services proposés par <strong>SO Caftan</strong> :
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li><strong>Location de caftans</strong> : Mise à disposition temporaire de caftans pour une durée de 3 à 5 jours</li>
@@ -265,8 +265,8 @@ const CGV = () => {
                   Pour toute réclamation concernant un défaut de conformité ou un vice caché, le Client peut contacter le service client :
                 </p>
                 <ul className="list-none ml-0 mt-3 space-y-2">
-                  <li>📧 Email : <strong>[contact@socaftan.fr]</strong></li>
-                  <li>📞 Téléphone : <strong>[+33 X XX XX XX XX]</strong></li>
+                  <li>📧 Email : <strong>contact@socaftan.fr</strong></li>
+                  <li>📞 Téléphone : <strong>06 99 83 29 02</strong></li>
                 </ul>
               </div>
 
@@ -320,9 +320,9 @@ const CGV = () => {
               </p>
               <div className="bg-gray-50 rounded-xl p-5">
                 <ul className="space-y-2">
-                  <li>📧 <strong>Email :</strong> [contact@socaftan.fr]</li>
-                  <li>📞 <strong>Téléphone :</strong> [+33 X XX XX XX XX]</li>
-                  <li>📮 <strong>Courrier :</strong> [Adresse complète]</li>
+                  <li>📧 <strong>Email :</strong> contact@socaftan.fr</li>
+                  <li>📞 <strong>Téléphone :</strong> 06 99 83 29 02</li>
+                  <li>📮 <strong>Courrier :</strong> SO Caftan, Île-de-France</li>
                 </ul>
               </div>
 
@@ -348,15 +348,8 @@ const CGV = () => {
                 <p className="mb-3">
                   Conformément à l'article L.612-1 du Code de la consommation, le Client a le droit de recourir gratuitement à un <strong>médiateur de la consommation</strong> en vue de la résolution amiable du litige qui l'oppose au Vendeur.
                 </p>
-                <p className="mb-3">
-                  <strong>Coordonnées du médiateur :</strong><br />
-                  [NOM DU MÉDIATEUR]<br />
-                  [Adresse]<br />
-                  [Email]<br />
-                  [Site web]
-                </p>
                 <p className="text-sm text-gray-600">
-                  Liste des médiateurs agréés : <a href="https://www.economie.gouv.fr/mediation-conso/mediateurs-references" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">economie.gouv.fr/mediation-conso</a>
+                  Le médiateur compétent est référencé sur la liste officielle des médiateurs agréés : <a href="https://www.economie.gouv.fr/mediation-conso/mediateurs-references" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">economie.gouv.fr/mediation-conso</a>
                 </p>
               </div>
 
@@ -416,13 +409,13 @@ const CGV = () => {
                 Pour toute question concernant nos Conditions Générales de Vente :
               </p>
               <div className="space-y-2 text-gray-700">
-                <p>📧 <strong>Email :</strong> [contact@socaftan.fr]</p>
-                <p>📞 <strong>Téléphone :</strong> [+33 X XX XX XX XX]</p>
+                <p>📧 <strong>Email :</strong> contact@socaftan.fr</p>
+                <p>📞 <strong>Téléphone :</strong> 06 99 83 29 02</p>
               </div>
             </div>
             
             <div className="text-center text-sm text-gray-500 mt-8">
-              <p>Dernière mise à jour : <strong>[Date]</strong></p>
+              <p>Dernière mise à jour : <strong>17 mars 2026</strong></p>
               <p className="mt-2">Version : <strong>1.0</strong></p>
             </div>
           </div>

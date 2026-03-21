@@ -41,37 +41,31 @@ const MentionsLegales = () => {
             
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <div className="bg-gray-50 rounded-xl p-6 border-l-4 border-rose-600">
-                <p className="mb-2"><strong>Raison sociale :</strong> [NOM DE L'ENTREPRISE ou NOM PRÉNOM si auto-entrepreneur]</p>
-                <p className="mb-2"><strong>Forme juridique :</strong> [Auto-entrepreneur / SARL / SAS / EURL / Autre]</p>
-                <p className="mb-2"><strong>Capital social :</strong> [MONTANT]€ <span className="text-sm text-gray-500">(si applicable)</span></p>
-                <p className="mb-2"><strong>SIRET :</strong> [XXX XXX XXX XXXXX]</p>
-                <p className="mb-2"><strong>N° TVA intracommunautaire :</strong> [FR XX XXXXXXXXX] <span className="text-sm text-gray-500">(si applicable)</span></p>
-                <p className="mb-2"><strong>RCS :</strong> [Ville + numéro] <span className="text-sm text-gray-500">(si société)</span></p>
+                <p className="mb-2"><strong>Raison sociale :</strong> SO Caftan</p>
+                <p className="mb-2"><strong>Forme juridique :</strong> Microentreprise (EI)</p>
+                <p className="mb-2"><strong>SIREN :</strong>  999 110 984 </p>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-6">
                 <p className="mb-2 flex items-start gap-2">
                   <MapPin className="text-rose-600 flex-shrink-0 mt-1" size={20} />
                   <span><strong>Siège social :</strong><br />
-                  [Adresse complète]<br />
-                  [Code postal] [Ville]<br />
+                  20 rue du Commandant Maurice Lissac<br />
+                  91250 Tigery<br />
                   France</span>
                 </p>
                 <p className="mb-2 flex items-center gap-2">
                   <Phone className="text-rose-600" size={20} />
-                  <span><strong>Téléphone :</strong> [+33 X XX XX XX XX]</span>
+                  <span><strong>Téléphone :</strong> 06 99 83 29 02</span>
                 </p>
                 <p className="flex items-center gap-2">
                   <Mail className="text-rose-600" size={20} />
-                  <span><strong>Email :</strong> [contact@socaftan.fr]</span>
+                  <span><strong>Email :</strong> contact@socaftan.fr</span>
                 </p>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-6">
-                <p><strong>Directeur de la publication :</strong> [NOM Prénom]</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Responsable de la rédaction : [NOM Prénom]
-                </p>
+                <p><strong>Directeur de la publication :</strong> SO Caftan</p>
               </div>
             </div>
           </section>
@@ -86,12 +80,10 @@ const MentionsLegales = () => {
             </div>
             
             <div className="bg-gray-50 rounded-xl p-6 text-gray-700">
-              <p className="mb-2"><strong>Hébergeur :</strong> Vercel Inc.</p>
-              <p className="mb-2"><strong>Adresse :</strong> 340 S Lemon Ave #4133, Walnut, CA 91789, USA</p>
-              <p className="mb-2"><strong>Site web :</strong> <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-rose-600 hover:underline">vercel.com</a></p>
-              <p className="text-sm text-gray-500 mt-4">
-                <em>Note : Si votre site est hébergé ailleurs, modifiez ces informations en conséquence.</em>
-              </p>
+              <p className="mb-2"><strong>Hébergeur :</strong> OVH</p>
+              <p className="mb-2"><strong>Adresse :</strong> 2 rue Kellermann, 59100 Roubaix, France</p>
+              <p className="mb-2"><strong>Site web :</strong> <a href="https://www.ovhcloud.com" target="_blank" rel="noopener noreferrer" className="text-rose-600 hover:underline">ovhcloud.com</a></p>
+              <p className="mb-2"><strong>Téléphone :</strong> 1007</p>
             </div>
           </section>
 
@@ -100,13 +92,13 @@ const MentionsLegales = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Propriété intellectuelle</h2>
             <div className="text-gray-700 leading-relaxed space-y-4">
               <p>
-                L'ensemble du contenu de ce site (textes, images, vidéos, logos, graphismes, etc.) est la propriété exclusive de <strong>[NOM DE L'ENTREPRISE]</strong> ou de ses partenaires, et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.
+                L'ensemble du contenu de ce site (textes, images, vidéos, logos, graphismes, etc.) est la propriété exclusive de <strong>SO Caftan</strong> ou de ses partenaires, et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.
               </p>
               <p>
-                Toute reproduction, représentation, modification, publication, transmission, dénaturation, totale ou partielle du site ou de son contenu, par quelque procédé que ce soit, et sur quelque support que ce soit est interdite sans l'autorisation écrite préalable de <strong>[NOM DE L'ENTREPRISE]</strong>.
+                Toute reproduction, représentation, modification, publication, transmission, dénaturation, totale ou partielle du site ou de son contenu, par quelque procédé que ce soit, et sur quelque support que ce soit est interdite sans l'autorisation écrite préalable de <strong>SO Caftan</strong>.
               </p>
               <p>
-                La marque <strong>SO Caftan</strong> ainsi que les logos figurant sur le site sont des marques déposées. Toute reproduction totale ou partielle de ces marques ou de ces logos effectuée à partir des éléments du site sans l'autorisation expresse de <strong>[NOM DE L'ENTREPRISE]</strong> est donc prohibée.
+                La marque <strong>SO Caftan</strong> ainsi que les logos figurant sur le site sont des marques déposées. Toute reproduction totale ou partielle de ces marques ou de ces logos effectuée à partir des éléments du site sans l'autorisation expresse de <strong>SO Caftan</strong> est donc prohibée.
               </p>
             </div>
           </section>
@@ -119,7 +111,7 @@ const MentionsLegales = () => {
                 Conformément à la loi « Informatique et Libertés » du 6 janvier 1978 modifiée et au Règlement Général sur la Protection des Données (RGPD) du 27 avril 2016, vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition aux données personnelles vous concernant.
               </p>
               <p>
-                Pour exercer ces droits, vous pouvez nous contacter à l'adresse suivante : <strong>[contact@socaftan.fr]</strong>
+                Pour exercer ces droits, vous pouvez nous contacter à l'adresse suivante : <strong>contact@socaftan.fr</strong>
               </p>
               <p>
                 Pour plus d'informations sur la collecte et le traitement de vos données personnelles, consultez notre <a href="/politique-confidentialite" className="text-rose-600 hover:underline font-semibold">Politique de Confidentialité</a>.
@@ -148,10 +140,10 @@ const MentionsLegales = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">6. Limitation de responsabilité</h2>
             <div className="text-gray-700 leading-relaxed space-y-4">
               <p>
-                <strong>[NOM DE L'ENTREPRISE]</strong> met tout en œuvre pour offrir aux utilisateurs des informations et/ou des outils disponibles et vérifiés, mais ne saurait être tenu responsable des erreurs, d'une absence de disponibilité des informations et/ou de la présence de virus sur son site.
+                <strong>SO Caftan</strong> met tout en œuvre pour offrir aux utilisateurs des informations et/ou des outils disponibles et vérifiés, mais ne saurait être tenu responsable des erreurs, d'une absence de disponibilité des informations et/ou de la présence de virus sur son site.
               </p>
               <p>
-                Les liens hypertextes mis en place dans le cadre du présent site internet en direction d'autres ressources présentes sur le réseau Internet ne sauraient engager la responsabilité de <strong>[NOM DE L'ENTREPRISE]</strong>.
+                Les liens hypertextes mis en place dans le cadre du présent site internet en direction d'autres ressources présentes sur le réseau Internet ne sauraient engager la responsabilité de <strong>SO Caftan</strong>.
               </p>
               <p>
                 Les photographies des produits présentés sur le site ne sont pas contractuelles. Les couleurs et les détails peuvent varier légèrement en fonction des écrans et de l'éclairage.
@@ -174,8 +166,7 @@ const MentionsLegales = () => {
                 Conformément à l'article L.612-1 du Code de la consommation, le consommateur a le droit de recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable du litige qui l'oppose à un professionnel.
               </p>
               <p>
-                <strong>Coordonnées du médiateur :</strong> [À compléter avec votre médiateur agréé]<br />
-                <span className="text-sm text-gray-500">Liste des médiateurs : <a href="https://www.economie.gouv.fr/mediation-conso/mediateurs-references" target="_blank" rel="noopener noreferrer" className="text-rose-600 hover:underline">economie.gouv.fr/mediation-conso</a></span>
+                <span className="text-sm text-gray-500">Le médiateur compétent est référencé sur la liste officielle : <a href="https://www.economie.gouv.fr/mediation-conso/mediateurs-references" target="_blank" rel="noopener noreferrer" className="text-rose-600 hover:underline">economie.gouv.fr/mediation-conso</a></span>
               </p>
             </div>
           </section>
@@ -190,15 +181,15 @@ const MentionsLegales = () => {
               <div className="space-y-2 text-gray-700">
                 <p className="flex items-center gap-2">
                   <Mail className="text-rose-600" size={20} />
-                  <strong>Par email :</strong> [contact@socaftan.fr]
+                  <strong>Par email :</strong> contact@socaftan.fr
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="text-rose-600" size={20} />
-                  <strong>Par téléphone :</strong> [+33 X XX XX XX XX]
+                  <strong>Par téléphone :</strong> 06 99 83 29 02
                 </p>
                 <p className="flex items-start gap-2">
                   <MapPin className="text-rose-600 flex-shrink-0 mt-1" size={20} />
-                  <span><strong>Par courrier :</strong><br />[Adresse complète]</span>
+                  <span><strong>Par courrier :</strong><br />20 rue du Commandant Maurice Lissac, 91250 Tigery</span>
                 </p>
               </div>
             </div>
@@ -206,7 +197,7 @@ const MentionsLegales = () => {
 
           {/* Footer de la page */}
           <div className="mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
-            <p>Dernière mise à jour : <strong>[Date]</strong></p>
+            <p>Dernière mise à jour : <strong>17 mars 2026</strong></p>
           </div>
 
         </motion.div>
