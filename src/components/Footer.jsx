@@ -6,6 +6,7 @@ const TikTokIcon = ({ size = 18 }) => (
   </svg>
 )
 import { Link } from 'react-router-dom'
+import logo from '../assets/logo.png'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -40,9 +41,7 @@ const Footer = () => {
 
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="text-2xl font-serif font-bold mb-4">
-              SO <span className="italic font-light">Caftan</span>
-            </div>
+            <img src={logo} alt="SO Caftan" className="h-16 mb-4 brightness-0 invert" />
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs">
               Votre destination pour des caftans d'exception. Location, achat ou création sur-mesure.
             </p>

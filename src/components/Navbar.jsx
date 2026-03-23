@@ -1,16 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { Menu, X, Phone, ShoppingBag, User } from 'lucide-react'
+import { Menu, X, Phone, ShoppingBag, User, Heart, Package, LogOut, ChevronDown, Settings } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
+import logo from '../assets/logo.png'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
+  const accountMenuRef = useRef(null)
   const { pathname } = useLocation()
   const { itemCount, setIsCartOpen } = useCart()
-  const { user } = useAuth()
+  const { user, profile, signOut } = useAuth()
   const isSolid = isScrolled || pathname !== '/'
 
   useEffect(() => {
@@ -21,6 +24,16 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (accountMenuRef.current && !accountMenuRef.current.contains(e.target)) {
+        setIsAccountMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   const navLinks = [
     { name: 'Accueil', href: '/#hero' },
     { name: 'Collection', href: '/#collection' },
@@ -29,6 +42,14 @@ const Navbar = () => {
     { name: 'Sur-mesure', href: '/sur-mesure' },
     { name: 'Contact', href: '/#contact' },
   ]
+
+  const accountMenuItems = [
+    { label: 'Mes commandes', to: '/compte?tab=orders', icon: Package },
+    { label: 'Ma wishlist', to: '/compte?tab=wishlist', icon: Heart },
+    { label: 'Informations personnelles', to: '/compte?tab=profile', icon: Settings },
+  ]
+
+  const displayName = profile?.first_name || user?.email?.split('@')[0] || ''
 
   return (
     <>
@@ -56,18 +77,18 @@ const Navbar = () => {
       >
         <div className="container-custom px-5 md:px-10">
           <div className={`flex items-center justify-between transition-all duration-500 ${
-            isScrolled ? 'py-3' : 'py-4 md:py-5'
+            isScrolled ? 'py-1' : 'py-2 md:py-3'
           }`}>
 
             {/* Logo */}
             <a href="/" className="flex items-center gap-2 group">
-              <div className={`font-serif font-bold transition-all duration-500 ${
-                isSolid
-                  ? 'text-xl md:text-2xl text-brand-ink'
-                  : 'text-2xl md:text-3xl text-white'
-              }`}>
-                SO <span className="italic font-light">Caftan</span>
-              </div>
+              <img
+                src={logo}
+                alt="SO Caftan"
+                className={`transition-all duration-500 ${
+                  isScrolled ? 'h-10 md:h-12' : 'h-12 md:h-14'
+                } ${isSolid ? '' : 'brightness-0 invert'}`}
+              />
             </a>
 
             {/* Desktop Navigation */}
@@ -89,18 +110,88 @@ const Navbar = () => {
 
             {/* CTA + Cart + Account + Mobile */}
             <div className="flex items-center gap-2">
-              {/* Account */}
-              <Link
-                to={user ? '/compte' : '/connexion'}
-                className={`hidden lg:flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300 ${
-                  isSolid
-                    ? 'text-brand-ink/50 hover:text-brand-ink hover:bg-brand-sand/40'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
-                }`}
-                title={user ? 'Mon compte' : 'Se connecter'}
-              >
-                <User size={18} />
-              </Link>
+              {/* Account - Connected */}
+              {user ? (
+                <div className="relative hidden lg:block" ref={accountMenuRef}>
+                  <button
+                    onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-full transition-colors duration-300 ${
+                      isSolid
+                        ? 'text-brand-ink/70 hover:text-brand-ink hover:bg-brand-sand/40'
+                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                      isSolid ? 'bg-brand-gold/15 text-brand-gold' : 'bg-white/20 text-white'
+                    }`}>
+                      {displayName.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-[13px] font-medium max-w-[100px] truncate">{displayName}</span>
+                    <ChevronDown size={14} className={`transition-transform ${isAccountMenuOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  <AnimatePresence>
+                    {isAccountMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border border-brand-sand/60 overflow-hidden"
+                      >
+                        {/* User info */}
+                        <div className="px-4 py-3 border-b border-brand-sand/40 bg-brand-ivory/50">
+                          <p className="text-sm font-semibold text-brand-ink">{profile?.first_name} {profile?.last_name}</p>
+                          <p className="text-xs text-brand-ink/40 truncate">{user.email}</p>
+                        </div>
+
+                        {/* Menu items */}
+                        <div className="py-1">
+                          {accountMenuItems.map((item) => (
+                            <Link
+                              key={item.to}
+                              to={item.to}
+                              onClick={() => setIsAccountMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-brand-ink/70 hover:text-brand-ink hover:bg-brand-sand/30 transition-colors"
+                            >
+                              <item.icon size={16} />
+                              {item.label}
+                            </Link>
+                          ))}
+                        </div>
+
+                        {/* Sign out */}
+                        <div className="border-t border-brand-sand/40 py-1">
+                          <button
+                            onClick={() => {
+                              setIsAccountMenuOpen(false)
+                              signOut()
+                            }}
+                            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500/70 hover:text-red-600 hover:bg-red-50/50 transition-colors"
+                          >
+                            <LogOut size={16} />
+                            Déconnexion
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                /* Account - Not Connected */
+                <Link
+                  to="/connexion"
+                  className={`hidden lg:flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300 ${
+                    isSolid
+                      ? 'text-brand-ink/50 hover:text-brand-ink hover:bg-brand-sand/40'
+                      : 'text-white/70 hover:text-white hover:bg-white/10'
+                  }`}
+                  title="Se connecter"
+                >
+                  <User size={18} />
+                </Link>
+              )}
 
               {/* Cart */}
               <button
@@ -167,13 +258,11 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white shadow-2xl"
+              className="absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white shadow-2xl overflow-y-auto"
             >
               <div className="p-8 pt-24">
                 <div className="mb-10">
-                  <h3 className="text-2xl font-serif font-bold text-brand-ink">
-                    SO <span className="italic font-light">Caftan</span>
-                  </h3>
+                  <img src={logo} alt="SO Caftan" className="h-16" />
                 </div>
 
                 <div className="space-y-1">
@@ -187,22 +276,71 @@ const Navbar = () => {
                       {link.name}
                     </a>
                   ))}
-
-                  {/* Mobile account link */}
-                  <Link
-                    to={user ? '/compte' : '/connexion'}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-brand-ink/80 hover:text-brand-ink hover:bg-brand-sand/30 font-medium transition-colors text-[15px]"
-                  >
-                    <User size={18} />
-                    {user ? 'Mon compte' : 'Se connecter'}
-                  </Link>
                 </div>
+
+                {/* Mobile - Connected user menu */}
+                {user ? (
+                  <div className="mt-6 pt-6 border-t border-brand-sand">
+                    <div className="flex items-center gap-3 px-4 mb-4">
+                      <div className="w-10 h-10 rounded-full bg-brand-gold/15 flex items-center justify-center text-sm font-bold text-brand-gold">
+                        {displayName.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-brand-ink">{profile?.first_name} {profile?.last_name}</p>
+                        <p className="text-xs text-brand-ink/40 truncate">{user.email}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      {accountMenuItems.map((item) => (
+                        <Link
+                          key={item.to}
+                          to={item.to}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center gap-3 px-4 py-3 rounded-xl text-brand-ink/70 hover:text-brand-ink hover:bg-brand-sand/30 font-medium transition-colors text-[15px]"
+                        >
+                          <item.icon size={18} />
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false)
+                        signOut()
+                      }}
+                      className="flex items-center gap-3 w-full px-4 py-3 mt-2 rounded-xl text-red-500/70 hover:text-red-600 hover:bg-red-50/50 font-medium transition-colors text-[15px]"
+                    >
+                      <LogOut size={18} />
+                      Déconnexion
+                    </button>
+                  </div>
+                ) : (
+                  /* Mobile - Not connected */
+                  <div className="mt-6 pt-6 border-t border-brand-sand space-y-2">
+                    <Link
+                      to="/connexion"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-brand-ink/80 hover:text-brand-ink hover:bg-brand-sand/30 font-medium transition-colors text-[15px]"
+                    >
+                      <User size={18} />
+                      Se connecter
+                    </Link>
+                    <Link
+                      to="/inscription"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full bg-brand-ink text-white text-center py-3.5 rounded-full font-semibold text-sm"
+                    >
+                      Créer un compte
+                    </Link>
+                  </div>
+                )}
 
                 <a
                   href="/#contact"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="mt-8 block w-full bg-brand-ink text-white text-center py-3.5 rounded-full font-semibold text-sm"
+                  className="mt-6 block w-full bg-brand-gold text-white text-center py-3.5 rounded-full font-semibold text-sm"
                 >
                   Réserver maintenant
                 </a>

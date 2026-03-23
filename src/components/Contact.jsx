@@ -1,6 +1,21 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Send, Clock } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Clock, X } from 'lucide-react'
 import { motion } from 'framer-motion'
+
+const products = [
+  { id: 'sfifa-royale', name: 'Sfifa Royale', category: 'Caftan' },
+  { id: 'malaki', name: 'Malaki', category: 'Caftan' },
+  { id: 'jawhara-argente', name: 'Jawhara Argenté', category: 'Caftan' },
+  { id: 'damas-or', name: "Damas d'Or", category: 'Caftan' },
+  { id: 'moutarde-mokhfi', name: 'Moutarde Mokhfi', category: 'Caftan' },
+  { id: 'zouak-royal', name: 'Zouak Royal', category: 'Caftan' },
+  { id: 'nesrine', name: 'Nesrine', category: 'Caftan' },
+  { id: 'ambre', name: 'Ambre', category: 'Caftan' },
+  { id: 'majestic', name: 'Majestic', category: 'Karakou' },
+  { id: 'emeraude-or', name: 'Émeraude & Or', category: 'Karakou' },
+  { id: 'obsidienne', name: 'Obsidienne', category: 'Karakou' },
+  { id: 'bleu-de-nuit', name: 'Bleu de Nuit', category: 'Karakou' },
+]
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,15 +26,35 @@ const Contact = () => {
     date: '',
     message: '',
   })
+  const [selectedProducts, setSelectedProducts] = useState([])
+  const [isProductDropdownOpen, setIsProductDropdownOpen] = useState(false)
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  const toggleProduct = (productId) => {
+    setSelectedProducts(prev =>
+      prev.includes(productId)
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    )
+  }
+
+  const removeProduct = (productId) => {
+    setSelectedProducts(prev => prev.filter(id => id !== productId))
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
+    const submissionData = {
+      ...formData,
+      products: selectedProducts.map(id => products.find(p => p.id === id)?.name),
+    }
+    console.log('Form submission:', submissionData)
     alert('Merci pour votre message. Nous vous recontacterons très bientôt.')
     setFormData({ name: '', email: '', phone: '', service: '', date: '', message: '' })
+    setSelectedProducts([])
   }
 
   const contactInfo = [
@@ -27,6 +62,11 @@ const Contact = () => {
     { icon: <Mail size={20} />, title: 'Email', content: 'contact@socaftan.fr', link: 'mailto:contact@socaftan.fr' },
     { icon: <MapPin size={20} />, title: 'Localisation', content: 'Île-de-France, France', link: '#' },
   ]
+
+  const groupedProducts = {
+    Caftan: products.filter(p => p.category === 'Caftan'),
+    Karakou: products.filter(p => p.category === 'Karakou'),
+  }
 
   return (
     <section id="contact" className="section-padding bg-brand-mist relative">
@@ -163,6 +203,92 @@ const Contact = () => {
                     <option value="sur-mesure">Sur-Mesure</option>
                     <option value="autre">Autre demande</option>
                   </select>
+                </div>
+
+                {/* Product Multi-Select */}
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-semibold text-brand-ink/50 mb-1.5 uppercase tracking-wide">
+                    Pièces qui vous intéressent
+                  </label>
+
+                  {/* Selected products tags */}
+                  {selectedProducts.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {selectedProducts.map(id => {
+                        const product = products.find(p => p.id === id)
+                        return (
+                          <span
+                            key={id}
+                            className="inline-flex items-center gap-1 bg-brand-gold/10 text-brand-gold border border-brand-gold/20 px-3 py-1 rounded-full text-xs font-medium"
+                          >
+                            {product?.name}
+                            <button
+                              type="button"
+                              onClick={() => removeProduct(id)}
+                              className="hover:text-brand-ink transition-colors"
+                            >
+                              <X size={12} />
+                            </button>
+                          </span>
+                        )
+                      })}
+                    </div>
+                  )}
+
+                  {/* Dropdown trigger */}
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setIsProductDropdownOpen(!isProductDropdownOpen)}
+                      className="w-full px-4 py-3 bg-brand-ivory border border-brand-sand/60 rounded-xl text-sm text-left focus:ring-2 focus:ring-brand-gold/30 focus:border-brand-gold transition-all outline-none flex items-center justify-between"
+                    >
+                      <span className={selectedProducts.length > 0 ? 'text-brand-ink' : 'text-brand-ink/40'}>
+                        {selectedProducts.length > 0
+                          ? `${selectedProducts.length} pièce${selectedProducts.length > 1 ? 's' : ''} sélectionnée${selectedProducts.length > 1 ? 's' : ''}`
+                          : 'Sélectionnez des pièces...'
+                        }
+                      </span>
+                      <svg className={`w-4 h-4 text-brand-ink/40 transition-transform ${isProductDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    {/* Dropdown */}
+                    {isProductDropdownOpen && (
+                      <div className="absolute z-20 top-full mt-1 w-full bg-white border border-brand-sand/60 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                        {Object.entries(groupedProducts).map(([category, items]) => (
+                          <div key={category}>
+                            <div className="px-4 py-2 bg-brand-ivory/50 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-ink/40 sticky top-0">
+                              {category}s
+                            </div>
+                            {items.map(product => (
+                              <button
+                                key={product.id}
+                                type="button"
+                                onClick={() => toggleProduct(product.id)}
+                                className={`w-full px-4 py-2.5 text-sm text-left flex items-center gap-3 hover:bg-brand-sand/20 transition-colors ${
+                                  selectedProducts.includes(product.id) ? 'bg-brand-gold/5' : ''
+                                }`}
+                              >
+                                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                                  selectedProducts.includes(product.id)
+                                    ? 'bg-brand-gold border-brand-gold'
+                                    : 'border-brand-sand'
+                                }`}>
+                                  {selectedProducts.includes(product.id) && (
+                                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  )}
+                                </div>
+                                <span className="text-brand-ink/80">{product.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="md:col-span-2">
