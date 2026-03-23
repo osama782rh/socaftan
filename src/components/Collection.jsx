@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Eye, X, ArrowRight } from 'lucide-react'
+import { Eye, X, ArrowRight, ShoppingBag, Calendar } from 'lucide-react'
+import { useCart } from '../contexts/CartContext'
+import RentalDateModal from './RentalDateModal'
 
 import imgAmbre from '../assets/CAFTAN_AMBRE.jpg'
 import imgBleu from '../assets/CAFTAN_BLEU.jpg'
@@ -23,23 +25,42 @@ import imgKarakouObsidienne from '../assets/KARAKOU_OBSIDIENNE.jpg'
 const Collection = () => {
   const [activeFilter, setActiveFilter] = useState('Tous')
   const [zoomedItem, setZoomedItem] = useState(null)
+  const [rentalModal, setRentalModal] = useState(null)
+  const { addItem } = useCart()
 
   const filters = ['Tous', 'Caftans', 'Karakous']
 
   const caftans = [
-    { id: 1, name: 'Sfifa Royale', category: 'Caftans', price: '60€', image: imgRougeJawhara, description: 'Travail de Maâlem traditionnel ton sur ton', featured: true },
-    { id: 2, name: 'Malaki', category: 'Caftans', price: '60€', image: imgMalaki, description: 'Émeraude profond & finitions royales', featured: true },
-    { id: 3, name: 'Jawhara Argenté', category: 'Caftans', price: '60€', image: imgJawharaArgent, description: 'Brocart de soie fleuri & reflets argent', featured: true },
-    { id: 4, name: 'Damas d\'Or', category: 'Caftans', price: '60€', image: imgDamasOr, description: 'Tissu damassé noble & motifs andalous' },
-    { id: 5, name: 'Moutarde Mokhfi', category: 'Caftans', price: '60€', image: imgMoutardeMokhfi, description: 'Broderie Sabra fine sur soie moutarde' },
-    { id: 6, name: 'Zouak Royal', category: 'Caftans', price: '60€', image: imgZouakRoyal, description: 'Prune intense & broderies en relief' },
-    { id: 7, name: 'Nesrine', category: 'Caftans', price: '60€', image: imgNesrine, description: 'Vieux rose poudré & fleurs de soie' },
-    { id: 8, name: 'Ambre', category: 'Caftans', price: '60€', image: imgAmbre, description: 'Terre de Sienne & travail de Randa' },
-    { id: 9, name: 'Majestic', category: 'Karakous', price: '60€', image: imgKarakouMajestic, description: 'Velours bleu nuit & broderies Fetla or', featured: true },
-    { id: 10, name: 'Émeraude & Or', category: 'Karakous', price: '60€', image: imgKarakouEmeraude, description: 'Vert sapin impérial & perlage de cristal' },
-    { id: 11, name: 'Obsidienne', category: 'Karakous', price: '60€', image: imgKarakouObsidienne, description: 'Velours noir & broderies baroques roses' },
-    { id: 12, name: 'Bleu de Nuit', category: 'Karakous', price: '60€', image: imgKarakouBleu, description: 'Style Algérois pur & finitions argent' },
+    { id: 1, name: 'Sfifa Royale', category: 'Caftans', price: '60€', rentalPrice: 60, purchasePrice: 350, image: imgRougeJawhara, description: 'Travail de Maâlem traditionnel ton sur ton', featured: true },
+    { id: 2, name: 'Malaki', category: 'Caftans', price: '60€', rentalPrice: 60, purchasePrice: 380, image: imgMalaki, description: 'Émeraude profond & finitions royales', featured: true },
+    { id: 3, name: 'Jawhara Argenté', category: 'Caftans', price: '60€', rentalPrice: 60, purchasePrice: 320, image: imgJawharaArgent, description: 'Brocart de soie fleuri & reflets argent', featured: true },
+    { id: 4, name: 'Damas d\'Or', category: 'Caftans', price: '60€', rentalPrice: 60, purchasePrice: 300, image: imgDamasOr, description: 'Tissu damassé noble & motifs andalous' },
+    { id: 5, name: 'Moutarde Mokhfi', category: 'Caftans', price: '60€', rentalPrice: 60, purchasePrice: 250, image: imgMoutardeMokhfi, description: 'Broderie Sabra fine sur soie moutarde' },
+    { id: 6, name: 'Zouak Royal', category: 'Caftans', price: '60€', rentalPrice: 60, purchasePrice: 280, image: imgZouakRoyal, description: 'Prune intense & broderies en relief' },
+    { id: 7, name: 'Nesrine', category: 'Caftans', price: '60€', rentalPrice: 60, purchasePrice: 220, image: imgNesrine, description: 'Vieux rose poudré & fleurs de soie' },
+    { id: 8, name: 'Ambre', category: 'Caftans', price: '60€', rentalPrice: 60, purchasePrice: 200, image: imgAmbre, description: 'Terre de Sienne & travail de Randa' },
+    { id: 9, name: 'Majestic', category: 'Karakous', price: '60€', rentalPrice: 60, purchasePrice: 220, image: imgKarakouMajestic, description: 'Velours bleu nuit & broderies Fetla or', featured: true },
+    { id: 10, name: 'Émeraude & Or', category: 'Karakous', price: '60€', rentalPrice: 60, purchasePrice: 200, image: imgKarakouEmeraude, description: 'Vert sapin impérial & perlage de cristal' },
+    { id: 11, name: 'Obsidienne', category: 'Karakous', price: '60€', rentalPrice: 60, purchasePrice: 190, image: imgKarakouObsidienne, description: 'Velours noir & broderies baroques roses' },
+    { id: 12, name: 'Bleu de Nuit', category: 'Karakous', price: '60€', rentalPrice: 60, purchasePrice: 180, image: imgKarakouBleu, description: 'Style Algérois pur & finitions argent' },
   ]
+
+  const handleRent = (product, e) => {
+    e.stopPropagation()
+    setRentalModal(product)
+  }
+
+  const handleRentalConfirm = (dates) => {
+    if (rentalModal) {
+      addItem(rentalModal, 'location', dates)
+      setRentalModal(null)
+    }
+  }
+
+  const handleBuy = (product, e) => {
+    e.stopPropagation()
+    addItem(product, 'achat')
+  }
 
   const filteredCaftans =
     activeFilter === 'Tous'
@@ -140,12 +161,28 @@ const Collection = () => {
 
                   {/* Info */}
                   <div className="p-4">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-3">
                       <div>
                         <h3 className="text-sm font-bold text-brand-ink font-serif">{caftan.name}</h3>
                         <p className="text-brand-ink/40 text-xs mt-0.5">{caftan.category === 'Caftans' ? 'Caftan' : 'Karakou'}</p>
                       </div>
                       <span className="text-lg font-bold text-brand-gold font-serif">{caftan.price}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => handleRent(caftan, e)}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full bg-brand-ink text-white text-xs font-semibold hover:bg-brand-ink/90 transition-colors"
+                      >
+                        <Calendar size={12} />
+                        Louer
+                      </button>
+                      <button
+                        onClick={(e) => handleBuy(caftan, e)}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full border border-brand-ink text-brand-ink text-xs font-semibold hover:bg-brand-ink hover:text-white transition-colors"
+                      >
+                        <ShoppingBag size={12} />
+                        Acheter
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -154,6 +191,17 @@ const Collection = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Rental Date Modal */}
+      <AnimatePresence>
+        {rentalModal && (
+          <RentalDateModal
+            product={rentalModal}
+            onConfirm={handleRentalConfirm}
+            onClose={() => setRentalModal(null)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Zoom Modal */}
       <AnimatePresence>
@@ -203,25 +251,44 @@ const Collection = () => {
                     {zoomedItem.description}
                   </p>
 
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <span className="text-3xl font-bold text-brand-ink font-serif">{zoomedItem.price}</span>
-                      <span className="text-brand-ink/40 text-sm ml-2">/ location</span>
+                  <div className="mb-6">
+                    <div className="flex items-baseline gap-4">
+                      <div>
+                        <span className="text-3xl font-bold text-brand-gold font-serif">{zoomedItem.rentalPrice}€</span>
+                        <span className="text-brand-ink/40 text-sm ml-1">/ location</span>
+                      </div>
+                      <div>
+                        <span className="text-xl font-bold text-brand-ink font-serif">{zoomedItem.purchasePrice}€</span>
+                        <span className="text-brand-ink/40 text-sm ml-1">/ achat</span>
+                      </div>
                     </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => { setZoomedItem(null); setRentalModal(zoomedItem) }}
+                      className="flex-1 flex items-center justify-center gap-2 bg-brand-ink text-white py-3.5 rounded-full font-semibold text-sm hover:bg-brand-ink/90 transition-colors"
+                    >
+                      <Calendar size={16} />
+                      Louer
+                    </button>
+                    <button
+                      onClick={() => { handleBuy(zoomedItem, { stopPropagation: () => {} }); setZoomedItem(null) }}
+                      className="flex-1 flex items-center justify-center gap-2 border-2 border-brand-ink text-brand-ink py-3.5 rounded-full font-semibold text-sm hover:bg-brand-ink hover:text-white transition-colors"
+                    >
+                      <ShoppingBag size={16} />
+                      Acheter
+                    </button>
                   </div>
 
                   <a
                     href="#contact"
                     onClick={() => setZoomedItem(null)}
-                    className="flex items-center justify-center gap-2 bg-brand-ink text-white py-3.5 rounded-full font-semibold text-sm hover:bg-brand-ink/90 transition-colors"
+                    className="flex items-center justify-center gap-1 text-brand-gold text-xs font-semibold mt-4 hover:text-brand-gold/80 transition-colors"
                   >
-                    Réserver cette pièce
-                    <ArrowRight size={16} />
+                    Ou contactez-nous pour plus d'infos
+                    <ArrowRight size={12} />
                   </a>
-
-                  <p className="mt-4 text-[11px] text-brand-ink/30 text-center">
-                    Appuyez sur Esc pour fermer
-                  </p>
                 </div>
               </div>
             </motion.div>

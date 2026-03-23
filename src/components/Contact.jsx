@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Send, Clock, X } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Clock, X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { supabase } from '../lib/supabase'
 
 const products = [
   { id: 'sfifa-royale', name: 'Sfifa Royale', category: 'Caftan' },
@@ -28,6 +29,8 @@ const Contact = () => {
   })
   const [selectedProducts, setSelectedProducts] = useState([])
   const [isProductDropdownOpen, setIsProductDropdownOpen] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState(null) // null | 'loading' | 'success' | 'error'
+  const [submitError, setSubmitError] = useState('')
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -45,16 +48,34 @@ const Contact = () => {
     setSelectedProducts(prev => prev.filter(id => id !== productId))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setSubmitStatus('loading')
+    setSubmitError('')
+
     const submissionData = {
       ...formData,
       products: selectedProducts.map(id => products.find(p => p.id === id)?.name),
     }
-    console.log('Form submission:', submissionData)
-    alert('Merci pour votre message. Nous vous recontacterons très bientôt.')
-    setFormData({ name: '', email: '', phone: '', service: '', date: '', message: '' })
-    setSelectedProducts([])
+
+    try {
+      if (supabase) {
+        const { error } = await supabase.functions.invoke('send-contact-email', {
+          body: submissionData,
+        })
+        if (error) throw error
+      }
+
+      setSubmitStatus('success')
+      setFormData({ name: '', email: '', phone: '', service: '', date: '', message: '' })
+      setSelectedProducts([])
+      setTimeout(() => setSubmitStatus(null), 5000)
+    } catch (err) {
+      console.error('Contact form error:', err)
+      setSubmitStatus('error')
+      setSubmitError(err.message || 'Une erreur est survenue. Veuillez nous contacter par telephone.')
+      setTimeout(() => setSubmitStatus(null), 5000)
+    }
   }
 
   const contactInfo = [
@@ -315,12 +336,36 @@ const Contact = () => {
                 </div>
               </div>
 
+              {submitStatus === 'success' && (
+                <div className="mt-4 flex items-center gap-2 bg-green-50 text-green-700 text-sm p-4 rounded-xl border border-green-200/50">
+                  <CheckCircle size={16} className="flex-shrink-0" />
+                  Merci pour votre message ! Nous vous recontacterons très bientôt.
+                </div>
+              )}
+
+              {submitStatus === 'error' && (
+                <div className="mt-4 flex items-center gap-2 bg-red-50 text-red-600 text-sm p-4 rounded-xl border border-red-200/50">
+                  <AlertCircle size={16} className="flex-shrink-0" />
+                  {submitError}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="mt-6 w-full flex items-center justify-center gap-2 bg-brand-ink text-white py-3.5 rounded-full font-semibold text-sm hover:bg-brand-ink/90 transition-colors"
+                disabled={submitStatus === 'loading'}
+                className="mt-6 w-full flex items-center justify-center gap-2 bg-brand-ink text-white py-3.5 rounded-full font-semibold text-sm hover:bg-brand-ink/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Envoyer le message
-                <Send size={16} />
+                {submitStatus === 'loading' ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Envoi en cours...
+                  </>
+                ) : (
+                  <>
+                    Envoyer le message
+                    <Send size={16} />
+                  </>
+                )}
               </button>
 
               <p className="mt-4 text-center text-[11px] text-brand-ink/30">
