@@ -1,0 +1,48 @@
+<!--
+  SO Caftan - Template de lien magique
+  =========================================================
+  À copier dans : Supabase Dashboard > Authentication > Email Templates > Magic Link
+  Subject : SO Caftan - Votre lien de connexion
+  Variable disponible : {{ .Token }} (code à 6 chiffres), {{ .ConfirmationURL }}
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#faf6f1;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+<div style="max-width:480px;margin:0 auto;padding:20px;">
+
+  <!-- Header -->
+  <div style="background-color:#2b201a;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
+    <h1 style="color:#c9a46b;font-size:28px;margin:0;font-family:Georgia,'Times New Roman',serif;letter-spacing:2px;">SO CAFTAN</h1>
+    <p style="color:rgba(255,255,255,0.5);font-size:11px;margin:8px 0 0;letter-spacing:3px;text-transform:uppercase;">L'art du caftan marocain</p>
+  </div>
+
+  <!-- Body -->
+  <div style="background-color:#ffffff;padding:40px 32px;text-align:center;">
+    <h2 style="color:#2b201a;font-size:22px;margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;">Connexion à votre compte</h2>
+    <p style="color:#2b201a99;font-size:14px;margin:0 0 32px;line-height:1.6;">
+      Utilisez le code ci-dessous pour vous connecter à votre espace SO Caftan.
+    </p>
+
+    <!-- OTP Code -->
+    <div style="background-color:#faf6f1;border:2px solid #c9a46b;border-radius:12px;padding:24px;margin:0 auto 32px;max-width:280px;">
+      <p style="color:#2b201a99;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin:0 0 12px;">Votre code de connexion</p>
+      <p style="color:#2b201a;font-size:36px;font-weight:bold;letter-spacing:8px;margin:0;font-family:'Courier New',monospace;">{{ .Token }}</p>
+    </div>
+
+    <p style="color:#2b201a60;font-size:12px;margin:0;line-height:1.5;">
+      Ce code expire dans 1 heure.<br>
+      Si vous n'avez pas demandé cette connexion, ignorez cet email.
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div style="background-color:#f5e6d3;padding:20px 24px;text-align:center;border-radius:0 0 12px 12px;">
+    <p style="color:#2b201a80;font-size:11px;margin:0;">
+      SO Caftan &middot; Location &amp; vente de caftans d'exception &middot; socaftan.fr
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

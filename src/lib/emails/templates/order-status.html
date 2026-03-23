@@ -1,0 +1,63 @@
+<!--
+  SO Caftan - Template de mise à jour de statut de commande
+  =========================================================
+  Envoyé via Edge Function (Resend) quand le statut change
+  Variables : {{orderNumber}}, {{firstName}}, {{status}}, {{statusLabel}}, {{statusMessage}}
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#faf6f1;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+<div style="max-width:480px;margin:0 auto;padding:20px;">
+
+  <!-- Header -->
+  <div style="background-color:#2b201a;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
+    <h1 style="color:#c9a46b;font-size:28px;margin:0;font-family:Georgia,'Times New Roman',serif;letter-spacing:2px;">SO CAFTAN</h1>
+    <p style="color:rgba(255,255,255,0.5);font-size:11px;margin:8px 0 0;letter-spacing:3px;text-transform:uppercase;">L'art du caftan marocain</p>
+  </div>
+
+  <!-- Body -->
+  <div style="background-color:#ffffff;padding:40px 32px;text-align:center;">
+    <h2 style="color:#2b201a;font-size:22px;margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;">Mise à jour de votre commande</h2>
+    <p style="color:#2b201a99;font-size:14px;margin:0 0 24px;">
+      Bonjour {{firstName}}, voici une mise à jour concernant votre commande.
+    </p>
+
+    <!-- Order number -->
+    <div style="background-color:#faf6f1;border-radius:12px;padding:16px 20px;margin-bottom:24px;">
+      <p style="color:#2b201a99;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin:0 0 4px;">Commande</p>
+      <p style="color:#2b201a;font-size:18px;font-weight:bold;margin:0;font-family:Georgia,'Times New Roman',serif;">{{orderNumber}}</p>
+    </div>
+
+    <!-- Status -->
+    <div style="background-color:#c9a46b15;border:2px solid #c9a46b;border-radius:12px;padding:24px;margin-bottom:24px;">
+      <p style="color:#c9a46b;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px;font-weight:bold;">Nouveau statut</p>
+      <p style="color:#2b201a;font-size:20px;font-weight:bold;margin:0;font-family:Georgia,'Times New Roman',serif;">{{statusLabel}}</p>
+    </div>
+
+    <!-- Status message -->
+    <p style="color:#2b201a99;font-size:14px;margin:0 0 32px;line-height:1.6;">
+      {{statusMessage}}
+    </p>
+
+    <!-- CTA -->
+    <a href="https://socaftan.fr/compte" style="display:inline-block;background-color:#2b201a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:50px;font-size:14px;font-weight:600;">
+      Voir ma commande
+    </a>
+
+    <p style="color:#2b201a60;font-size:12px;margin:24px 0 0;line-height:1.5;">
+      Une question ? Contactez-nous au 06 99 83 29 02<br>
+      ou par email à contact@socaftan.fr
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div style="background-color:#f5e6d3;padding:20px 24px;text-align:center;border-radius:0 0 12px 12px;">
+    <p style="color:#2b201a80;font-size:11px;margin:0;">
+      SO Caftan &middot; Location &amp; vente de caftans d'exception &middot; socaftan.fr
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

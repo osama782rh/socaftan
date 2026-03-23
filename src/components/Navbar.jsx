@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-import { Menu, X, Phone } from 'lucide-react'
+import { useLocation, Link } from 'react-router-dom'
+import { Menu, X, Phone, ShoppingBag, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useCart } from '../contexts/CartContext'
+import { useAuth } from '../contexts/AuthContext'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { pathname } = useLocation()
+  const { itemCount, setIsCartOpen } = useCart()
+  const { user } = useAuth()
   const isSolid = isScrolled || pathname !== '/'
 
   useEffect(() => {
@@ -83,8 +87,40 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* CTA + Mobile */}
-            <div className="flex items-center gap-3">
+            {/* CTA + Cart + Account + Mobile */}
+            <div className="flex items-center gap-2">
+              {/* Account */}
+              <Link
+                to={user ? '/compte' : '/connexion'}
+                className={`hidden lg:flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300 ${
+                  isSolid
+                    ? 'text-brand-ink/50 hover:text-brand-ink hover:bg-brand-sand/40'
+                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                }`}
+                title={user ? 'Mon compte' : 'Se connecter'}
+              >
+                <User size={18} />
+              </Link>
+
+              {/* Cart */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-300 ${
+                  isSolid
+                    ? 'text-brand-ink/50 hover:text-brand-ink hover:bg-brand-sand/40'
+                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                }`}
+                title="Panier"
+              >
+                <ShoppingBag size={18} />
+                {itemCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-brand-gold text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {itemCount}
+                  </span>
+                )}
+              </button>
+
+              {/* CTA */}
               <a
                 href="/#contact"
                 className={`hidden lg:inline-flex px-6 py-2.5 rounded-full text-[13px] font-semibold transition-all duration-300 ${
@@ -151,6 +187,16 @@ const Navbar = () => {
                       {link.name}
                     </a>
                   ))}
+
+                  {/* Mobile account link */}
+                  <Link
+                    to={user ? '/compte' : '/connexion'}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-brand-ink/80 hover:text-brand-ink hover:bg-brand-sand/30 font-medium transition-colors text-[15px]"
+                  >
+                    <User size={18} />
+                    {user ? 'Mon compte' : 'Se connecter'}
+                  </Link>
                 </div>
 
                 <a
