@@ -1,23 +1,54 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
-import Stripe from 'https://esm.sh/stripe@14.14.0?target=deno'
+
+// HMAC-SHA256 for Stripe signature verification
+async function computeHmac(secret: string, payload: string): Promise<string> {
+  const encoder = new TextEncoder()
+  const key = await crypto.subtle.importKey(
+    'raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+  )
+  const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(payload))
+  return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('')
+}
+
+async function verifyStripeSignature(body: string, signature: string, secret: string): Promise<boolean> {
+  const elements = signature.split(',')
+  const timestamp = elements.find(e => e.startsWith('t='))?.split('=')[1]
+  const v1Sig = elements.find(e => e.startsWith('v1='))?.split('=')[1]
+  if (!timestamp || !v1Sig) return false
+
+  // Check timestamp is within 5 minutes
+  const age = Math.abs(Date.now() / 1000 - parseInt(timestamp))
+  if (age > 300) return false
+
+  const expectedSig = await computeHmac(secret, `${timestamp}.${body}`)
+  return expectedSig === v1Sig
+}
 
 serve(async (req) => {
   try {
-    const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!, { apiVersion: '2023-10-16' })
     const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET')!
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const resendApiKey = Deno.env.get('RESEND_API_KEY')
 
     const body = await req.text()
-    const signature = req.headers.get('stripe-signature')!
+    const signature = req.headers.get('stripe-signature')
 
-    const event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+    if (!signature) {
+      return new Response(JSON.stringify({ error: 'Missing signature' }), { status: 400 })
+    }
+
+    const isValid = await verifyStripeSignature(body, signature, webhookSecret)
+    if (!isValid) {
+      return new Response(JSON.stringify({ error: 'Invalid signature' }), { status: 400 })
+    }
+
+    const event = JSON.parse(body)
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object as Stripe.Checkout.Session
+      const session = event.data.object
 
       const orderId = session.metadata?.order_id
       if (!orderId) throw new Error('order_id manquant dans metadata')
@@ -28,7 +59,9 @@ serve(async (req) => {
         .update({
           status: 'paid',
           stripe_session_id: session.id,
-          stripe_payment_intent: session.payment_intent,
+          stripe_payment_intent: typeof session.payment_intent === 'string'
+            ? session.payment_intent
+            : session.payment_intent?.id || null,
         })
         .eq('id', orderId)
         .select(`*, order_items (*, products:product_id (name, category))`)
@@ -43,13 +76,12 @@ serve(async (req) => {
       if (resendApiKey && order) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('first_name, last_name, phone')
+          .select('first_name, last_name')
           .eq('id', order.user_id)
           .single()
 
         const firstName = profile?.first_name || 'Client'
 
-        // Build items HTML
         const itemsHtml = (order.order_items || []).map((item: any) => `
           <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5e6d3;">
             <div>
@@ -60,41 +92,36 @@ serve(async (req) => {
           </div>
         `).join('')
 
-        const emailHtml = `
-          <!DOCTYPE html>
-          <html lang="fr">
-          <head><meta charset="UTF-8"></head>
-          <body style="margin:0;padding:0;background-color:#faf6f1;font-family:'Helvetica Neue',Arial,sans-serif;">
-          <div style="max-width:520px;margin:0 auto;padding:20px;">
-            <div style="background-color:#2b201a;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
-              <h1 style="color:#c9a46b;font-size:28px;margin:0;font-family:Georgia,serif;letter-spacing:2px;">SO CAFTAN</h1>
-            </div>
-            <div style="background-color:#ffffff;padding:40px 32px;">
-              <div style="text-align:center;margin-bottom:24px;">
-                <div style="width:56px;height:56px;background-color:#ecfdf5;border-radius:50%;margin:0 auto 16px;line-height:56px;font-size:28px;">&#10003;</div>
-                <h2 style="color:#2b201a;font-size:24px;margin:0 0 8px;font-family:Georgia,serif;">Commande confirmee !</h2>
-                <p style="color:#2b201a99;font-size:14px;margin:0;">Merci ${firstName}, votre commande a bien ete enregistree.</p>
-              </div>
-              <div style="background-color:#faf6f1;border-radius:12px;padding:16px;text-align:center;margin-bottom:24px;">
-                <p style="color:#2b201a80;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin:0 0 4px;">Numero de commande</p>
-                <p style="color:#2b201a;font-size:20px;font-weight:bold;margin:0;font-family:Georgia,serif;">${order.order_number}</p>
-              </div>
-              ${itemsHtml}
-              <div style="margin-top:20px;padding-top:16px;border-top:2px solid #2b201a;display:flex;justify-content:space-between;">
-                <span style="color:#2b201a;font-size:16px;font-weight:bold;">Total</span>
-                <span style="color:#2b201a;font-size:18px;font-weight:bold;font-family:Georgia,serif;">${order.total?.toFixed(2)}\u20AC</span>
-              </div>
-              <div style="text-align:center;margin-top:32px;">
-                <a href="https://socaftan.fr/compte?tab=orders" style="display:inline-block;background-color:#2b201a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:50px;font-size:14px;font-weight:600;">Suivre ma commande</a>
-              </div>
-            </div>
-            <div style="background-color:#f5e6d3;padding:20px;text-align:center;border-radius:0 0 12px 12px;">
-              <p style="color:#2b201a80;font-size:11px;margin:0;">SO Caftan &middot; socaftan.fr</p>
-            </div>
-          </div>
-          </body>
-          </html>
-        `
+        const emailHtml = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background-color:#faf6f1;font-family:'Helvetica Neue',Arial,sans-serif;">
+<div style="max-width:520px;margin:0 auto;padding:20px;">
+  <div style="background-color:#2b201a;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
+    <h1 style="color:#c9a46b;font-size:28px;margin:0;font-family:Georgia,serif;letter-spacing:2px;">SO CAFTAN</h1>
+  </div>
+  <div style="background-color:#ffffff;padding:40px 32px;">
+    <div style="text-align:center;margin-bottom:24px;">
+      <h2 style="color:#2b201a;font-size:24px;margin:0 0 8px;font-family:Georgia,serif;">Commande confirmee !</h2>
+      <p style="color:#2b201a99;font-size:14px;margin:0;">Merci ${firstName}, votre commande a bien ete enregistree.</p>
+    </div>
+    <div style="background-color:#faf6f1;border-radius:12px;padding:16px;text-align:center;margin-bottom:24px;">
+      <p style="color:#2b201a80;font-size:11px;text-transform:uppercase;letter-spacing:2px;margin:0 0 4px;">Numero de commande</p>
+      <p style="color:#2b201a;font-size:20px;font-weight:bold;margin:0;font-family:Georgia,serif;">${order.order_number}</p>
+    </div>
+    ${itemsHtml}
+    <div style="margin-top:20px;padding-top:16px;border-top:2px solid #2b201a;">
+      <table width="100%"><tr>
+        <td style="color:#2b201a;font-size:16px;font-weight:bold;">Total</td>
+        <td style="color:#2b201a;font-size:18px;font-weight:bold;font-family:Georgia,serif;text-align:right;">${order.total?.toFixed(2)}\u20AC</td>
+      </tr></table>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+      <a href="https://socaftan.fr/compte?tab=orders" style="display:inline-block;background-color:#2b201a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:50px;font-size:14px;font-weight:600;">Suivre ma commande</a>
+    </div>
+  </div>
+  <div style="background-color:#f5e6d3;padding:20px;text-align:center;border-radius:0 0 12px 12px;">
+    <p style="color:#2b201a80;font-size:11px;margin:0;">SO Caftan &middot; socaftan.fr</p>
+  </div>
+</div></body></html>`
 
         try {
           await fetch('https://api.resend.com/emails', {
@@ -112,7 +139,6 @@ serve(async (req) => {
           })
         } catch (emailErr) {
           console.error('Email send error:', emailErr)
-          // Don't fail the webhook if email fails
         }
       }
     }

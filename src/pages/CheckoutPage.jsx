@@ -107,10 +107,16 @@ const CheckoutPage = () => {
         body: { orderId: order.id },
       })
 
-      if (stripeError) throw stripeError
+      if (stripeError) {
+        // Try to extract the real error message
+        const errorBody = stripeData?.error || stripeError?.message || 'Erreur lors du paiement.'
+        throw new Error(typeof errorBody === 'string' ? errorBody : JSON.stringify(errorBody))
+      }
 
       if (stripeData?.url) {
         window.location.href = stripeData.url
+      } else if (stripeData?.error) {
+        throw new Error(stripeData.error)
       } else {
         throw new Error('Impossible de créer la session de paiement.')
       }
