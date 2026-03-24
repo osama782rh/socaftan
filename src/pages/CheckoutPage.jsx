@@ -93,31 +93,12 @@ const CheckoutPage = () => {
     return typeof raw === 'string' ? raw : JSON.stringify(raw)
   }
 
-  const ensureAuthenticatedSession = async () => {
-    // Toujours forcer un refresh pour obtenir un token frais garanti
-    // getSession() retourne un cache local qui peut être expiré côté serveur
-    const { data: refreshedData, error: refreshError } = await supabase.auth.refreshSession()
-    if (!refreshError && refreshedData?.session?.access_token) {
-      return refreshedData.session.access_token
-    }
-
-    // Fallback : tenter getSession si le refresh échoue (ex: token encore valide)
-    const { data: sessionData } = await supabase.auth.getSession()
-    if (sessionData?.session?.access_token) {
-      return sessionData.session.access_token
-    }
-
-    throw new Error('Session expirée. Veuillez vous reconnecter.')
-  }
-
   const handleCheckout = async () => {
     setError('')
     setLoading(true)
     let createdOrderId = null
 
     try {
-      const accessToken = await ensureAuthenticatedSession()
-
       // 1. Créer la commande dans Supabase
       const { data: order, error: orderError } = await supabase
         .from('orders')
@@ -159,31 +140,13 @@ const CheckoutPage = () => {
       if (itemsError) throw itemsError
 
       // 3. Rediriger vers Stripe Checkout
-      let { data: stripeData, error: stripeError } = await supabase.functions.invoke('create-checkout', {
-        body: { orderId: order.id, accessToken, userId: user.id, customerEmail: user.email },
+      const { data: stripeData, error: stripeError } = await supabase.functions.invoke('create-checkout', {
+        body: { orderId: order.id, userId: user.id, customerEmail: user.email },
       })
 
       if (stripeError) {
-        const firstErrorMessage = await extractFunctionErrorMessage(stripeError, stripeData)
-        const isJwtError = /invalid jwt|jwt invalide|session invalide|non authentifie|non authentifié|jwt/i.test(firstErrorMessage)
-
-        if (isJwtError) {
-          const refreshedToken = await ensureAuthenticatedSession()
-
-          const retry = await supabase.functions.invoke('create-checkout', {
-            body: { orderId: order.id, accessToken: refreshedToken, userId: user.id, customerEmail: user.email },
-          })
-
-          stripeData = retry.data
-          stripeError = retry.error
-
-          if (stripeError) {
-            const retryErrorMessage = await extractFunctionErrorMessage(stripeError, stripeData)
-            throw new Error(retryErrorMessage)
-          }
-        } else {
-          throw new Error(firstErrorMessage)
-        }
+        const backendErrorMessage = await extractFunctionErrorMessage(stripeError, stripeData)
+        throw new Error(backendErrorMessage)
       }
 
       if (stripeData?.url) {
