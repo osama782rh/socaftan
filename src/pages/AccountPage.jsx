@@ -158,17 +158,19 @@ const AccountPage = () => {
     new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' })
 
   // Stats
-  const totalOrders = orders.length
-  const activeOrders = orders.filter(o => ['paid', 'confirmed', 'preparing', 'ready'].includes(o.status)).length
-  const totalSpent = orders.reduce((sum, o) => sum + (o.total || 0), 0)
-  const completedOrders = orders.filter(o => ['delivered', 'returned'].includes(o.status)).length
+  const visibleOrders = orders.filter(o => o.status !== 'pending')
+  const totalOrders = visibleOrders.length
+  const activeOrders = visibleOrders.filter(o => ['paid', 'confirmed', 'preparing', 'ready'].includes(o.status)).length
+  const totalSpent = visibleOrders
+    .filter(o => ['paid', 'confirmed', 'preparing', 'ready', 'delivered', 'returned'].includes(o.status))
+    .reduce((sum, o) => sum + (Number(o.total) || 0), 0)
 
   const getStatusStep = (status) => {
     const idx = statusFlow.indexOf(status)
     return idx === -1 ? 0 : idx
   }
 
-  const recentOrders = orders.slice(0, 3)
+  const recentOrders = visibleOrders.slice(0, 3)
 
   // Input class helper
   const inputClass = 'w-full px-4 py-3 rounded-xl border border-brand-sand/80 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 outline-none text-sm bg-white transition-all'
@@ -312,7 +314,7 @@ const AccountPage = () => {
                     {[
                       { label: 'Commandes totales', value: totalOrders, icon: Package, color: 'blue', suffix: '' },
                       { label: 'En cours', value: activeOrders, icon: Clock, color: 'amber', suffix: '' },
-                      { label: 'Total depense', value: `${totalSpent.toFixed(0)}`, icon: TrendingUp, color: 'emerald', suffix: '\u20AC' },
+                      { label: 'Total depense', value: `${totalSpent.toFixed(0)}`, icon: TrendingUp, color: 'emerald', suffix: '€' },
                       { label: 'Wishlist', value: wishlist.length, icon: Heart, color: 'rose', suffix: '' },
                     ].map((stat, i) => (
                       <div key={i} className="bg-white rounded-xl p-4 md:p-5 border border-brand-sand/50 hover:shadow-md transition-shadow">
@@ -356,7 +358,7 @@ const AccountPage = () => {
                         <Package size={18} className="text-brand-ink/40" />
                         <h2 className="text-base font-bold text-brand-ink font-serif">Commandes recentes</h2>
                       </div>
-                      {orders.length > 0 && (
+                      {totalOrders > 0 && (
                         <button
                           onClick={() => handleTabChange('orders')}
                           className="text-xs font-semibold text-brand-gold hover:text-brand-gold/80 transition-colors flex items-center gap-1"
@@ -395,7 +397,7 @@ const AccountPage = () => {
                                   {formatDate(order.created_at)} · {order.order_items?.length || 0} article{(order.order_items?.length || 0) > 1 ? 's' : ''}
                                 </p>
                               </div>
-                              <p className="text-sm font-bold text-brand-ink font-serif">{order.total?.toFixed(2)}\u20AC</p>
+                              <p className="text-sm font-bold text-brand-ink font-serif">{order.total?.toFixed(2)}€</p>
                             </div>
                           )
                         })}
@@ -430,7 +432,7 @@ const AccountPage = () => {
                       <h1 className="text-xl md:text-2xl font-bold text-brand-ink font-serif">Mes commandes</h1>
                       <p className="text-xs text-brand-ink/40 mt-1">Suivez l'etat de vos commandes et locations</p>
                     </div>
-                    {orders.length > 0 && (
+                    {totalOrders > 0 && (
                       <span className="text-xs font-semibold text-brand-ink/30 bg-brand-sand/30 px-3 py-1.5 rounded-full">
                         {totalOrders} commande{totalOrders > 1 ? 's' : ''}
                       </span>
@@ -445,7 +447,7 @@ const AccountPage = () => {
                         ))}
                       </div>
                     </div>
-                  ) : orders.length === 0 ? (
+                  ) : totalOrders === 0 ? (
                     <div className="bg-white rounded-2xl p-12 border border-brand-sand/50 text-center">
                       <div className="w-16 h-16 bg-brand-sand/20 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Package size={28} className="text-brand-ink/15" />
@@ -458,7 +460,7 @@ const AccountPage = () => {
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      {orders.map(order => {
+                      {visibleOrders.map(order => {
                         const status = statusLabels[order.status] || statusLabels.pending
                         const isExpanded = expandedOrder === order.id
                         const step = getStatusStep(order.status)
@@ -488,7 +490,7 @@ const AccountPage = () => {
                                 </div>
                               </div>
                               <div className="flex items-center gap-3 flex-shrink-0">
-                                <p className="text-base font-bold text-brand-ink font-serif">{order.total?.toFixed(2)}\u20AC</p>
+                                <p className="text-base font-bold text-brand-ink font-serif">{order.total?.toFixed(2)}€</p>
                                 <ChevronRight size={16} className={`text-brand-ink/20 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} />
                               </div>
                             </button>
@@ -544,7 +546,7 @@ const AccountPage = () => {
                                               )}
                                             </div>
                                           </div>
-                                          <p className="text-sm font-semibold text-brand-ink">{(item.unit_price * item.quantity).toFixed(2)}\u20AC</p>
+                                          <p className="text-sm font-semibold text-brand-ink">{(item.unit_price * item.quantity).toFixed(2)}€</p>
                                         </div>
                                       ))}
                                     </div>
@@ -554,10 +556,10 @@ const AccountPage = () => {
                                       <div className="text-[11px] text-brand-ink/35">
                                         {order.delivery_method === 'delivery' ? 'Livraison' : 'Retrait en boutique'}
                                         {order.deposit_amount > 0 && (
-                                          <span className="ml-3">· Caution : {order.deposit_amount?.toFixed(2)}\u20AC</span>
+                                          <span className="ml-3">· Caution : {order.deposit_amount?.toFixed(2)}€</span>
                                         )}
                                       </div>
-                                      <p className="text-base font-bold text-brand-ink font-serif">Total : {order.total?.toFixed(2)}\u20AC</p>
+                                      <p className="text-base font-bold text-brand-ink font-serif">Total : {order.total?.toFixed(2)}€</p>
                                     </div>
                                   </div>
                                 </motion.div>
@@ -635,12 +637,12 @@ const AccountPage = () => {
                             <div className="flex items-center gap-3 mt-3">
                               {item.products?.price_rent && (
                                 <span className="text-sm font-semibold text-brand-gold">
-                                  {item.products.price_rent}\u20AC <span className="text-[10px] font-normal text-brand-ink/30">location</span>
+                                  {item.products.price_rent}€ <span className="text-[10px] font-normal text-brand-ink/30">location</span>
                                 </span>
                               )}
                               {item.products?.price_buy && (
                                 <span className="text-sm font-semibold text-brand-ink">
-                                  {item.products.price_buy}\u20AC <span className="text-[10px] font-normal text-brand-ink/30">achat</span>
+                                  {item.products.price_buy}€ <span className="text-[10px] font-normal text-brand-ink/30">achat</span>
                                 </span>
                               )}
                             </div>

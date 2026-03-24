@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Lock, Calendar, ShoppingBag, AlertCircle, MapPin, Truck } from 'lucide-react'
 import { useCart } from '../contexts/CartContext'
@@ -10,6 +10,7 @@ const CheckoutPage = () => {
   const { items, subtotal, deposit, total, clearCart } = useCart()
   const { user, profile } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [deliveryMethod, setDeliveryMethod] = useState('pickup')
@@ -57,12 +58,66 @@ const CheckoutPage = () => {
   const hasRentals = items.some(item => item.type === 'location')
   const hasPurchases = items.some(item => item.type === 'achat')
   const orderType = hasRentals && hasPurchases ? 'location' : hasRentals ? 'location' : 'achat'
+  const isStripeReturn = new URLSearchParams(location.search).get('from') === 'stripe'
+
+  const handleBack = () => {
+    if (isStripeReturn) {
+      navigate('/')
+      return
+    }
+
+    navigate(-1)
+  }
+
+  const extractFunctionErrorMessage = async (fnError, fnData) => {
+    let backendError = ''
+
+    if (fnError?.context) {
+      try {
+        const errorJson = await fnError.context.clone().json()
+        if (typeof errorJson?.error === 'string') {
+          backendError = errorJson.error
+        } else if (typeof errorJson?.message === 'string') {
+          backendError = errorJson.message
+        }
+      } catch {
+        try {
+          backendError = await fnError.context.clone().text()
+        } catch {
+          backendError = ''
+        }
+      }
+    }
+
+    const raw = backendError || fnData?.error || fnError?.message || 'Erreur lors du paiement.'
+    return typeof raw === 'string' ? raw : JSON.stringify(raw)
+  }
+
+  const ensureAuthenticatedSession = async () => {
+    // Toujours forcer un refresh pour obtenir un token frais garanti
+    // getSession() retourne un cache local qui peut être expiré côté serveur
+    const { data: refreshedData, error: refreshError } = await supabase.auth.refreshSession()
+    if (!refreshError && refreshedData?.session?.access_token) {
+      return refreshedData.session.access_token
+    }
+
+    // Fallback : tenter getSession si le refresh échoue (ex: token encore valide)
+    const { data: sessionData } = await supabase.auth.getSession()
+    if (sessionData?.session?.access_token) {
+      return sessionData.session.access_token
+    }
+
+    throw new Error('Session expirée. Veuillez vous reconnecter.')
+  }
 
   const handleCheckout = async () => {
     setError('')
     setLoading(true)
+    let createdOrderId = null
 
     try {
+      const accessToken = await ensureAuthenticatedSession()
+
       // 1. Créer la commande dans Supabase
       const { data: order, error: orderError } = await supabase
         .from('orders')
@@ -84,6 +139,7 @@ const CheckoutPage = () => {
         .single()
 
       if (orderError) throw orderError
+      createdOrderId = order.id
 
       // 2. Ajouter les articles
       const orderItems = items.map(item => ({
@@ -103,14 +159,31 @@ const CheckoutPage = () => {
       if (itemsError) throw itemsError
 
       // 3. Rediriger vers Stripe Checkout
-      const { data: stripeData, error: stripeError } = await supabase.functions.invoke('create-checkout', {
-        body: { orderId: order.id },
+      let { data: stripeData, error: stripeError } = await supabase.functions.invoke('create-checkout', {
+        body: { orderId: order.id, accessToken, userId: user.id, customerEmail: user.email },
       })
 
       if (stripeError) {
-        // Try to extract the real error message
-        const errorBody = stripeData?.error || stripeError?.message || 'Erreur lors du paiement.'
-        throw new Error(typeof errorBody === 'string' ? errorBody : JSON.stringify(errorBody))
+        const firstErrorMessage = await extractFunctionErrorMessage(stripeError, stripeData)
+        const isJwtError = /invalid jwt|jwt invalide|session invalide|non authentifie|non authentifié|jwt/i.test(firstErrorMessage)
+
+        if (isJwtError) {
+          const refreshedToken = await ensureAuthenticatedSession()
+
+          const retry = await supabase.functions.invoke('create-checkout', {
+            body: { orderId: order.id, accessToken: refreshedToken, userId: user.id, customerEmail: user.email },
+          })
+
+          stripeData = retry.data
+          stripeError = retry.error
+
+          if (stripeError) {
+            const retryErrorMessage = await extractFunctionErrorMessage(stripeError, stripeData)
+            throw new Error(retryErrorMessage)
+          }
+        } else {
+          throw new Error(firstErrorMessage)
+        }
       }
 
       if (stripeData?.url) {
@@ -121,8 +194,30 @@ const CheckoutPage = () => {
         throw new Error('Impossible de créer la session de paiement.')
       }
     } catch (err) {
+      if (createdOrderId) {
+        try {
+          // Nettoyage pour éviter les commandes "pending" fantômes en cas d'échec checkout
+          await supabase.from('order_items').delete().eq('order_id', createdOrderId)
+          const { error: cleanupError } = await supabase
+            .from('orders')
+            .delete()
+            .eq('id', createdOrderId)
+            .eq('user_id', user.id)
+          if (cleanupError) {
+            console.error('Cleanup order error:', cleanupError)
+          }
+        } catch (cleanupException) {
+          console.error('Cleanup order exception:', cleanupException)
+        }
+      }
       console.error('Checkout error:', err)
-      setError(err.message || 'Une erreur est survenue lors de la commande.')
+      const rawMessage = err?.message || 'Une erreur est survenue lors de la commande.'
+      const isSessionError = typeof rawMessage === 'string' && /invalid jwt|jwt invalide|session invalide|session expirée|non authentifie|non authentifié|jwt/i.test(rawMessage)
+      const message = isSessionError
+        ? 'Session expirée ou invalide. Veuillez vous reconnecter puis réessayer.'
+        : rawMessage
+
+      setError(message)
       setLoading(false)
     }
   }
@@ -134,7 +229,7 @@ const CheckoutPage = () => {
 
           {/* Back */}
           <button
-            onClick={() => navigate(-1)}
+            onClick={handleBack}
             className="flex items-center gap-2 text-brand-ink/50 hover:text-brand-ink text-sm mb-6 transition-colors"
           >
             <ArrowLeft size={16} />

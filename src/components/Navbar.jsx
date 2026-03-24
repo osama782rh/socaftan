@@ -4,7 +4,6 @@ import { Menu, X, Phone, ShoppingBag, User, Heart, Package, LogOut, ChevronDown,
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
-import logo from '../assets/logo.png'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -82,13 +81,13 @@ const Navbar = () => {
 
             {/* Logo */}
             <a href="/" className="flex items-center gap-2 group">
-              <img
-                src={logo}
-                alt="SO Caftan"
-                className={`transition-all duration-500 ${
-                  isScrolled ? 'h-10 md:h-12' : 'h-12 md:h-14'
-                } ${isSolid ? '' : 'brightness-0 invert'}`}
-              />
+              <span
+                className={`font-serif font-bold tracking-[0.18em] transition-all duration-500 ${
+                  isScrolled ? 'text-lg md:text-xl' : 'text-xl md:text-2xl'
+                } ${isSolid ? 'text-brand-ink' : 'text-white'}`}
+              >
+                SO CAFTAN
+              </span>
             </a>
 
             {/* Desktop Navigation */}
@@ -262,7 +261,7 @@ const Navbar = () => {
             >
               <div className="p-8 pt-24">
                 <div className="mb-10">
-                  <img src={logo} alt="SO Caftan" className="h-16" />
+                  <span className="font-serif font-bold tracking-[0.18em] text-2xl text-brand-ink">SO CAFTAN</span>
                 </div>
 
                 <div className="space-y-1">
