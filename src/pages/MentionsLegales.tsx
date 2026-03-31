@@ -56,7 +56,7 @@ const MentionsLegales = () => {
                 </p>
                 <p className="mb-2 flex items-center gap-2">
                   <Phone className="text-rose-600" size={20} />
-                  <span><strong>Téléphone :</strong> 06 99 83 29 02</span>
+                  <span><strong>Téléphone :</strong> +33 184180326</span>
                 </p>
                 <p className="flex items-center gap-2">
                   <Mail className="text-rose-600" size={20} />
@@ -185,7 +185,7 @@ const MentionsLegales = () => {
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="text-rose-600" size={20} />
-                  <strong>Par téléphone :</strong> 06 99 83 29 02
+                  <strong>Par téléphone :</strong> +33 184180326
                 </p>
                 <p className="flex items-start gap-2">
                   <MapPin className="text-rose-600 flex-shrink-0 mt-1" size={20} />
@@ -224,3 +224,4 @@ const MentionsLegales = () => {
 }
 
 export default MentionsLegales
+

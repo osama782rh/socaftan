@@ -4,6 +4,7 @@ import About from '../components/About'
 import Collection from '../components/Collection'
 import Services from '../components/Services'
 import Pricing from '../components/Pricing'
+import SEOContentSection from '../components/SEOContentSection'
 import Contact from '../components/Contact'
 
 function HomePage() {
@@ -15,6 +16,7 @@ function HomePage() {
       <Collection />
       <Services />
       <Pricing />
+      <SEOContentSection />
       <Contact />
     </>
   )

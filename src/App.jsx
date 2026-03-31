@@ -4,15 +4,21 @@ import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import SEOManager from './components/SEOManager'
 import ScrollToTop from './components/ScrollToTop'
 import CartDrawer from './components/CartDrawer'
 import ProtectedRoute from './components/ProtectedRoute'
 import HomePage from './pages/HomePage'
 
+const LocationTakchitaPage = lazy(() => import('./pages/LocationTakchitaPage'))
+const LocationKarakouPage = lazy(() => import('./pages/LocationKarakouPage'))
+const VenteCaftanPage = lazy(() => import('./pages/VenteCaftanPage'))
 const CustomPage = lazy(() => import('./pages/CustomPage'))
 const Cgv = lazy(() => import('./pages/Cgv'))
+const Cgu = lazy(() => import('./pages/Cgu'))
 const Confidentialite = lazy(() => import('./pages/Confidentialite'))
 const MentionsLegales = lazy(() => import('./pages/MentionsLegales'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 const AccountPage = lazy(() => import('./pages/AccountPage'))
@@ -34,11 +40,16 @@ function App() {
           <div className="bg-brand-ivory">
             <Navbar />
             <CartDrawer />
+            <SEOManager />
             <Suspense fallback={<RouteFallback />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/location-takchita-ile-de-france" element={<LocationTakchitaPage />} />
+                <Route path="/location-karakou-ile-de-france" element={<LocationKarakouPage />} />
+                <Route path="/vente-caftan-ile-de-france" element={<VenteCaftanPage />} />
                 <Route path="/sur-mesure" element={<CustomPage />} />
                 <Route path="/cgv" element={<Cgv />} />
+                <Route path="/cgu" element={<Cgu />} />
                 <Route path="/confidentialite" element={<Confidentialite />} />
                 <Route path="/mentions-legales" element={<MentionsLegales />} />
                 <Route path="/politique-confidentialite" element={<Confidentialite />} />
@@ -49,6 +60,7 @@ function App() {
                 } />
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/commande-confirmee" element={<OrderSuccessPage />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
             <Footer />

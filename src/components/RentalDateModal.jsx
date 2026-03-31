@@ -109,7 +109,7 @@ const RentalDateModal = ({ product, onConfirm, onClose }) => {
                   <p><strong className="text-brand-ink">Retrait :</strong> {formatDateFr(startDate)}</p>
                   <p><strong className="text-brand-ink">Retour :</strong> {formatDateFr(endDate)}</p>
                   <p className="mt-1 text-xs text-brand-ink/40">
-                    Caution de 100€ (remboursable au retour)
+                    Caution de 100€ restituée uniquement si la pièce est rendue dans l'état fourni
                   </p>
                 </div>
               </div>

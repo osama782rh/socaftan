@@ -191,7 +191,7 @@ serve(async (req) => {
       lineItems.push({
         price_data: {
           currency: 'eur',
-          product_data: { name: 'Caution (remboursable au retour)' },
+          product_data: { name: 'Caution location (validee selon etat au retour)' },
           unit_amount: depositCents,
         },
         quantity: 1,

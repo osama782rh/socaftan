@@ -52,7 +52,7 @@ const PolitiqueConfidentialite = () => {
                 <p className="mb-2"><strong>Raison sociale :</strong> SO Caftan</p>
                 <p className="mb-2"><strong>Adresse :</strong> Île-de-France, France</p>
                 <p className="mb-2"><strong>Email :</strong> contact@socaftan.fr</p>
-                <p className="mb-2"><strong>Téléphone :</strong> 06 99 83 29 02</p>
+                <p className="mb-2"><strong>Téléphone :</strong> +33 184180326</p>
                 <p className="mb-2"><strong>SIREN :</strong> 999 110 984 </p>
               </div>
               <p className="mt-4">
@@ -385,7 +385,7 @@ const PolitiqueConfidentialite = () => {
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li>✉️ <strong>Par email :</strong> contact@socaftan.fr</li>
-                  <li>📞 <strong>Par téléphone :</strong> 06 99 83 29 02</li>
+                  <li>📞 <strong>Par téléphone :</strong> +33 184180326</li>
                   <li>📮 <strong>Par courrier :</strong> SO Caftan, Île-de-France</li>
                 </ul>
                 <p className="text-xs text-gray-600 mt-4">
@@ -549,7 +549,7 @@ const PolitiqueConfidentialite = () => {
               </p>
               <div className="space-y-2 text-gray-700">
                 <p>📧 <strong>Email :</strong> contact@socaftan.fr</p>
-                <p>📞 <strong>Téléphone :</strong> 06 99 83 29 02</p>
+                <p>📞 <strong>Téléphone :</strong> +33 184180326</p>
                 <p>📮 <strong>Courrier :</strong> SO Caftan, Île-de-France</p>
               </div>
             </div>
@@ -584,3 +584,4 @@ const PolitiqueConfidentialite = () => {
 }
 
 export default PolitiqueConfidentialite
+

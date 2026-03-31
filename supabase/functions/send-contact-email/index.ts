@@ -83,7 +83,7 @@ serve(async (req) => {
           <p style="color:#2b201a99;font-size:14px;margin:0 0 24px;line-height:1.6;">
             Bonjour ${name},<br><br>
             Nous avons bien recu votre message et nous vous recontacterons dans les plus brefs delais.<br><br>
-            En attendant, n'hesitez pas a nous appeler au <strong>06 99 83 29 02</strong>.
+            En attendant, n'hesitez pas a nous appeler au <strong>+33 184180326</strong>.
           </p>
           <a href="https://socaftan.fr" style="display:inline-block;background-color:#2b201a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:50px;font-size:14px;font-weight:600;">
             Visiter notre site
@@ -139,3 +139,4 @@ serve(async (req) => {
     )
   }
 })
+

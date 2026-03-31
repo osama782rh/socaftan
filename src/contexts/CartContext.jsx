@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 const CartContext = createContext(null)
 
 const CART_STORAGE_KEY = 'socaftan_cart'
+const RENTAL_DEPOSIT = 100
 
 export const useCart = () => {
   const ctx = useContext(CartContext)
@@ -27,6 +28,13 @@ export const CartProvider = ({ children }) => {
 
   const addItem = useCallback((product, type = 'location', rentalDates = null) => {
     setItems(prev => {
+      const canRent = typeof product.rentalPrice === 'number' && product.rentalPrice > 0
+      const canBuy = typeof product.purchasePrice === 'number' && product.purchasePrice > 0
+
+      if ((type === 'location' && !canRent) || (type === 'achat' && !canBuy)) {
+        return prev
+      }
+
       const existingIndex = prev.findIndex(
         item => item.productId === product.id && item.type === type
           && item.rentalStartDate === rentalDates?.startDate
@@ -41,6 +49,11 @@ export const CartProvider = ({ children }) => {
         return updated
       }
 
+      const unitPrice = type === 'location' ? product.rentalPrice : product.purchasePrice
+      if (typeof unitPrice !== 'number' || unitPrice <= 0) {
+        return prev
+      }
+
       return [...prev, {
         id: `${product.id}-${type}-${Date.now()}`,
         productId: product.id,
@@ -48,7 +61,7 @@ export const CartProvider = ({ children }) => {
         category: product.category,
         image: product.image,
         type,
-        unitPrice: type === 'location' ? product.rentalPrice : product.purchasePrice,
+        unitPrice,
         quantity: 1,
         rentalStartDate: rentalDates?.startDate || null,
         rentalEndDate: rentalDates?.endDate || null,
@@ -81,7 +94,7 @@ export const CartProvider = ({ children }) => {
 
   const deposit = items
     .filter(item => item.type === 'location')
-    .reduce((sum, item) => sum + 100 * item.quantity, 0)
+    .reduce((sum, item) => sum + RENTAL_DEPOSIT * item.quantity, 0)
 
   const total = subtotal + deposit
 

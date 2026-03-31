@@ -352,7 +352,7 @@ const RegisterPage = () => {
                   value={form.phone}
                   onChange={updateField('phone')}
                   className="w-full pl-10 pr-4 py-3 rounded-xl border border-brand-sand focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none text-sm transition-colors bg-brand-ivory/50"
-                  placeholder="06 XX XX XX XX"
+                  placeholder="+33 184180326"
                 />
               </div>
             </div>

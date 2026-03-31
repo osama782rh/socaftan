@@ -1,24 +1,33 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Send, Clock, X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { Mail, Phone, MapPin, Send, Clock, X, CheckCircle, AlertCircle, Loader2, MessageCircle } from 'lucide-react'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 
+const easePremium = [0.22, 1, 0.36, 1]
+
 const products = [
+  { id: 'andalouse', name: 'Andalouse', category: 'Caftan' },
+  { id: 'azur-magenta', name: 'Azur Magenta', category: 'Caftan' },
+  { id: 'caftan-ambre', name: 'Caftan Ambre', category: 'Caftan' },
+  { id: 'emeraude', name: 'Émeraude', category: 'Caftan' },
+  { id: 'imperial-bronze', name: 'Impérial Bronze', category: 'Caftan' },
+  { id: 'indigo', name: 'Indigo', category: 'Caftan' },
+  { id: 'jade', name: 'Jade', category: 'Karakou' },
+  { id: 'jawhara', name: 'Jawhara', category: 'Caftan' },
+  { id: 'karakou-imperial', name: 'Karakou Impérial', category: 'Karakou' },
+  { id: 'lilas', name: 'Lilas', category: 'Caftan' },
+  { id: 'pourpe', name: 'Pourpe', category: 'Caftan' },
+  { id: 'royale', name: 'Royale', category: 'Karakou' },
+  { id: 'safran', name: 'Safran', category: 'Caftan' },
   { id: 'sfifa-royale', name: 'Sfifa Royale', category: 'Caftan' },
-  { id: 'malaki', name: 'Malaki', category: 'Caftan' },
-  { id: 'jawhara-argente', name: 'Jawhara Argenté', category: 'Caftan' },
-  { id: 'damas-or', name: "Damas d'Or", category: 'Caftan' },
-  { id: 'moutarde-mokhfi', name: 'Moutarde Mokhfi', category: 'Caftan' },
-  { id: 'zouak-royal', name: 'Zouak Royal', category: 'Caftan' },
-  { id: 'nesrine', name: 'Nesrine', category: 'Caftan' },
-  { id: 'ambre', name: 'Ambre', category: 'Caftan' },
-  { id: 'majestic', name: 'Majestic', category: 'Karakou' },
-  { id: 'emeraude-or', name: 'Émeraude & Or', category: 'Karakou' },
-  { id: 'obsidienne', name: 'Obsidienne', category: 'Karakou' },
-  { id: 'bleu-de-nuit', name: 'Bleu de Nuit', category: 'Karakou' },
+  { id: 'soultana-de-fes', name: 'Soultana de Fès', category: 'Caftan' },
+  { id: 'takchita-bleu-majeste', name: 'Takchita Bleu Majesté', category: 'Caftan' },
+  { id: 'takchita-nuit-royale', name: 'Takchita Nuit Royale', category: 'Caftan' },
+  { id: 'takchita-sultana', name: 'Takchita Sultana', category: 'Caftan' },
 ]
 
 const Contact = () => {
+  const prefersReducedMotion = useReducedMotion()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -79,7 +88,8 @@ const Contact = () => {
   }
 
   const contactInfo = [
-    { icon: <Phone size={20} />, title: 'Téléphone', content: '06 99 83 29 02', link: 'tel:+33699832902' },
+    { icon: <Phone size={20} />, title: 'Téléphone', content: '+33 184180326', link: 'tel:+33184180326' },
+    { icon: <MessageCircle size={20} />, title: 'WhatsApp Business', content: '+33 184180326', link: 'https://wa.me/33184180326' },
     { icon: <Mail size={20} />, title: 'Email', content: 'contact@socaftan.fr', link: 'mailto:contact@socaftan.fr' },
     { icon: <MapPin size={20} />, title: 'Localisation', content: 'Île-de-France, France', link: '#' },
   ]
@@ -91,6 +101,23 @@ const Contact = () => {
 
   return (
     <section id="contact" className="section-padding bg-brand-mist relative">
+      {!prefersReducedMotion && (
+        <>
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-brand-gold/15 blur-3xl"
+            animate={{ x: [0, 14, 0], y: [0, -8, 0], opacity: [0.35, 0.55, 0.35] }}
+            transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 bottom-12 h-80 w-80 rounded-full bg-brand-forest/12 blur-3xl"
+            animate={{ x: [0, -14, 0], y: [0, 10, 0], opacity: [0.25, 0.45, 0.25] }}
+            transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </>
+      )}
+
       <div className="container-custom">
 
         {/* Header */}
@@ -115,13 +142,18 @@ const Contact = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-2 space-y-4"
-          >
-            {contactInfo.map((info, index) => (
-              <a
+          viewport={{ once: true }}
+          className="lg:col-span-2 space-y-4"
+        >
+          {contactInfo.map((info, index) => (
+              <motion.a
                 key={index}
                 href={info.link}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08, duration: 0.55, ease: easePremium }}
+                whileHover={prefersReducedMotion ? undefined : { y: -4 }}
                 className="flex items-center gap-4 p-5 bg-white rounded-xl border border-brand-sand/50 hover:border-brand-gold/30 hover:shadow-sm transition-all duration-300 group"
               >
                 <div className="w-11 h-11 rounded-lg bg-brand-sand flex items-center justify-center text-brand-ink flex-shrink-0 group-hover:bg-brand-gold group-hover:text-white transition-colors duration-300">
@@ -131,11 +163,17 @@ const Contact = () => {
                   <h4 className="text-xs font-semibold text-brand-ink/40 uppercase tracking-wide">{info.title}</h4>
                   <p className="text-brand-ink font-medium text-sm">{info.content}</p>
                 </div>
-              </a>
+              </motion.a>
             ))}
 
             {/* Availability */}
-            <div className="p-5 bg-brand-ink rounded-xl text-white">
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.55, ease: easePremium }}
+              className="p-5 bg-brand-ink rounded-xl text-white"
+            >
               <div className="flex items-center gap-2 mb-4">
                 <Clock size={18} className="text-brand-gold" />
                 <h4 className="font-bold font-serif">Disponibilité</h4>
@@ -154,7 +192,7 @@ const Contact = () => {
                   <span className="font-medium text-brand-gold">Sur RDV</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
 
           {/* Right: Form */}
@@ -164,8 +202,12 @@ const Contact = () => {
             viewport={{ once: true }}
             className="lg:col-span-3"
           >
-            <form
+            <motion.form
               onSubmit={handleSubmit}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.65, ease: easePremium }}
               className="bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-brand-sand/50"
             >
               <h3 className="text-xl font-bold text-brand-ink font-serif mb-6">
@@ -205,7 +247,7 @@ const Contact = () => {
                     type="tel" id="phone" name="phone"
                     value={formData.phone} onChange={handleChange} required
                     className="w-full px-4 py-3 bg-brand-ivory border border-brand-sand/60 rounded-xl text-sm focus:ring-2 focus:ring-brand-gold/30 focus:border-brand-gold transition-all outline-none"
-                    placeholder="06 99 83 29 02"
+                    placeholder="+33 184180326"
                   />
                 </div>
 
@@ -275,8 +317,15 @@ const Contact = () => {
                     </button>
 
                     {/* Dropdown */}
-                    {isProductDropdownOpen && (
-                      <div className="absolute z-20 top-full mt-1 w-full bg-white border border-brand-sand/60 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <AnimatePresence>
+                      {isProductDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                        transition={{ duration: 0.22, ease: easePremium }}
+                        className="absolute z-20 top-full mt-1 w-full bg-white border border-brand-sand/60 rounded-xl shadow-lg max-h-60 overflow-y-auto origin-top"
+                      >
                         {Object.entries(groupedProducts).map(([category, items]) => (
                           <div key={category}>
                             <div className="px-4 py-2 bg-brand-ivory/50 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-ink/40 sticky top-0">
@@ -307,8 +356,9 @@ const Contact = () => {
                             ))}
                           </div>
                         ))}
-                      </div>
+                      </motion.div>
                     )}
+                    </AnimatePresence>
                   </div>
                 </div>
 
@@ -371,7 +421,7 @@ const Contact = () => {
               <p className="mt-4 text-center text-[11px] text-brand-ink/30">
                 Vos données sont sécurisées et ne seront jamais partagées.
               </p>
-            </form>
+            </motion.form>
           </motion.div>
         </div>
       </div>
@@ -380,3 +430,4 @@ const Contact = () => {
 }
 
 export default Contact
+

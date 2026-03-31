@@ -139,7 +139,7 @@ const CartDrawer = () => {
                 </div>
                 {deposit > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-brand-ink/50">Caution (remboursable)</span>
+                    <span className="text-brand-ink/50">Caution location (sous reserve de l'etat au retour)</span>
                     <span className="text-brand-ink font-semibold">{deposit.toFixed(2)}€</span>
                   </div>
                 )}

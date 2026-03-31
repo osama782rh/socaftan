@@ -559,10 +559,10 @@ const Custom3D = () => {
             <div className="bg-brand-sand/30 rounded-xl p-4 text-center">
               <p className="text-xs text-brand-ink/40 mb-2">Besoin de conseils ?</p>
               <a
-                href="tel:+33699832902"
+                href="tel:+33184180326"
                 className="text-sm font-semibold text-brand-ink hover:text-brand-gold transition-colors"
               >
-                06 99 83 29 02
+                +33 184180326
               </a>
             </div>
           </div>
@@ -575,3 +575,4 @@ const Custom3D = () => {
 useGLTF.preload('/models/mannequin.glb')
 
 export default Custom3D
+

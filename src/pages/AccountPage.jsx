@@ -157,6 +157,29 @@ const AccountPage = () => {
   const formatDateShort = (dateStr) =>
     new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' })
 
+  const getCatalogOffer = (product) => {
+    const normalize = (value) =>
+      String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+
+    const normalizedCategory = normalize(product?.category)
+    const normalizedName = normalize(product?.name)
+    const isTakchita = normalizedName.includes('takchita') || normalizedName.includes('soultana de fes')
+    const isKarakou = normalizedCategory.includes('karakou')
+
+    if (isTakchita) {
+      return { type: 'takchita', rentalPrice: 90, purchasePrice: null, label: 'Takchita', short: 'T' }
+    }
+
+    if (isKarakou) {
+      return { type: 'karakou', rentalPrice: 100, purchasePrice: null, label: 'Karakou', short: 'K' }
+    }
+
+    return { type: 'caftan', rentalPrice: null, purchasePrice: 150, label: 'Caftan', short: 'C' }
+  }
+
   // Stats
   const visibleOrders = orders.filter(o => o.status !== 'pending')
   const totalOrders = visibleOrders.length
@@ -613,11 +636,13 @@ const AccountPage = () => {
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {wishlist.map(item => (
+                      {wishlist.map(item => {
+                        const offer = getCatalogOffer(item.products)
+                        return (
                         <div key={item.id} className="bg-white rounded-2xl border border-brand-sand/50 overflow-hidden group hover:shadow-md transition-all">
                           <div className="relative aspect-[3/4] bg-gradient-to-b from-brand-sand/15 to-brand-sand/30 flex items-center justify-center">
                             <span className="text-5xl text-brand-ink/5 font-serif font-bold">
-                              {item.products?.category === 'Caftans' ? 'C' : 'K'}
+                              {offer.short}
                             </span>
                             <button
                               onClick={() => removeFromWishlist(item.id)}
@@ -628,27 +653,28 @@ const AccountPage = () => {
                             </button>
                             <div className="absolute bottom-3 left-3">
                               <span className="px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-semibold text-brand-ink/60">
-                                {item.products?.category === 'Caftans' ? 'Caftan' : 'Karakou'}
+                                {offer.label}
                               </span>
                             </div>
                           </div>
                           <div className="p-4">
                             <h3 className="font-bold text-brand-ink font-serif text-base">{item.products?.name}</h3>
                             <div className="flex items-center gap-3 mt-3">
-                              {item.products?.price_rent && (
+                              {offer.rentalPrice && (
                                 <span className="text-sm font-semibold text-brand-gold">
-                                  {item.products.price_rent}€ <span className="text-[10px] font-normal text-brand-ink/30">location</span>
+                                  {offer.rentalPrice}€ <span className="text-[10px] font-normal text-brand-ink/30">location</span>
                                 </span>
                               )}
-                              {item.products?.price_buy && (
+                              {offer.purchasePrice && (
                                 <span className="text-sm font-semibold text-brand-ink">
-                                  {item.products.price_buy}€ <span className="text-[10px] font-normal text-brand-ink/30">achat</span>
+                                  {offer.purchasePrice}€ <span className="text-[10px] font-normal text-brand-ink/30">achat</span>
                                 </span>
                               )}
                             </div>
                           </div>
                         </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   )}
                 </div>
@@ -822,7 +848,7 @@ const AccountPage = () => {
                             value={profileForm.phone}
                             onChange={(e) => setProfileForm(f => ({ ...f, phone: e.target.value }))}
                             className={inputClass}
-                            placeholder="06 XX XX XX XX"
+                            placeholder="+33 184180326"
                           />
                         </div>
                       </div>

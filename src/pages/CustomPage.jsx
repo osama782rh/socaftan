@@ -246,11 +246,11 @@ function CustomPage() {
                   Nous vous accompagnons personnellement
                 </p>
                 <a
-                  href="tel:+33699832902"
+                  href="tel:+33184180326"
                   className="inline-flex items-center gap-2 bg-brand-gold text-brand-ink px-6 py-3 rounded-full font-semibold text-sm hover:bg-brand-goldSoft transition-colors"
                 >
                   <Phone size={16} />
-                  06 99 83 29 02
+                  +33 184180326
                 </a>
               </div>
             </div>
@@ -321,11 +321,11 @@ function CustomPage() {
               Nous vous guidons par téléphone
             </p>
             <a
-              href="tel:+33699832902"
+              href="tel:+33184180326"
               className="inline-flex items-center gap-2 bg-brand-gold text-brand-ink px-6 py-3 rounded-full font-semibold text-sm hover:bg-brand-goldSoft transition-colors"
             >
               <Phone size={16} />
-              06 99 83 29 02
+              +33 184180326
             </a>
           </motion.div>
         </div>
@@ -363,3 +363,4 @@ function CustomPage() {
 }
 
 export default CustomPage
+

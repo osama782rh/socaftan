@@ -18,17 +18,21 @@ const Footer = () => {
   ]
 
   const quickLinks = [
-    { name: 'Accueil', href: '#hero' },
-    { name: 'Collection', href: '#collection' },
-    { name: 'Services', href: '#services' },
-    { name: 'Tarifs', href: '#pricing' },
+    { name: 'Accueil', href: '/#hero' },
+    { name: 'Collection', href: '/#collection' },
+    { name: 'Location Takchita', href: '/location-takchita-ile-de-france' },
+    { name: 'Location Karakou', href: '/location-karakou-ile-de-france' },
+    { name: 'Vente Caftan', href: '/vente-caftan-ile-de-france' },
+    { name: 'Services', href: '/#services' },
+    { name: 'Tarifs', href: '/#pricing' },
     { name: 'Sur-mesure', href: '/sur-mesure#custom' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Contact', href: '/#contact' },
   ]
 
   const legalLinks = [
     { name: 'Mentions légales', to: '/mentions-legales' },
     { name: 'CGV', to: '/cgv' },
+    { name: 'CGU', to: '/cgu' },
     { name: 'Confidentialité', to: '/confidentialite' },
   ]
 
@@ -43,7 +47,7 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <img src={logo} alt="SO Caftan" className="h-16 mb-4 brightness-0 invert" />
             <p className="text-white/40 text-sm leading-relaxed mb-6 max-w-xs">
-              Votre destination pour des caftans d'exception. Location, achat ou création sur-mesure.
+              Votre destination pour des tenues d'exception. Takchitas et karakous en location, caftans en vente.
             </p>
             <div className="flex gap-2">
               {socialLinks.map((social, index) => (
@@ -82,8 +86,9 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3">
               {[
-                { name: 'Location de Caftans', price: 'dès 60€' },
-                { name: 'Achat de Caftans', price: 'dès 180€' },
+                { name: 'Location de Takchitas', price: '90€' },
+                { name: 'Location de Karakous', price: '100€' },
+                { name: 'Achat de Caftans', price: '150€' },
                 { name: 'Création sur-mesure', price: 'dès 220€' },
               ].map((service, index) => (
                 <li key={index}>
@@ -106,8 +111,8 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-2.5">
                 <Phone size={15} className="text-brand-gold flex-shrink-0 mt-0.5" />
-                <a href="tel:+33699832902" className="text-white/50 hover:text-white transition-colors">
-                  06 99 83 29 02
+                <a href="tel:+33184180326" className="text-white/50 hover:text-white transition-colors">
+                  +33 184180326
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
@@ -156,3 +161,4 @@ const Footer = () => {
 }
 
 export default Footer
+

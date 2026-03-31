@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Pages privees ou transactionnelles
+Disallow: /compte
+Disallow: /checkout
+Disallow: /connexion
+Disallow: /inscription
+Disallow: /commande-confirmee
+
+Sitemap: https://socaftan.fr/sitemap.xml

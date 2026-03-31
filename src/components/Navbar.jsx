@@ -4,6 +4,7 @@ import { Menu, X, Phone, ShoppingBag, User, Heart, Package, LogOut, ChevronDown,
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
+import logo from '../assets/logo.png'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -36,6 +37,9 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Accueil', href: '/#hero' },
     { name: 'Collection', href: '/#collection' },
+    { name: 'Takchitas', href: '/location-takchita-ile-de-france' },
+    { name: 'Karakous', href: '/location-karakou-ile-de-france' },
+    { name: 'Caftans', href: '/vente-caftan-ile-de-france' },
     { name: 'Services', href: '/#services' },
     { name: 'Tarifs', href: '/#pricing' },
     { name: 'Sur-mesure', href: '/sur-mesure' },
@@ -56,12 +60,12 @@ const Navbar = () => {
       <div className="fixed top-0 left-0 right-0 z-50 bg-brand-ink text-white/90">
         <div className="container-custom flex items-center justify-between px-5 md:px-10 py-2">
           <span className="text-[11px] tracking-wide">
-            <span className="hidden sm:inline">Location dès 60€ &nbsp;·&nbsp; Achat dès 180€ &nbsp;·&nbsp; Sur-mesure dès 220€</span>
-            <span className="sm:hidden text-[10px]">Location 60€ · Achat 180€ · Sur-mesure 220€</span>
+            <span className="hidden sm:inline">Takchita 90€ · Karakou 100€ · Caftan 150€ · WhatsApp Business disponible</span>
+            <span className="sm:hidden text-[10px]">Takchita 90€ · Karakou 100€ · Caftan 150€</span>
           </span>
-          <a href="tel:+33699832902" className="hidden md:flex items-center gap-1.5 text-[11px] hover:text-brand-gold transition-colors">
+          <a href="tel:+33184180326" className="hidden md:flex items-center gap-1.5 text-[11px] hover:text-brand-gold transition-colors">
             <Phone size={12} />
-            <span>06 99 83 29 02</span>
+            <span>+33 184180326</span>
           </a>
         </div>
       </div>
@@ -80,14 +84,14 @@ const Navbar = () => {
           }`}>
 
             {/* Logo */}
-            <a href="/" className="flex items-center gap-2 group">
-              <span
-                className={`font-serif font-bold tracking-[0.18em] transition-all duration-500 ${
-                  isScrolled ? 'text-lg md:text-xl' : 'text-xl md:text-2xl'
-                } ${isSolid ? 'text-brand-ink' : 'text-white'}`}
-              >
-                SO CAFTAN
-              </span>
+            <a href="/" className="flex items-center group">
+              <img
+                src={logo}
+                alt="SO Caftan"
+                className={`w-auto transition-all duration-500 ${
+                  isScrolled ? 'h-14 md:h-16' : 'h-16 md:h-20'
+                } ${isSolid ? '' : 'brightness-0 invert drop-shadow-[0_1px_8px_rgba(0,0,0,0.45)]'}`}
+              />
             </a>
 
             {/* Desktop Navigation */}
@@ -261,7 +265,7 @@ const Navbar = () => {
             >
               <div className="p-8 pt-24">
                 <div className="mb-10">
-                  <span className="font-serif font-bold tracking-[0.18em] text-2xl text-brand-ink">SO CAFTAN</span>
+                  <img src={logo} alt="SO Caftan" className="h-20 w-auto" />
                 </div>
 
                 <div className="space-y-1">
@@ -345,9 +349,9 @@ const Navbar = () => {
                 </a>
 
                 <div className="mt-8 pt-6 border-t border-brand-sand text-center">
-                  <a href="tel:+33699832902" className="text-brand-ink/60 hover:text-brand-ink text-sm flex items-center justify-center gap-2">
+                  <a href="tel:+33184180326" className="text-brand-ink/60 hover:text-brand-ink text-sm flex items-center justify-center gap-2">
                     <Phone size={14} />
-                    <span>06 99 83 29 02</span>
+                    <span>+33 184180326</span>
                   </a>
                 </div>
               </div>
@@ -360,3 +364,4 @@ const Navbar = () => {
 }
 
 export default Navbar
+

@@ -1,19 +1,47 @@
 import { Check, Sparkles, ShoppingBag, Palette, ArrowRight } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
+
+const easePremium = [0.22, 1, 0.36, 1]
+
+const cardsContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.06,
+    },
+  },
+}
+
+const cardReveal = {
+  hidden: { opacity: 0, y: 24, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.75,
+      ease: easePremium,
+    },
+  },
+}
 
 const Pricing = () => {
+  const prefersReducedMotion = useReducedMotion()
+
   const plans = [
     {
       name: 'Location',
       icon: <Sparkles size={24} />,
-      price: '60',
+      price: '90 - 100',
       unit: '€',
-      period: '3-5 jours',
+      period: 'Takchita/Karakou • 3-5 jours',
       features: [
-        'Caftans & Karakous disponibles',
+        'Takchitas: 90€',
+        'Karakous: 100€',
+        'Caution location: 100€',
         'Nettoyage inclus',
-        'Retrait pratique',
-        'Échange possible sous 48h',
+        'Retrait pratique en Ile-de-France',
         'Conseil personnalisé',
       ],
       highlighted: false,
@@ -23,13 +51,12 @@ const Pricing = () => {
     {
       name: 'Achat',
       icon: <ShoppingBag size={24} />,
-      price: '180',
+      price: '150',
       unit: '€',
-      period: 'à partir de',
+      period: 'Caftans uniquement',
       features: [
-        'Large choix de modèles',
-        'Prix variables selon qualité',
-        'Caftans de 180€ à 450€+',
+        'Prix fixe sur la collection caftans',
+        'Vente definitive de la piece',
         'Nettoyage offert 1ère fois',
         'Garantie qualité',
         'Support après-vente',
@@ -74,25 +101,38 @@ const Pricing = () => {
             Choisissez <span className="italic font-light">votre formule</span>
           </h2>
           <p className="section-subtitle mx-auto text-center">
-            Location ponctuelle, achat ou création sur-mesure : trouvez l'option qui vous correspond.
+            Takchitas et karakous en location, caftans en vente, ou creation sur-mesure.
           </p>
         </motion.div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto mb-14">
+        <motion.div
+          variants={cardsContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto mb-14"
+        >
           {plans.map((plan, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              variants={cardReveal}
+              whileHover={prefersReducedMotion ? undefined : { y: -8 }}
               className={`relative rounded-2xl p-7 md:p-8 transition-all duration-300 ${
                 plan.highlighted
                   ? 'bg-brand-ink text-white shadow-xl md:-mt-4 md:mb-[-16px] md:py-10'
                   : 'bg-white border border-brand-sand/60 hover:shadow-md'
               }`}
             >
+              {plan.highlighted && !prefersReducedMotion && (
+                <motion.div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -right-10 top-10 h-24 w-24 rounded-full bg-brand-gold/30 blur-2xl"
+                  animate={{ x: [0, -6, 0], y: [0, 8, 0], opacity: [0.35, 0.55, 0.35] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                />
+              )}
+
               {plan.highlighted && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-brand-ink text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded-full">
                   Populaire
@@ -161,7 +201,7 @@ const Pricing = () => {
               </a>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Info Box */}
         <motion.div
@@ -176,17 +216,24 @@ const Pricing = () => {
             </h4>
             <div className="grid sm:grid-cols-2 gap-3">
               {[
-                { label: 'Location', info: 'Caution de 100€ remboursable' },
-                { label: 'Achat', info: 'Prix variables selon le modèle' },
+                { label: 'Location', info: 'Caution de 100€ (rendue apres verification de l etat)' },
+                { label: 'Achat', info: 'Caftans uniquement: 150€' },
                 { label: 'Sur-Mesure', info: 'Acompte de 50% à la commande' },
-                { label: 'Paiement', info: 'Espèces, CB ou virement' },
+                { label: 'Paiement', info: 'Paiement securise via Stripe' },
               ].map((item, i) => (
-                <div key={i} className="flex items-start gap-2.5 py-2">
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05, duration: 0.45, ease: easePremium }}
+                  className="flex items-start gap-2.5 py-2"
+                >
                   <Check size={14} className="text-brand-gold flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-brand-ink/60">
                     <span className="font-semibold text-brand-ink">{item.label} :</span> {item.info}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
