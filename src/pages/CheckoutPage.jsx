@@ -21,6 +21,62 @@ const CheckoutPage = () => {
   })
   const [notes, setNotes] = useState('')
 
+  const normalize = (value) =>
+    String(value || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim()
+
+  const resolveCartProductIds = async (cartItems) => {
+    const { data: products, error } = await supabase
+      .from('products')
+      .select('id, name, category')
+
+    if (error) {
+      throw new Error('Impossible de verifier les produits avant commande.')
+    }
+
+    const ids = new Set(products.map((product) => Number(product.id)))
+    const byNameAndCategory = new Map()
+    const byName = new Map()
+
+    for (const product of products) {
+      const normalizedName = normalize(product.name)
+      const normalizedCategory = normalize(product.category)
+      byNameAndCategory.set(`${normalizedName}::${normalizedCategory}`, Number(product.id))
+      if (!byName.has(normalizedName)) {
+        byName.set(normalizedName, Number(product.id))
+      }
+    }
+
+    const resolvedByCartItemId = {}
+    const unresolvedItems = []
+
+    for (const item of cartItems) {
+      const rawId = Number(item.productId)
+      let resolvedId = Number.isInteger(rawId) && ids.has(rawId) ? rawId : null
+
+      if (!resolvedId) {
+        const key = `${normalize(item.name)}::${normalize(item.category)}`
+        resolvedId = byNameAndCategory.get(key) || byName.get(normalize(item.name)) || null
+      }
+
+      if (!resolvedId) {
+        unresolvedItems.push(item.name)
+        continue
+      }
+
+      resolvedByCartItemId[item.id] = resolvedId
+    }
+
+    if (unresolvedItems.length > 0) {
+      throw new Error(`Articles introuvables: ${[...new Set(unresolvedItems)].join(', ')}. Videz le panier et reessayez.`)
+    }
+
+    return resolvedByCartItemId
+  }
+
   if (!user) {
     return (
       <div className="min-h-screen bg-brand-ivory flex items-center justify-center px-5 pt-28 pb-20">
@@ -99,6 +155,8 @@ const CheckoutPage = () => {
     let createdOrderId = null
 
     try {
+      const resolvedProductIds = await resolveCartProductIds(items)
+
       // 1. Créer la commande dans Supabase
       const { data: order, error: orderError } = await supabase
         .from('orders')
@@ -125,7 +183,7 @@ const CheckoutPage = () => {
       // 2. Ajouter les articles
       const orderItems = items.map(item => ({
         order_id: order.id,
-        product_id: item.productId,
+        product_id: resolvedProductIds[item.id],
         item_type: item.type,
         quantity: item.quantity,
         unit_price: item.unitPrice,
