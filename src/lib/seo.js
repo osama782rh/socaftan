@@ -1,4 +1,4 @@
-const SITE_URL = 'https://socaftan.fr'
+const SITE_URL = 'https://www.socaftan.fr'
 const SITE_NAME = 'SO Caftan'
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`
 
