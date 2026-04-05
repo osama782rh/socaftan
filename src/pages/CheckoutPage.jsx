@@ -1,18 +1,21 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Lock, Calendar, ShoppingBag, AlertCircle, MapPin, Truck } from 'lucide-react'
+import { ArrowLeft, Lock, Calendar, ShoppingBag, MapPin, Truck } from 'lucide-react'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
+import { useUiFeedback } from '../contexts/UiFeedbackContext'
+
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
 
 const CheckoutPage = () => {
   const { items, subtotal, deposit, total, clearCart } = useCart()
   const { user, profile } = useAuth()
+  const { notifyError } = useUiFeedback()
   const navigate = useNavigate()
   const location = useLocation()
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
   const [deliveryMethod, setDeliveryMethod] = useState('pickup')
   const [deliveryInfo, setDeliveryInfo] = useState({
     address: profile?.address || '',
@@ -150,7 +153,16 @@ const CheckoutPage = () => {
   }
 
   const handleCheckout = async () => {
-    setError('')
+    if (deliveryMethod === 'delivery') {
+      const missingAddress = !String(deliveryInfo.address || '').trim()
+      const missingCity = !String(deliveryInfo.city || '').trim()
+      const missingPostalCode = !String(deliveryInfo.postal_code || '').trim()
+      if (missingAddress || missingCity || missingPostalCode) {
+        notifyError('Pour la livraison, renseignez adresse, ville et code postal.')
+        return
+      }
+    }
+
     setLoading(true)
     let createdOrderId = null
 
@@ -197,9 +209,29 @@ const CheckoutPage = () => {
 
       if (itemsError) throw itemsError
 
+      let { data: sessionData } = await supabase.auth.getSession()
+      if (!sessionData?.session?.access_token) {
+        const { data: refreshed } = await supabase.auth.refreshSession()
+        sessionData = refreshed
+      }
+      const accessToken = sessionData?.session?.access_token || ''
+      if (!accessToken) {
+        throw new Error('Session expirée ou invalide. Veuillez vous reconnecter puis réessayer.')
+      }
+
+      const gatewayHeaders = supabaseAnonKey
+        ? { Authorization: `Bearer ${supabaseAnonKey}`, apikey: supabaseAnonKey }
+        : {}
+
       // 3. Rediriger vers Stripe Checkout
       const { data: stripeData, error: stripeError } = await supabase.functions.invoke('create-checkout', {
-        body: { orderId: order.id, userId: user.id, customerEmail: user.email },
+        body: {
+          orderId: order.id,
+          userId: user.id,
+          customerEmail: user.email,
+          accessToken,
+        },
+        ...(Object.keys(gatewayHeaders).length > 0 ? { headers: gatewayHeaders } : {}),
       })
 
       if (stripeError) {
@@ -238,7 +270,7 @@ const CheckoutPage = () => {
         ? 'Session expirée ou invalide. Veuillez vous reconnecter puis réessayer.'
         : rawMessage
 
-      setError(message)
+      notifyError(message)
       setLoading(false)
     }
   }
@@ -258,13 +290,6 @@ const CheckoutPage = () => {
           </button>
 
           <h1 className="text-headline font-bold text-brand-ink mb-8">Finaliser la commande</h1>
-
-          {error && (
-            <div className="flex items-center gap-2 bg-red-50 text-red-600 text-sm p-4 rounded-xl mb-6">
-              <AlertCircle size={16} className="flex-shrink-0" />
-              {error}
-            </div>
-          )}
 
           <div className="grid lg:grid-cols-[1fr_380px] gap-6">
             {/* Left - Details */}
