@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
+import { UiFeedbackProvider } from './contexts/UiFeedbackContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import SEOManager from './components/SEOManager'
@@ -22,6 +23,7 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
 const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 const AccountPage = lazy(() => import('./pages/AccountPage'))
+const AdminOrdersPage = lazy(() => import('./pages/AdminOrdersPage'))
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'))
 const OrderSuccessPage = lazy(() => import('./pages/OrderSuccessPage'))
 
@@ -36,35 +38,40 @@ function App() {
     <Router>
       <AuthProvider>
         <CartProvider>
-          <ScrollToTop />
-          <div className="bg-brand-ivory">
-            <Navbar />
-            <CartDrawer />
-            <SEOManager />
-            <Suspense fallback={<RouteFallback />}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/location-takchita-ile-de-france" element={<LocationTakchitaPage />} />
-                <Route path="/location-karakou-ile-de-france" element={<LocationKarakouPage />} />
-                <Route path="/vente-caftan-ile-de-france" element={<VenteCaftanPage />} />
-                <Route path="/sur-mesure" element={<CustomPage />} />
-                <Route path="/cgv" element={<Cgv />} />
-                <Route path="/cgu" element={<Cgu />} />
-                <Route path="/confidentialite" element={<Confidentialite />} />
-                <Route path="/mentions-legales" element={<MentionsLegales />} />
-                <Route path="/politique-confidentialite" element={<Confidentialite />} />
-                <Route path="/connexion" element={<LoginPage />} />
-                <Route path="/inscription" element={<RegisterPage />} />
-                <Route path="/compte" element={
-                  <ProtectedRoute><AccountPage /></ProtectedRoute>
-                } />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/commande-confirmee" element={<OrderSuccessPage />} />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </Suspense>
-            <Footer />
-          </div>
+          <UiFeedbackProvider>
+            <ScrollToTop />
+            <div className="bg-brand-ivory">
+              <Navbar />
+              <CartDrawer />
+              <SEOManager />
+              <Suspense fallback={<RouteFallback />}>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/location-takchita-ile-de-france" element={<LocationTakchitaPage />} />
+                  <Route path="/location-karakou-ile-de-france" element={<LocationKarakouPage />} />
+                  <Route path="/vente-caftan-ile-de-france" element={<VenteCaftanPage />} />
+                  <Route path="/sur-mesure" element={<CustomPage />} />
+                  <Route path="/cgv" element={<Cgv />} />
+                  <Route path="/cgu" element={<Cgu />} />
+                  <Route path="/confidentialite" element={<Confidentialite />} />
+                  <Route path="/mentions-legales" element={<MentionsLegales />} />
+                  <Route path="/politique-confidentialite" element={<Confidentialite />} />
+                  <Route path="/connexion" element={<LoginPage />} />
+                  <Route path="/inscription" element={<RegisterPage />} />
+                  <Route path="/compte" element={
+                    <ProtectedRoute><AccountPage /></ProtectedRoute>
+                  } />
+                  <Route path="/admin/commandes" element={
+                    <ProtectedRoute><AdminOrdersPage /></ProtectedRoute>
+                  } />
+                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/commande-confirmee" element={<OrderSuccessPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+              </Suspense>
+              <Footer />
+            </div>
+          </UiFeedbackProvider>
         </CartProvider>
       </AuthProvider>
     </Router>
