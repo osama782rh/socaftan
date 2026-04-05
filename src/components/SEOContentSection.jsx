@@ -15,7 +15,7 @@ const seoCards = [
   {
     href: '/vente-caftan-ile-de-france',
     title: 'Vente Caftan Ile-de-France',
-    description: 'Caftans disponibles a la vente a 150€.',
+    description: 'Caftans disponibles a la vente a 180€.',
   },
 ]
 

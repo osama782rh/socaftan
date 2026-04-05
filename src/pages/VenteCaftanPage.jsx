@@ -3,7 +3,7 @@ import ServiceLandingPage from '../components/ServiceLandingPage'
 const faq = [
   {
     question: 'Quel est le prix de vente des caftans ?',
-    answer: 'Les caftans de la collection sont proposes a un tarif fixe de 150€.',
+    answer: 'Les caftans de la collection sont proposes a un tarif fixe de 180€.',
   },
   {
     question: 'Puis-je essayer avant achat ?',
@@ -20,11 +20,11 @@ const VenteCaftanPage = () => {
     <ServiceLandingPage
       badge="Vente Caftan Ile-de-France"
       title="Vente de caftans en Ile-de-France"
-      subtitle="Decouvrez notre collection de caftans en vente au prix fixe de 150€, avec accompagnement personnalise pour votre selection."
-      price="150€"
+      subtitle="Decouvrez notre collection de caftans en vente au prix fixe de 180€, avec accompagnement personnalise pour votre selection."
+      price="180€"
       details={['Vente uniquement', 'Paiement securise Stripe', 'Accompagnement personnalise']}
       benefits={[
-        'Prix clair et transparent a 150€',
+        'Prix clair et transparent a 180€',
         'Collection selectionnee pour les grandes occasions',
         'Service client reactif et professionnel',
         'Disponibilite en Ile-de-France',

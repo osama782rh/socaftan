@@ -46,7 +46,7 @@ const CGV = () => {
               <ul className="list-disc list-inside ml-4 space-y-2">
                 <li><strong>Takchitas :</strong> location uniquement a <strong>90€</strong> (3 a 5 jours)</li>
                 <li><strong>Karakous :</strong> location uniquement a <strong>100€</strong> (3 a 5 jours)</li>
-                <li><strong>Caftans :</strong> vente uniquement a <strong>150€</strong></li>
+                <li><strong>Caftans :</strong> vente uniquement a <strong>180€</strong></li>
                 <li><strong>Sur-mesure :</strong> a partir de <strong>220€</strong> selon options</li>
               </ul>
             </div>

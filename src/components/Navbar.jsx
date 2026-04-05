@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { Menu, X, Phone, ShoppingBag, User, Heart, Package, LogOut, ChevronDown, Settings } from 'lucide-react'
+import { Menu, X, Phone, ShoppingBag, User, Heart, Package, LogOut, ChevronDown, Settings, ShieldCheck } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
+import { isAdminEmail } from '../lib/admin'
 import logo from '../assets/logo.png'
 
 const Navbar = () => {
@@ -46,10 +47,13 @@ const Navbar = () => {
     { name: 'Contact', href: '/#contact' },
   ]
 
+  const canAccessAdmin = isAdminEmail(user?.email)
+
   const accountMenuItems = [
     { label: 'Mes commandes', to: '/compte?tab=orders', icon: Package },
     { label: 'Ma wishlist', to: '/compte?tab=wishlist', icon: Heart },
     { label: 'Informations personnelles', to: '/compte?tab=profile', icon: Settings },
+    ...(canAccessAdmin ? [{ label: 'Administration', to: '/admin/commandes', icon: ShieldCheck }] : []),
   ]
 
   const displayName = profile?.first_name || user?.email?.split('@')[0] || ''
@@ -60,8 +64,8 @@ const Navbar = () => {
       <div className="fixed top-0 left-0 right-0 z-50 bg-brand-ink text-white/90">
         <div className="container-custom flex items-center justify-between px-5 md:px-10 py-2">
           <span className="text-[11px] tracking-wide">
-            <span className="hidden sm:inline">Takchita 90€ · Karakou 100€ · Caftan 150€ · WhatsApp Business disponible</span>
-            <span className="sm:hidden text-[10px]">Takchita 90€ · Karakou 100€ · Caftan 150€</span>
+            <span className="hidden sm:inline">Takchita 90€ · Karakou 100€ · Caftan 180€ · WhatsApp Business disponible</span>
+            <span className="sm:hidden text-[10px]">Takchita 90€ · Karakou 100€ · Caftan 180€</span>
           </span>
           <a href="tel:+33184180326" className="hidden md:flex items-center gap-1.5 text-[11px] hover:text-brand-gold transition-colors">
             <Phone size={12} />

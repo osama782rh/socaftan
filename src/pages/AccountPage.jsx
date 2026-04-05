@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  User, Package, LogOut, Save, AlertCircle, CheckCircle,
+  User, Package, LogOut, Save,
   Calendar, Heart, Trash2, ShoppingBag, Eye, Lock,
   MapPin, CreditCard, ChevronRight, Plus, Edit3,
   LayoutDashboard, Clock, TrendingUp, Star, Phone,
@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
+import { useUiFeedback } from '../contexts/UiFeedbackContext'
 
 const statusLabels = {
   pending: { label: 'En attente', color: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-400' },
@@ -23,6 +24,7 @@ const statusLabels = {
 }
 
 const statusFlow = ['pending', 'paid', 'confirmed', 'preparing', 'ready', 'delivered']
+const GOOGLE_REVIEW_URL = 'https://g.page/r/CVZQ56HB6j9FEAE/review'
 
 const sidebarItems = [
   { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
@@ -35,6 +37,7 @@ const sidebarItems = [
 
 const AccountPage = () => {
   const { user, profile, signOut, updateProfile } = useAuth()
+  const { notifyError, notifySuccess, showInfo } = useUiFeedback()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'dashboard')
@@ -47,9 +50,7 @@ const AccountPage = () => {
   const [profileForm, setProfileForm] = useState({
     first_name: '', last_name: '', phone: '', address: '', city: '', postal_code: '',
   })
-  const [saveStatus, setSaveStatus] = useState(null)
   const [passwordForm, setPasswordForm] = useState({ current: '', new_password: '', confirm: '' })
-  const [passwordStatus, setPasswordStatus] = useState(null)
   const [showPasswords, setShowPasswords] = useState({ current: false, new_password: false, confirm: false })
 
   useEffect(() => {
@@ -97,7 +98,7 @@ const AccountPage = () => {
       setWishlistLoading(true)
       const { data } = await supabase
         .from('wishlist')
-        .select(`*, products:product_id (id, name, category, image_key, price_rent, price_buy)`)
+        .select(`*, products:product_id (id, name, category, image_key, price_rent:rental_price, price_buy:purchase_price)`)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
       setWishlist(data || [])
@@ -114,35 +115,31 @@ const AccountPage = () => {
 
   const handleSaveProfile = async (e) => {
     e.preventDefault()
-    setSaveStatus(null)
     try {
       await updateProfile(profileForm)
-      setSaveStatus('success')
-      setTimeout(() => setSaveStatus(null), 3000)
+      notifySuccess('Profil mis a jour avec succes.')
     } catch {
-      setSaveStatus('error')
+      notifyError('Erreur lors de la mise a jour du profil.')
     }
   }
 
   const handleChangePassword = async (e) => {
     e.preventDefault()
-    setPasswordStatus(null)
     if (passwordForm.new_password !== passwordForm.confirm) {
-      setPasswordStatus({ type: 'error', message: 'Les mots de passe ne correspondent pas.' })
+      notifyError('Les mots de passe ne correspondent pas.')
       return
     }
     if (passwordForm.new_password.length < 6) {
-      setPasswordStatus({ type: 'error', message: 'Le mot de passe doit contenir au moins 6 caracteres.' })
+      notifyError('Le mot de passe doit contenir au moins 6 caracteres.')
       return
     }
     try {
       const { error } = await supabase.auth.updateUser({ password: passwordForm.new_password })
       if (error) throw error
-      setPasswordStatus({ type: 'success', message: 'Mot de passe modifie avec succes.' })
+      notifySuccess('Mot de passe modifie avec succes.')
       setPasswordForm({ current: '', new_password: '', confirm: '' })
-      setTimeout(() => setPasswordStatus(null), 3000)
     } catch {
-      setPasswordStatus({ type: 'error', message: 'Erreur lors du changement de mot de passe.' })
+      notifyError('Erreur lors du changement de mot de passe.')
     }
   }
 
@@ -177,7 +174,7 @@ const AccountPage = () => {
       return { type: 'karakou', rentalPrice: 100, purchasePrice: null, label: 'Karakou', short: 'K' }
     }
 
-    return { type: 'caftan', rentalPrice: null, purchasePrice: 150, label: 'Caftan', short: 'C' }
+    return { type: 'caftan', rentalPrice: null, purchasePrice: 180, label: 'Caftan', short: 'C' }
   }
 
   // Stats
@@ -199,9 +196,9 @@ const AccountPage = () => {
   const inputClass = 'w-full px-4 py-3 rounded-xl border border-brand-sand/80 focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 outline-none text-sm bg-white transition-all'
 
   return (
-    <div className="min-h-screen bg-brand-ivory pt-20">
+    <div className="min-h-screen bg-brand-ivory pt-28 md:pt-[136px]">
       {/* Mobile sidebar toggle */}
-      <div className="lg:hidden fixed top-20 left-0 right-0 z-30 bg-white/95 backdrop-blur-sm border-b border-brand-sand/40 px-4 py-3 flex items-center justify-between">
+      <div className="lg:hidden fixed top-28 md:top-[136px] left-0 right-0 z-30 bg-white/95 backdrop-blur-sm border-b border-brand-sand/40 px-4 py-3 flex items-center justify-between">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="flex items-center gap-2 text-sm font-medium text-brand-ink"
@@ -216,7 +213,7 @@ const AccountPage = () => {
         </div>
       </div>
 
-      <div className="flex min-h-[calc(100vh-5rem)]">
+      <div className="flex min-h-[calc(100vh-7rem)] md:min-h-[calc(100vh-8.5rem)]">
         {/* Sidebar overlay on mobile */}
         <AnimatePresence>
           {sidebarOpen && (
@@ -232,7 +229,7 @@ const AccountPage = () => {
 
         {/* Sidebar */}
         <aside className={`
-          fixed lg:sticky top-20 left-0 h-[calc(100vh-5rem)] w-72 bg-white border-r border-brand-sand/40
+          fixed lg:sticky top-28 md:top-[136px] left-0 h-[calc(100vh-7rem)] md:h-[calc(100vh-8.5rem)] w-72 bg-white border-r border-brand-sand/40
           z-50 lg:z-10 transition-transform duration-300 overflow-y-auto
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}>
@@ -304,7 +301,7 @@ const AccountPage = () => {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 px-4 md:px-8 lg:px-10 py-6 lg:py-8 mt-14 lg:mt-0 max-w-5xl">
+        <main className="flex-1 px-4 md:px-8 lg:px-10 py-6 lg:py-8 mt-16 lg:mt-0 max-w-5xl">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -487,6 +484,7 @@ const AccountPage = () => {
                         const status = statusLabels[order.status] || statusLabels.pending
                         const isExpanded = expandedOrder === order.id
                         const step = getStatusStep(order.status)
+                        const canRequestReview = ['delivered', 'returned'].includes(order.status)
                         return (
                           <div key={order.id} className="bg-white rounded-2xl border border-brand-sand/50 overflow-hidden hover:shadow-sm transition-shadow">
                             <button
@@ -584,6 +582,24 @@ const AccountPage = () => {
                                       </div>
                                       <p className="text-base font-bold text-brand-ink font-serif">Total : {order.total?.toFixed(2)}€</p>
                                     </div>
+
+                                    {canRequestReview && (
+                                      <div className="rounded-xl border border-brand-gold/35 bg-brand-gold/10 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                        <div>
+                                          <p className="text-sm font-semibold text-brand-ink">Votre piece vous a plu ?</p>
+                                          <p className="text-xs text-brand-ink/60 mt-1">Votre avis Google aide d'autres clientes a nous faire confiance.</p>
+                                        </div>
+                                        <a
+                                          href={GOOGLE_REVIEW_URL}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-brand-ink text-white text-xs font-semibold hover:bg-brand-ink/90 transition-colors"
+                                        >
+                                          <Star size={14} />
+                                          Laisser un avis Google
+                                        </a>
+                                      </div>
+                                    )}
                                   </div>
                                 </motion.div>
                               )}
@@ -768,31 +784,6 @@ const AccountPage = () => {
                     <p className="text-xs text-brand-ink/40 mt-1">Modifiez vos informations de compte</p>
                   </div>
 
-                  <AnimatePresence>
-                    {saveStatus === 'success' && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        className="flex items-center gap-2 bg-emerald-50 text-emerald-700 text-sm p-4 rounded-xl border border-emerald-200/40"
-                      >
-                        <CheckCircle size={16} />
-                        Profil mis a jour avec succes.
-                      </motion.div>
-                    )}
-                    {saveStatus === 'error' && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        className="flex items-center gap-2 bg-red-50 text-red-600 text-sm p-4 rounded-xl border border-red-200/40"
-                      >
-                        <AlertCircle size={16} />
-                        Erreur lors de la mise a jour.
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
                   <form onSubmit={handleSaveProfile} className="space-y-6">
                     {/* Identity */}
                     <div className="bg-white rounded-2xl border border-brand-sand/50 p-5 md:p-6">
@@ -924,24 +915,6 @@ const AccountPage = () => {
                       <h2 className="text-sm font-bold text-brand-ink uppercase tracking-wide">Changer le mot de passe</h2>
                     </div>
 
-                    <AnimatePresence>
-                      {passwordStatus && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -8 }}
-                          className={`flex items-center gap-2 text-sm p-4 rounded-xl mb-5 border ${
-                            passwordStatus.type === 'success'
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200/40'
-                              : 'bg-red-50 text-red-600 border-red-200/40'
-                          }`}
-                        >
-                          {passwordStatus.type === 'success' ? <CheckCircle size={16} /> : <AlertCircle size={16} />}
-                          {passwordStatus.message}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
                     <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
                       {[
                         { key: 'current', label: 'Mot de passe actuel', placeholder: 'Votre mot de passe actuel' },
@@ -1019,7 +992,11 @@ const AccountPage = () => {
                     </p>
                     <button
                       className="text-xs font-semibold text-red-400 hover:text-red-500 transition-colors border border-red-200/40 px-4 py-2 rounded-full hover:bg-red-50"
-                      onClick={() => alert('Pour supprimer votre compte, veuillez nous contacter a contact@socaftan.com')}
+                      onClick={() => showInfo({
+                        title: 'Suppression du compte',
+                        message: 'Pour supprimer votre compte, contactez-nous a contact@socaftan.fr.',
+                        confirmLabel: 'Fermer',
+                      })}
                     >
                       Supprimer mon compte
                     </button>

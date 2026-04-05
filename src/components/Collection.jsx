@@ -3,57 +3,124 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { Eye, X, ArrowRight, ShoppingBag, Calendar } from 'lucide-react'
 import { useCart } from '../contexts/CartContext'
 import RentalDateModal from './RentalDateModal'
-
-import imgAndalouse from '../assets/ANDALOUSE.jpeg'
-import imgAzurMagenta from '../assets/AZUR_MAGENTA.jpeg'
-import imgCaftanAmbre from '../assets/CAFTAN_AMBRE.jpeg'
-import imgEmeraude from '../assets/EMERAUDE.png'
-import imgImperialBronze from '../assets/IMPERIAL_BRONZE.png'
-import imgIndigo from '../assets/INDIGO.png'
-import imgJade from '../assets/JADE.jpeg'
-import imgJawhara from '../assets/JAWHARA.jpeg'
-import imgKarakouImperial from '../assets/KARAKOU_IMPERIAL.jpeg'
-import imgLilas from '../assets/LILAS.png'
-import imgPourpe from '../assets/POURPE.jpeg'
-import imgRoyale from '../assets/ROYALE.jpeg'
-import imgSafran from '../assets/SAFRAN.png'
-import imgSfifaRoyale from '../assets/SFIFA_ROYALE.jpeg'
-import imgSoultanaDeFes from '../assets/SOULTANA_DE_FES.png'
-import imgTakchitaBleuMajeste from '../assets/TAKCHITA_BLEU_MAJESTE.jpeg'
-import imgTakchitaNuitRoyale from '../assets/TAKCHITA_NUIT_ROYALE.jpeg'
-import imgTakchitaSultana from '../assets/TAKCHITA_SULTANA.jpeg'
+import { supabase } from '../lib/supabase'
+import { resolveProductImage } from '../lib/productImages'
 
 const easePremium = [0.22, 1, 0.36, 1]
+
+const normalizeText = (value) =>
+  String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+
+const isTakchitaName = (value) => {
+  const normalized = normalizeText(value)
+  return normalized.includes('takchita') || normalized.includes('soultana de fes')
+}
+
+const FALLBACK_ROWS = [
+  { id: 1, name: 'Andalouse', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'ANDALOUSE', description: 'Coupe elegante et finitions artisanales.', featured: true },
+  { id: 2, name: 'Azur Magenta', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'AZUR_MAGENTA', description: 'Alliance raffinee de tons vibrants et de details couture.' },
+  { id: 3, name: 'Caftan Ambre', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'CAFTAN_AMBRE', description: 'Piece lumineuse au style intemporel.' },
+  { id: 4, name: 'Emeraude', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'EMERAUDE', description: 'Nuance profonde sublimee par un travail delicat.' },
+  { id: 5, name: 'Imperial Bronze', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'IMPERIAL_BRONZE', description: 'Silhouette majestueuse et finition brillante.' },
+  { id: 6, name: 'Indigo', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'INDIGO', description: 'Equilibre parfait entre modernite et tradition.' },
+  { id: 7, name: 'Jade', category: 'Karakous', price_rent: 100, price_buy: null, image_key: 'JADE', description: 'Tonalite chic et details raffines.' },
+  { id: 8, name: 'Jawhara', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'JAWHARA', description: 'Piece signature au charme marocain.', featured: true },
+  { id: 9, name: 'Karakou Imperial', category: 'Karakous', price_rent: 100, price_buy: null, image_key: 'KARAKOU_IMPERIAL', description: 'Karakou elegant aux finitions premium.', featured: true },
+  { id: 10, name: 'Lilas', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'LILAS', description: 'Couleur douce et allure distinguee.' },
+  { id: 11, name: 'Pourpe', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'POURPE', description: 'Style affirme et details soignes.' },
+  { id: 12, name: 'Royale', category: 'Karakous', price_rent: 100, price_buy: null, image_key: 'ROYALE', description: 'Inspiration royale pour vos evenements.' },
+  { id: 13, name: 'Safran', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'SAFRAN', description: 'Teinte chaude et elegance assumee.' },
+  { id: 14, name: 'Sfifa Royale', category: 'Caftans', price_rent: null, price_buy: 180, image_key: 'SFIFA_ROYALE', description: 'Travail sfifa traditionnel revisite.' },
+  { id: 15, name: 'Soultana de Fes', category: 'Caftans', price_rent: 90, price_buy: null, image_key: 'SOULTANA_DE_FES', description: 'Hommage a l elegance fassie.' },
+  { id: 16, name: 'Takchita Bleu Majeste', category: 'Caftans', price_rent: 90, price_buy: null, image_key: 'TAKCHITA_BLEU_MAJESTE', description: 'Takchita d exception aux lignes nobles.', featured: true },
+  { id: 17, name: 'Takchita Nuit Royale', category: 'Caftans', price_rent: 90, price_buy: null, image_key: 'TAKCHITA_NUIT_ROYALE', description: 'Silhouette de soiree, chic et royale.' },
+  { id: 18, name: 'Takchita Sultana', category: 'Caftans', price_rent: 90, price_buy: null, image_key: 'TAKCHITA_SULTANA', description: 'Takchita sophistiquee pour les grandes occasions.' },
+]
+
+const mapCatalogRowToProduct = (row, index) => {
+  const priceRentRaw = row?.price_rent ?? row?.rental_price
+  const priceBuyRaw = row?.price_buy ?? row?.purchase_price
+  const priceRentNumber = Number(priceRentRaw)
+  const priceBuyNumber = Number(priceBuyRaw)
+  const rentalPrice = Number.isFinite(priceRentNumber) && priceRentNumber > 0 ? priceRentNumber : null
+  const purchasePrice = Number.isFinite(priceBuyNumber) && priceBuyNumber > 0 ? priceBuyNumber : null
+
+  const categoryNormalized = normalizeText(row?.category)
+  const category = categoryNormalized.includes('karakou') ? 'Karakous' : 'Caftans'
+  const takchita = isTakchitaName(row?.name)
+
+  let description = String(row?.description || '').trim()
+  if (!description) {
+    if (takchita) description = 'Takchita d exception pour vos evenements.'
+    else if (category === 'Karakous') description = 'Karakou elegant avec finitions soignees.'
+    else description = 'Caftan raffine pour sublimer vos occasions.'
+  }
+
+  return {
+    id: row?.id ?? `local-${index}`,
+    name: String(row?.name || 'Modele SO Caftan'),
+    category,
+    rentalPrice,
+    purchasePrice,
+    imageKey: row?.image_key || 'ANDALOUSE',
+    image: resolveProductImage(row?.image_key),
+    description,
+    featured: Boolean(row?.featured),
+    isTakchita: takchita,
+  }
+}
+
+const FALLBACK_PRODUCTS = FALLBACK_ROWS.map((row, index) => mapCatalogRowToProduct(row, index))
 
 const Collection = () => {
   const [activeFilter, setActiveFilter] = useState('Tous')
   const [zoomedItem, setZoomedItem] = useState(null)
   const [rentalModal, setRentalModal] = useState(null)
+  const [catalogItems, setCatalogItems] = useState(FALLBACK_PRODUCTS)
+  const [catalogLoading, setCatalogLoading] = useState(Boolean(supabase))
   const prefersReducedMotion = useReducedMotion()
   const { addItem } = useCart()
 
   const filters = ['Tous', 'Caftans', 'Karakous', 'Takchita']
 
-  const caftans = [
-    { id: 1, name: 'Andalouse', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgAndalouse, description: 'Coupe élégante et finitions artisanales.', featured: true },
-    { id: 2, name: 'Azur Magenta', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgAzurMagenta, description: 'Alliance raffinée de tons vibrants et de détails couture.' },
-    { id: 3, name: 'Caftan Ambre', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgCaftanAmbre, description: 'Pièce lumineuse au style intemporel.' },
-    { id: 4, name: 'Émeraude', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgEmeraude, description: 'Nuance profonde sublimée par un travail délicat.' },
-    { id: 5, name: 'Impérial Bronze', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgImperialBronze, description: 'Silhouette majestueuse et finition brillante.' },
-    { id: 6, name: 'Indigo', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgIndigo, description: 'Équilibre parfait entre modernité et tradition.' },
-    { id: 7, name: 'Jade', category: 'Karakous', rentalPrice: 100, purchasePrice: null, image: imgJade, description: 'Tonalité chic et détails raffinés.' },
-    { id: 8, name: 'Jawhara', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgJawhara, description: 'Pièce signature au charme marocain.', featured: true },
-    { id: 9, name: 'Karakou Impérial', category: 'Karakous', rentalPrice: 100, purchasePrice: null, image: imgKarakouImperial, description: 'Karakou élégant aux finitions premium.', featured: true },
-    { id: 10, name: 'Lilas', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgLilas, description: 'Couleur douce et allure distinguée.' },
-    { id: 11, name: 'Pourpe', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgPourpe, description: 'Style affirmé et détails soignés.' },
-    { id: 12, name: 'Royale', category: 'Karakous', rentalPrice: 100, purchasePrice: null, image: imgRoyale, description: 'Inspiration royale pour vos événements.' },
-    { id: 13, name: 'Safran', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgSafran, description: 'Teinte chaude et élégance assumée.' },
-    { id: 14, name: 'Sfifa Royale', category: 'Caftans', rentalPrice: null, purchasePrice: 150, image: imgSfifaRoyale, description: 'Travail sfifa traditionnel revisité.' },
-    { id: 15, name: 'Soultana de Fès', category: 'Caftans', rentalPrice: 90, purchasePrice: null, image: imgSoultanaDeFes, description: 'Hommage à l’élégance fassie.', isTakchita: true },
-    { id: 16, name: 'Takchita Bleu Majesté', category: 'Caftans', rentalPrice: 90, purchasePrice: null, image: imgTakchitaBleuMajeste, description: 'Takchita d’exception aux lignes nobles.', featured: true, isTakchita: true },
-    { id: 17, name: 'Takchita Nuit Royale', category: 'Caftans', rentalPrice: 90, purchasePrice: null, image: imgTakchitaNuitRoyale, description: 'Silhouette de soirée, chic et royale.', isTakchita: true },
-    { id: 18, name: 'Takchita Sultana', category: 'Caftans', rentalPrice: 90, purchasePrice: null, image: imgTakchitaSultana, description: 'Takchita sophistiquée pour les grandes occasions.', isTakchita: true },
-  ]
+  useEffect(() => {
+    let isMounted = true
+
+    const loadCatalog = async () => {
+      if (!supabase) {
+        setCatalogLoading(false)
+        return
+      }
+
+      setCatalogLoading(true)
+      const { data, error } = await supabase
+        .from('products')
+        .select('id, name, category, price_rent:rental_price, price_buy:purchase_price, image_key, description, featured, available')
+        .eq('available', true)
+        .order('id', { ascending: true })
+
+      if (!isMounted) return
+
+      if (error || !Array.isArray(data) || data.length === 0) {
+        setCatalogItems(FALLBACK_PRODUCTS)
+      } else {
+        const mapped = data.map((row, index) => mapCatalogRowToProduct(row, index))
+        setCatalogItems(mapped)
+      }
+
+      setCatalogLoading(false)
+    }
+
+    loadCatalog()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const getProductModes = (product) => {
     const canRent = typeof product.rentalPrice === 'number' && product.rentalPrice > 0
@@ -90,12 +157,12 @@ const Collection = () => {
 
   const filteredCaftans =
     activeFilter === 'Tous'
-      ? caftans
+      ? catalogItems
       : activeFilter === 'Takchita'
-        ? caftans.filter((c) => c.isTakchita)
+        ? catalogItems.filter((c) => c.isTakchita)
         : activeFilter === 'Caftans'
-          ? caftans.filter((c) => c.category === 'Caftans' && !c.isTakchita)
-          : caftans.filter((c) => c.category === activeFilter)
+          ? catalogItems.filter((c) => c.category === 'Caftans' && !c.isTakchita)
+          : catalogItems.filter((c) => c.category === activeFilter)
 
   useEffect(() => {
     if (!zoomedItem) return
@@ -120,7 +187,6 @@ const Collection = () => {
     <section id="collection" className="section-padding bg-brand-cream relative">
       <div className="container-custom">
 
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -129,139 +195,133 @@ const Collection = () => {
         >
           <p className="section-label justify-center">Collection exclusive</p>
           <h2 className="section-title text-center">
-            Nos pièces <span className="italic font-light">d'exception</span>
+            Nos pieces <span className="italic font-light">d'exception</span>
           </h2>
           <p className="section-subtitle mx-auto text-center">
             Chaque caftan raconte une histoire d'artisanat et de raffinement.
           </p>
+          {catalogLoading && (
+            <p className="text-xs text-brand-ink/35 mt-2">Synchronisation de la collection...</p>
+          )}
         </motion.div>
 
-        {/* Filters */}
         <div className="flex justify-center mb-12">
           <div className="inline-flex gap-1 rounded-full p-1.5 bg-white/85 border border-brand-sand/70 shadow-sm backdrop-blur-sm">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
+            {filters.map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setActiveFilter(filter)}
                 className="relative px-5 md:px-6 py-2.5 rounded-full text-sm font-medium transition-colors duration-300"
-            >
+              >
                 {activeFilter === filter && (
                   <motion.span
                     layoutId="collection-active-filter"
                     className="absolute inset-0 rounded-full bg-brand-ink shadow-[0_8px_20px_rgba(43,32,26,0.22)]"
-                    transition={{
-                      type: 'spring',
-                      stiffness: 360,
-                      damping: 32,
-                    }}
+                    transition={{ type: 'spring', stiffness: 360, damping: 32 }}
                   />
                 )}
                 <span className={`relative z-10 ${activeFilter === filter ? 'text-white' : 'text-brand-ink/60 hover:text-brand-ink'}`}>
                   {filter}
                 </span>
-            </button>
-          ))}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           <AnimatePresence mode="popLayout">
             {filteredCaftans.map((caftan, index) => {
               const { canRent, canBuy } = getProductModes(caftan)
+
               return (
-              <motion.div
-                key={caftan.id}
-                layout
-                initial={{ opacity: 0, y: 18, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 12, scale: 0.97 }}
-                transition={{
-                  duration: 0.45,
-                  ease: easePremium,
-                  delay: prefersReducedMotion ? 0 : Math.min(index * 0.035, 0.3),
-                }}
-                className="group cursor-pointer"
-                whileHover={prefersReducedMotion ? undefined : { y: -6 }}
-                onClick={() => setZoomedItem(caftan)}
-              >
-                <div className="relative bg-white rounded-2xl overflow-hidden border border-brand-sand/50 hover:shadow-lg hover:border-brand-gold/30 transition-all duration-500">
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/25 via-transparent to-brand-sand/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[1]" />
+                <motion.div
+                  key={caftan.id}
+                  layout
+                  initial={{ opacity: 0, y: 18, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 12, scale: 0.97 }}
+                  transition={{
+                    duration: 0.45,
+                    ease: easePremium,
+                    delay: prefersReducedMotion ? 0 : Math.min(index * 0.035, 0.3),
+                  }}
+                  className="group cursor-pointer"
+                  whileHover={prefersReducedMotion ? undefined : { y: -6 }}
+                  onClick={() => setZoomedItem(caftan)}
+                >
+                  <div className="relative bg-white rounded-2xl overflow-hidden border border-brand-sand/50 hover:shadow-lg hover:border-brand-gold/30 transition-all duration-500">
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/25 via-transparent to-brand-sand/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[1]" />
 
-                  {/* Image */}
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    <img
-                      src={caftan.image}
-                      alt={caftan.name}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
+                    <div className="relative aspect-[3/4] overflow-hidden">
+                      <img
+                        src={caftan.image}
+                        alt={caftan.name}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
 
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-brand-ink/0 group-hover:bg-brand-ink/20 transition-colors duration-500 flex items-center justify-center">
-                      <div className="w-11 h-11 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
-                        <Eye size={18} className="text-brand-ink" />
+                      <div className="absolute inset-0 bg-brand-ink/0 group-hover:bg-brand-ink/20 transition-colors duration-500 flex items-center justify-center">
+                        <div className="w-11 h-11 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
+                          <Eye size={18} className="text-brand-ink" />
+                        </div>
                       </div>
-                    </div>
 
-                    {caftan.featured && (
-                      <motion.div
-                        animate={prefersReducedMotion ? undefined : { y: [0, -2, 0] }}
-                        transition={prefersReducedMotion ? undefined : { duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
-                        className="absolute top-3 left-3 bg-brand-gold text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase"
-                      >
-                        Coup de coeur
-                      </motion.div>
-                    )}
-                    {caftan.isTakchita && (
-                      <div className="absolute top-3 right-3 bg-brand-ink/85 text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase">
-                        Takchita
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <div>
-                        <h3 className="text-sm font-bold text-brand-ink font-serif">{caftan.name}</h3>
-                        <p className="text-brand-ink/40 text-xs mt-0.5">
-                          {caftan.isTakchita ? 'Takchita • ' : ''}
-                          {caftan.category === 'Caftans' ? 'Caftan' : 'Karakou'}
-                        </p>
-                      </div>
-                      <span className="text-lg font-bold text-brand-gold font-serif">{formatCardPrice(caftan)}</span>
-                    </div>
-                    <div className="flex gap-2">
-                      {canRent && (
-                        <button
-                          onClick={(e) => handleRent(caftan, e)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full bg-brand-ink text-white text-xs font-semibold hover:bg-brand-ink/90 transition-colors"
+                      {caftan.featured && (
+                        <motion.div
+                          animate={prefersReducedMotion ? undefined : { y: [0, -2, 0] }}
+                          transition={prefersReducedMotion ? undefined : { duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
+                          className="absolute top-3 left-3 bg-brand-gold text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase"
                         >
-                          <Calendar size={12} />
-                          Louer
-                        </button>
+                          Coup de coeur
+                        </motion.div>
                       )}
-                      {canBuy && (
-                        <button
-                          onClick={(e) => handleBuy(caftan, e)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full border border-brand-ink text-brand-ink text-xs font-semibold hover:bg-brand-ink hover:text-white transition-colors"
-                        >
-                          <ShoppingBag size={12} />
-                          Acheter
-                        </button>
+                      {caftan.isTakchita && (
+                        <div className="absolute top-3 right-3 bg-brand-ink/85 text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase">
+                          Takchita
+                        </div>
                       )}
                     </div>
+
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <h3 className="text-sm font-bold text-brand-ink font-serif">{caftan.name}</h3>
+                          <p className="text-brand-ink/40 text-xs mt-0.5">
+                            {caftan.isTakchita ? 'Takchita • ' : ''}
+                            {caftan.category === 'Caftans' ? 'Caftan' : 'Karakou'}
+                          </p>
+                        </div>
+                        <span className="text-lg font-bold text-brand-gold font-serif">{formatCardPrice(caftan)}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        {canRent && (
+                          <button
+                            onClick={(e) => handleRent(caftan, e)}
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full bg-brand-ink text-white text-xs font-semibold hover:bg-brand-ink/90 transition-colors"
+                          >
+                            <Calendar size={12} />
+                            Louer
+                          </button>
+                        )}
+                        {canBuy && (
+                          <button
+                            onClick={(e) => handleBuy(caftan, e)}
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full border border-brand-ink text-brand-ink text-xs font-semibold hover:bg-brand-ink hover:text-white transition-colors"
+                          >
+                            <ShoppingBag size={12} />
+                            Acheter
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
               )
             })}
           </AnimatePresence>
         </div>
       </div>
 
-      {/* Rental Date Modal */}
       <AnimatePresence>
         {rentalModal && (
           <RentalDateModal
@@ -272,7 +332,6 @@ const Collection = () => {
         )}
       </AnimatePresence>
 
-      {/* Zoom Modal */}
       <AnimatePresence>
         {zoomedItem && (
           <motion.div

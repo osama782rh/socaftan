@@ -51,7 +51,7 @@ const Pricing = () => {
     {
       name: 'Achat',
       icon: <ShoppingBag size={24} />,
-      price: '150',
+      price: '180',
       unit: '€',
       period: 'Caftans uniquement',
       features: [
@@ -217,7 +217,7 @@ const Pricing = () => {
             <div className="grid sm:grid-cols-2 gap-3">
               {[
                 { label: 'Location', info: 'Caution de 100€ (rendue apres verification de l etat)' },
-                { label: 'Achat', info: 'Caftans uniquement: 150€' },
+                { label: 'Achat', info: 'Caftans uniquement: 180€' },
                 { label: 'Sur-Mesure', info: 'Acompte de 50% à la commande' },
                 { label: 'Paiement', info: 'Paiement securise via Stripe' },
               ].map((item, i) => (

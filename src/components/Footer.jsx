@@ -88,7 +88,7 @@ const Footer = () => {
               {[
                 { name: 'Location de Takchitas', price: '90€' },
                 { name: 'Location de Karakous', price: '100€' },
-                { name: 'Achat de Caftans', price: '150€' },
+                { name: 'Achat de Caftans', price: '180€' },
                 { name: 'Création sur-mesure', price: 'dès 220€' },
               ].map((service, index) => (
                 <li key={index}>

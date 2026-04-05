@@ -39,7 +39,7 @@ const LocationTakchitaPage = () => {
       faq={faq}
       relatedLinks={[
         { href: '/location-karakou-ile-de-france', title: 'Location Karakou', description: 'Karakous en location a 100€.' },
-        { href: '/vente-caftan-ile-de-france', title: 'Vente Caftan', description: 'Caftans disponibles a la vente a 150€.' },
+        { href: '/vente-caftan-ile-de-france', title: 'Vente Caftan', description: 'Caftans disponibles a la vente a 180€.' },
         { href: '/sur-mesure', title: 'Caftan Sur-Mesure', description: 'Creation personnalisee selon vos envies.' },
       ]}
     />

@@ -17,7 +17,7 @@ const homeFaqs = [
   },
   {
     question: 'Quel est le prix de vente des caftans ?',
-    answer: 'Les caftans de la collection sont proposes a 150€ en vente.',
+    answer: 'Les caftans de la collection sont proposes a 180€ en vente.',
   },
   {
     question: 'Dans quelles villes livrez-vous ou organisez-vous le retrait ?',
@@ -27,13 +27,13 @@ const homeFaqs = [
 
 const routeSeoMap = {
   '/': {
-    title: 'Location Takchita et Karakou en Ile-de-France, Vente Caftan 150€',
+    title: 'Location Takchita et Karakou en Ile-de-France, Vente Caftan 180€',
     description:
-      "SO Caftan propose la location de takchitas (90€), la location de karakous (100€) et la vente de caftans (150€) en Ile-de-France. Reservation rapide et paiement securise.",
+      "SO Caftan propose la location de takchitas (90€), la location de karakous (100€) et la vente de caftans (180€) en Ile-de-France. Reservation rapide et paiement securise.",
     keywords: [
       'location takchita ile de france',
       'location karakou paris',
-      'vente caftan 150',
+      'vente caftan 180',
       'boutique caftan ile de france',
       'so caftan',
     ],
@@ -54,9 +54,9 @@ const routeSeoMap = {
       }),
       buildServiceSchema({
         name: 'Vente Caftan Ile-de-France',
-        description: 'Vente de caftans de la collection au prix fixe de 150€.',
+        description: 'Vente de caftans de la collection au prix fixe de 180€.',
         path: '/',
-        price: 150,
+        price: 180,
       }),
       buildFaqSchema(homeFaqs),
     ],
@@ -108,21 +108,21 @@ const routeSeoMap = {
     ],
   },
   '/vente-caftan-ile-de-france': {
-    title: 'Vente Caftan Ile-de-France a 150€',
+    title: 'Vente Caftan Ile-de-France a 180€',
     description:
-      "Achetez votre caftan en Ile-de-France au prix fixe de 150€. Collection SO Caftan disponible avec paiement securise.",
+      "Achetez votre caftan en Ile-de-France au prix fixe de 180€. Collection SO Caftan disponible avec paiement securise.",
     keywords: [
       'vente caftan ile de france',
       'acheter caftan paris',
-      'caftan 150',
+      'caftan 180',
     ],
     schema: [
       buildLocalBusinessSchema(),
       buildServiceSchema({
         name: 'Vente Caftan Ile-de-France',
-        description: 'Vente de caftans de collection a 150€.',
+        description: 'Vente de caftans de collection a 180€.',
         path: '/vente-caftan-ile-de-france',
-        price: 150,
+        price: 180,
       }),
       buildBreadcrumbSchema([
         { name: 'Accueil', path: '/' },
@@ -179,6 +179,7 @@ const buildNoIndexConfig = (path) => ({
 })
 
 const resolveRouteSeo = (pathname) => {
+  if (pathname.startsWith('/admin')) return buildNoIndexConfig(pathname)
   if (pathname.startsWith('/compte')) return buildNoIndexConfig(pathname)
   if (pathname.startsWith('/checkout')) return buildNoIndexConfig(pathname)
   if (pathname.startsWith('/connexion')) return buildNoIndexConfig(pathname)
