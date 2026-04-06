@@ -3,12 +3,17 @@ import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
   BarChart3,
-  Clock,
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
+  Mail,
+  MapPin,
   Pencil,
   Plus,
   RefreshCw,
   Save,
   ShoppingBag,
+  Tag,
   Trash2,
   Truck,
   X,
@@ -166,6 +171,8 @@ const AdminOrdersPage = () => {
     featured: false,
   })
 
+  const [expandedOrderId, setExpandedOrderId] = useState('')
+
   const [loadingOrders, setLoadingOrders] = useState(true)
   const [loadingProducts, setLoadingProducts] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -318,7 +325,9 @@ const AdminOrdersPage = () => {
           order.customer?.first_name,
           order.customer?.last_name,
           order.customer?.phone,
+          order.customer?.email,
           order.delivery_city,
+          order.delivery_address,
           order.notes,
           ...(order.items || []).map((item) => item?.products?.name || ''),
         ].map(normalizeText).join(' ')
@@ -632,9 +641,10 @@ const AdminOrdersPage = () => {
               <div className="bg-white rounded-2xl border border-brand-sand/60 p-10 text-center text-brand-ink/45">Aucune commande trouvee.</div>
             ) : (
               <div className="bg-white rounded-2xl border border-brand-sand/60 overflow-x-auto">
-                <table className="w-full min-w-[980px] text-sm">
+                <table className="w-full min-w-[1100px] text-sm">
                   <thead className="bg-brand-ivory/50">
                     <tr className="text-left text-brand-ink/55">
+                      <th className="px-4 py-3 font-semibold w-6"></th>
                       <th className="px-4 py-3 font-semibold">Commande</th>
                       <th className="px-4 py-3 font-semibold">Cliente</th>
                       <th className="px-4 py-3 font-semibold">Articles</th>
@@ -647,33 +657,197 @@ const AdminOrdersPage = () => {
                     {filteredOrders.map((order) => {
                       const itemPreview = (order.items || []).slice(0, 2).map((item) => item?.products?.name || 'Article').join(', ')
                       const hasMoreItems = (order.items || []).length > 2
+                      const isExpanded = expandedOrderId === order.id
+                      const fullName = `${order.customer?.first_name || ''} ${order.customer?.last_name || ''}`.trim() || 'Cliente'
+                      const hasAddress = order.delivery_address || order.delivery_city || order.delivery_postal_code
+                      const stripePaymentUrl = order.stripe_payment_intent
+                        ? `https://dashboard.stripe.com/payments/${order.stripe_payment_intent}`
+                        : order.stripe_session_id
+                          ? `https://dashboard.stripe.com/checkout/sessions/${order.stripe_session_id}`
+                          : ''
                       return (
-                        <tr key={order.id} className="border-t border-brand-sand/35 align-top">
-                          <td className="px-4 py-3">
-                            <p className="font-semibold text-brand-ink">{order.order_number || order.id}</p>
-                            <p className="text-xs text-brand-ink/45 mt-1">{formatDateTime(order.created_at)}</p>
-                          </td>
-                          <td className="px-4 py-3">
-                            <p className="text-brand-ink">{`${order.customer?.first_name || ''} ${order.customer?.last_name || ''}`.trim() || 'Cliente'}</p>
-                            <p className="text-xs text-brand-ink/45 mt-1">{order.customer?.phone || 'Telephone non renseigne'}</p>
-                          </td>
-                          <td className="px-4 py-3">
-                            <p className="text-brand-ink/75">{itemPreview || 'Aucun article'}</p>
-                            {hasMoreItems && <p className="text-xs text-brand-ink/45 mt-1">+{(order.items || []).length - 2} autres</p>}
-                          </td>
-                          <td className="px-4 py-3 font-semibold text-brand-ink">{formatCurrency(order.total)}</td>
-                          <td className="px-4 py-3">
-                            <select value={orderStatusDrafts[order.id] || order.status} onChange={(event) => setOrderStatusDrafts((prev) => ({ ...prev, [order.id]: event.target.value }))} className="w-[180px] px-2 py-1.5 rounded-lg border border-brand-sand/70 text-sm text-brand-ink">
-                              {statusOptions.map((status) => <option key={status.value} value={status.value}>{status.label}</option>)}
-                            </select>
-                          </td>
-                          <td className="px-4 py-3">
-                            <button onClick={() => handleUpdateOrderStatus(order.id)} disabled={savingOrderId === order.id || (orderStatusDrafts[order.id] || order.status) === order.status} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-ink text-white text-xs font-semibold disabled:opacity-60">
-                              <Save size={12} />
-                              {savingOrderId === order.id ? 'Maj...' : 'Mettre a jour'}
-                            </button>
-                          </td>
-                        </tr>
+                        <>
+                          <tr key={order.id} className="border-t border-brand-sand/35 align-top hover:bg-brand-ivory/20">
+                            <td className="px-3 py-3">
+                              <button
+                                onClick={() => setExpandedOrderId(isExpanded ? '' : order.id)}
+                                className="p-1 rounded-lg hover:bg-brand-sand/30 text-brand-ink/40 hover:text-brand-ink transition-colors"
+                                title={isExpanded ? 'Reduire' : 'Voir les details'}
+                              >
+                                {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                              </button>
+                            </td>
+                            <td className="px-4 py-3">
+                              <p className="font-semibold text-brand-ink">{order.order_number || order.id}</p>
+                              <p className="text-xs text-brand-ink/45 mt-1">{formatDateTime(order.created_at)}</p>
+                              {order.order_type && <p className="text-xs text-brand-ink/40 mt-0.5">{order.order_type === 'location' ? 'Location' : 'Achat'}</p>}
+                            </td>
+                            <td className="px-4 py-3">
+                              <p className="text-brand-ink font-medium">{fullName}</p>
+                              {order.customer?.email && (
+                                <p className="text-xs text-brand-ink/50 mt-0.5 flex items-center gap-1">
+                                  <Mail size={10} />
+                                  {order.customer.email}
+                                </p>
+                              )}
+                              {order.customer?.phone && (
+                                <p className="text-xs text-brand-ink/45 mt-0.5">{order.customer.phone}</p>
+                              )}
+                            </td>
+                            <td className="px-4 py-3">
+                              <p className="text-brand-ink/75">{itemPreview || 'Aucun article'}</p>
+                              {hasMoreItems && <p className="text-xs text-brand-ink/45 mt-1">+{(order.items || []).length - 2} autres</p>}
+                            </td>
+                            <td className="px-4 py-3">
+                              <p className="font-semibold text-brand-ink">{formatCurrency(order.total)}</p>
+                              {Number(order.deposit_amount) > 0 && (
+                                <p className="text-xs text-brand-ink/45 mt-0.5">dont {formatCurrency(order.deposit_amount)} caution</p>
+                              )}
+                            </td>
+                            <td className="px-4 py-3">
+                              <select value={orderStatusDrafts[order.id] || order.status} onChange={(event) => setOrderStatusDrafts((prev) => ({ ...prev, [order.id]: event.target.value }))} className="w-[175px] px-2 py-1.5 rounded-lg border border-brand-sand/70 text-sm text-brand-ink">
+                                {statusOptions.map((status) => <option key={status.value} value={status.value}>{status.label}</option>)}
+                              </select>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-1.5">
+                                <button onClick={() => handleUpdateOrderStatus(order.id)} disabled={savingOrderId === order.id || (orderStatusDrafts[order.id] || order.status) === order.status} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-ink text-white text-xs font-semibold disabled:opacity-60">
+                                  <Save size={12} />
+                                  {savingOrderId === order.id ? 'Maj...' : 'Sauver'}
+                                </button>
+                                {stripePaymentUrl && (
+                                  <a href={stripePaymentUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-brand-sand/70 text-brand-ink/60 text-xs hover:bg-brand-sand/20" title="Voir sur Stripe">
+                                    <ExternalLink size={11} />
+                                    Stripe
+                                  </a>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                          {isExpanded && (
+                            <tr key={`${order.id}-detail`} className="border-t border-brand-sand/20 bg-brand-ivory/30">
+                              <td colSpan={7} className="px-5 py-4">
+                                <div className="grid md:grid-cols-3 gap-4 text-xs">
+                                  {/* Articles detail */}
+                                  <div>
+                                    <p className="text-brand-ink/50 uppercase tracking-wide font-semibold mb-2">Articles commandes</p>
+                                    <div className="space-y-1.5">
+                                      {(order.items || []).length === 0 ? (
+                                        <p className="text-brand-ink/40">Aucun article</p>
+                                      ) : (order.items || []).map((item, idx) => (
+                                        <div key={idx} className="flex justify-between gap-2 bg-white rounded-lg px-3 py-2 border border-brand-sand/40">
+                                          <div>
+                                            <p className="font-semibold text-brand-ink">{item?.products?.name || 'Article'}</p>
+                                            <p className="text-brand-ink/50">{item.item_type === 'location' ? 'Location' : 'Achat'} · x{item.quantity}</p>
+                                            {item.rental_start_date && (
+                                              <p className="text-brand-ink/45 mt-0.5">
+                                                {new Date(item.rental_start_date).toLocaleDateString('fr-FR')}
+                                                {item.rental_end_date ? ` → ${new Date(item.rental_end_date).toLocaleDateString('fr-FR')}` : ''}
+                                              </p>
+                                            )}
+                                          </div>
+                                          <p className="font-semibold text-brand-ink whitespace-nowrap">{formatCurrency(Number(item.unit_price) * Number(item.quantity))}</p>
+                                        </div>
+                                      ))}
+                                      {Number(order.deposit_amount) > 0 && (
+                                        <div className="flex justify-between gap-2 bg-white rounded-lg px-3 py-2 border border-amber-100">
+                                          <p className="text-brand-ink/70">Caution location</p>
+                                          <p className="font-semibold text-amber-700">{formatCurrency(order.deposit_amount)}</p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  {/* Livraison */}
+                                  <div>
+                                    <p className="text-brand-ink/50 uppercase tracking-wide font-semibold mb-2">Livraison &amp; contact</p>
+                                    <div className="bg-white rounded-lg px-3 py-3 border border-brand-sand/40 space-y-1.5">
+                                      <p className="text-brand-ink font-semibold">{fullName}</p>
+                                      {order.customer?.email && (
+                                        <p className="flex items-center gap-1.5 text-brand-ink/65">
+                                          <Mail size={11} className="shrink-0" />
+                                          {order.customer.email}
+                                        </p>
+                                      )}
+                                      {order.customer?.phone && (
+                                        <p className="text-brand-ink/65">{order.customer.phone}</p>
+                                      )}
+                                      <div className="border-t border-brand-sand/30 pt-1.5 mt-1.5">
+                                        <p className="text-brand-ink/50 mb-1">Mode: <span className="text-brand-ink font-medium">{order.delivery_method === 'delivery' ? 'Livraison' : order.delivery_method === 'pickup' ? 'Retrait' : order.delivery_method || '-'}</span></p>
+                                        {hasAddress ? (
+                                          <p className="flex items-start gap-1.5 text-brand-ink/70">
+                                            <MapPin size={11} className="shrink-0 mt-0.5" />
+                                            <span>
+                                              {[order.delivery_address, order.delivery_postal_code, order.delivery_city].filter(Boolean).join(', ')}
+                                            </span>
+                                          </p>
+                                        ) : (
+                                          <p className="text-brand-ink/35">Adresse non renseignee</p>
+                                        )}
+                                      </div>
+                                    </div>
+                                    {order.notes && (
+                                      <div className="bg-amber-50 rounded-lg px-3 py-2.5 border border-amber-100 mt-2">
+                                        <p className="text-amber-700 font-semibold mb-1">Notes client</p>
+                                        <p className="text-amber-800/80 whitespace-pre-wrap">{order.notes}</p>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {/* Paiement */}
+                                  <div>
+                                    <p className="text-brand-ink/50 uppercase tracking-wide font-semibold mb-2">Paiement &amp; recap</p>
+                                    <div className="bg-white rounded-lg px-3 py-3 border border-brand-sand/40 space-y-1.5">
+                                      <div className="flex justify-between">
+                                        <span className="text-brand-ink/60">Sous-total</span>
+                                        <span className="font-medium text-brand-ink">{formatCurrency(order.subtotal)}</span>
+                                      </div>
+                                      {Number(order.deposit_amount) > 0 && (
+                                        <div className="flex justify-between">
+                                          <span className="text-brand-ink/60">Caution</span>
+                                          <span className="font-medium text-brand-ink">{formatCurrency(order.deposit_amount)}</span>
+                                        </div>
+                                      )}
+                                      <div className="flex justify-between border-t border-brand-sand/30 pt-1.5 mt-1.5">
+                                        <span className="font-semibold text-brand-ink">Total</span>
+                                        <span className="font-bold text-brand-ink">{formatCurrency(order.total)}</span>
+                                      </div>
+                                      <div className="border-t border-brand-sand/30 pt-1.5 mt-1.5 space-y-1">
+                                        <div className="flex justify-between text-xs">
+                                          <span className="text-brand-ink/50">Statut paiement</span>
+                                          <span className={`font-semibold ${order.status === 'paid' || order.status === 'confirmed' || order.status === 'delivered' ? 'text-emerald-600' : 'text-amber-600'}`}>
+                                            {order.status === 'pending' ? 'En attente' : order.status === 'cancelled' ? 'Annule' : 'Paye'}
+                                          </span>
+                                        </div>
+                                        {order.stripe_payment_intent && (
+                                          <div className="flex justify-between items-center">
+                                            <span className="text-brand-ink/50">Paiement Stripe</span>
+                                            <a href={`https://dashboard.stripe.com/payments/${order.stripe_payment_intent}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-brand-gold font-semibold hover:underline">
+                                              <ExternalLink size={10} />
+                                              Voir le recu
+                                            </a>
+                                          </div>
+                                        )}
+                                        {order.stripe_session_id && !order.stripe_payment_intent && (
+                                          <div className="flex justify-between items-center">
+                                            <span className="text-brand-ink/50">Session Stripe</span>
+                                            <a href={`https://dashboard.stripe.com/checkout/sessions/${order.stripe_session_id}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-brand-gold font-semibold hover:underline">
+                                              <ExternalLink size={10} />
+                                              Voir session
+                                            </a>
+                                          </div>
+                                        )}
+                                        {!order.stripe_payment_intent && !order.stripe_session_id && (
+                                          <p className="text-brand-ink/35 text-center pt-1">Pas de paiement Stripe enregistre</p>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </>
                       )
                     })}
                   </tbody>
