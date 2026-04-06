@@ -1,3 +1,6 @@
+// DEPLOY WITH: npx supabase functions deploy stripe-webhook --no-verify-jwt
+// Stripe webhooks don't send Authorization headers - JWT verification must be disabled.
+// Security is ensured by Stripe signature verification inside the handler.
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
 
