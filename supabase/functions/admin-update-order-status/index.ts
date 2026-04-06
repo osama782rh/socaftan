@@ -1,0 +1,132 @@
+import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+const allowedStatuses = new Set([
+  'pending',
+  'paid',
+  'confirmed',
+  'preparing',
+  'ready',
+  'delivered',
+  'returned',
+  'cancelled',
+])
+
+const normalizeEmail = (value = '') => String(value || '').trim().toLowerCase()
+
+const getAdminEmails = () => {
+  const blocked = new Set(['osama.rahim@outlook.fr'])
+  const defaults = ['contact@socaftan.fr', 'sara.ltr@outlook.fr']
+  const configured = (Deno.env.get('ADMIN_EMAILS') || '')
+    .split(',')
+    .map(normalizeEmail)
+    .filter((email) => email && !blocked.has(email))
+
+  return new Set([...defaults, ...configured])
+}
+
+const extractBearerTokens = (header: string | null): string[] => {
+  if (!header) return []
+
+  const matches = [...header.matchAll(/Bearer\s+([^,\s]+)/gi)]
+    .map((match) => match[1])
+    .filter(Boolean)
+
+  return [...new Set(matches)]
+}
+
+const errorResponse = (status: number, message: string) =>
+  new Response(
+    JSON.stringify({ error: message }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status },
+  )
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
+  if (req.method !== 'POST') {
+    return errorResponse(405, 'Methode non autorisee.')
+  }
+
+  try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+
+    if (!supabaseUrl || !serviceRoleKey) {
+      return errorResponse(500, 'Secrets Supabase manquants.')
+    }
+
+    const payload = await req.json().catch(() => ({}))
+    const bodyToken = typeof payload?.accessToken === 'string' ? payload.accessToken.trim() : ''
+    const authHeader = req.headers.get('Authorization')
+    const candidateTokens = [
+      ...(bodyToken ? [bodyToken] : []),
+      ...extractBearerTokens(authHeader),
+    ]
+    const uniqueTokens = [...new Set(candidateTokens)]
+
+    if (uniqueTokens.length === 0) {
+      return errorResponse(401, 'Session invalide.')
+    }
+
+    const serviceClient = createClient(supabaseUrl, serviceRoleKey)
+    let authenticatedUser: any = null
+
+    for (const token of uniqueTokens) {
+      const { data: authData, error: authError } = await serviceClient.auth.getUser(token)
+      if (!authError && authData?.user) {
+        authenticatedUser = authData.user
+        break
+      }
+    }
+
+    if (!authenticatedUser) {
+      return errorResponse(401, 'Session invalide.')
+    }
+
+    const requesterEmail = normalizeEmail(authenticatedUser.email || '')
+    const adminEmails = getAdminEmails()
+    if (!adminEmails.has(requesterEmail)) {
+      return errorResponse(403, 'Acces refuse.')
+    }
+
+    const orderId = typeof payload?.orderId === 'string' ? payload.orderId.trim() : ''
+    const status = typeof payload?.status === 'string' ? payload.status.trim() : ''
+
+    if (!orderId) {
+      return errorResponse(400, 'orderId requis.')
+    }
+
+    if (!status || !allowedStatuses.has(status)) {
+      return errorResponse(400, 'Statut invalide.')
+    }
+
+    const { data: updatedOrder, error: updateError } = await serviceClient
+      .from('orders')
+      .update({ status })
+      .eq('id', orderId)
+      .select('id, order_number, status, user_id, total, order_type, delivery_method')
+      .single()
+
+    if (updateError || !updatedOrder) {
+      console.error('admin-update-order-status updateError:', updateError)
+      return errorResponse(400, `Impossible de mettre a jour la commande: ${updateError?.message || 'Introuvable'}`)
+    }
+
+    return new Response(
+      JSON.stringify({ order: updatedOrder }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 },
+    )
+  } catch (error: any) {
+    const message = error instanceof Error ? error.message : 'Erreur inconnue'
+    console.error('admin-update-order-status error:', message)
+    return errorResponse(400, message)
+  }
+})

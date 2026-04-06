@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Send, Clock, X, CheckCircle, AlertCircle, Loader2, MessageCircle } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Clock, X, Loader2, MessageCircle } from 'lucide-react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
+import { useUiFeedback } from '../contexts/UiFeedbackContext'
 
 const easePremium = [0.22, 1, 0.36, 1]
 
@@ -28,6 +29,7 @@ const products = [
 
 const Contact = () => {
   const prefersReducedMotion = useReducedMotion()
+  const { notifyError, notifySuccess } = useUiFeedback()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -38,8 +40,7 @@ const Contact = () => {
   })
   const [selectedProducts, setSelectedProducts] = useState([])
   const [isProductDropdownOpen, setIsProductDropdownOpen] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState(null) // null | 'loading' | 'success' | 'error'
-  const [submitError, setSubmitError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -59,8 +60,7 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitStatus('loading')
-    setSubmitError('')
+    setIsSubmitting(true)
 
     const submissionData = {
       ...formData,
@@ -75,15 +75,14 @@ const Contact = () => {
         if (error) throw error
       }
 
-      setSubmitStatus('success')
+      notifySuccess('Merci pour votre message. Nous vous recontactons tres vite.')
       setFormData({ name: '', email: '', phone: '', service: '', date: '', message: '' })
       setSelectedProducts([])
-      setTimeout(() => setSubmitStatus(null), 5000)
     } catch (err) {
       console.error('Contact form error:', err)
-      setSubmitStatus('error')
-      setSubmitError(err.message || 'Une erreur est survenue. Veuillez nous contacter par telephone.')
-      setTimeout(() => setSubmitStatus(null), 5000)
+      notifyError(err.message || 'Une erreur est survenue. Veuillez nous contacter par telephone.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -386,26 +385,12 @@ const Contact = () => {
                 </div>
               </div>
 
-              {submitStatus === 'success' && (
-                <div className="mt-4 flex items-center gap-2 bg-green-50 text-green-700 text-sm p-4 rounded-xl border border-green-200/50">
-                  <CheckCircle size={16} className="flex-shrink-0" />
-                  Merci pour votre message ! Nous vous recontacterons très bientôt.
-                </div>
-              )}
-
-              {submitStatus === 'error' && (
-                <div className="mt-4 flex items-center gap-2 bg-red-50 text-red-600 text-sm p-4 rounded-xl border border-red-200/50">
-                  <AlertCircle size={16} className="flex-shrink-0" />
-                  {submitError}
-                </div>
-              )}
-
               <button
                 type="submit"
-                disabled={submitStatus === 'loading'}
+                disabled={isSubmitting}
                 className="mt-6 w-full flex items-center justify-center gap-2 bg-brand-ink text-white py-3.5 rounded-full font-semibold text-sm hover:bg-brand-ink/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {submitStatus === 'loading' ? (
+                {isSubmitting ? (
                   <>
                     <Loader2 size={16} className="animate-spin" />
                     Envoi en cours...

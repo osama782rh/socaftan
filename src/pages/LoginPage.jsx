@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { useUiFeedback } from '../contexts/UiFeedbackContext'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { signIn } = useAuth()
+  const { notifyError, notifySuccess } = useUiFeedback()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -18,17 +19,17 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setError('')
     setLoading(true)
 
     try {
       await signIn(email, password)
+      notifySuccess('Connexion reussie.')
       navigate(from, { replace: true })
     } catch (err) {
       if (err.message?.includes('Invalid login')) {
-        setError('Email ou mot de passe incorrect.')
+        notifyError('Email ou mot de passe incorrect.')
       } else {
-        setError(err.message || 'Une erreur est survenue.')
+        notifyError(err.message || 'Une erreur est survenue.')
       }
     } finally {
       setLoading(false)
@@ -50,13 +51,6 @@ const LoginPage = () => {
         </div>
 
         <div className="bg-white rounded-2xl p-8 border border-brand-sand/60 shadow-sm">
-          {error && (
-            <div className="flex items-center gap-2 bg-red-50 text-red-600 text-sm p-3 rounded-xl mb-6">
-              <AlertCircle size={16} className="flex-shrink-0" />
-              {error}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-brand-ink mb-1.5">Email</label>

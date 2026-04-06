@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle, ShieldCheck } from 'lucide-react'
+import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, CheckCircle, ShieldCheck } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import { useUiFeedback } from '../contexts/UiFeedbackContext'
 
 const OTP_LENGTH = 6
 
@@ -65,12 +66,12 @@ const RegisterPage = () => {
     confirmPassword: '',
   })
   const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
   const [step, setStep] = useState('form') // 'form' | 'otp' | 'success'
   const [loading, setLoading] = useState(false)
   const [otpCode, setOtpCode] = useState('')
   const [resendCooldown, setResendCooldown] = useState(0)
   const navigate = useNavigate()
+  const { notifyError, notifyInfo, notifySuccess } = useUiFeedback()
 
   const updateField = (field) => (e) => {
     setForm(prev => ({ ...prev, [field]: e.target.value }))
@@ -78,15 +79,14 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setError('')
 
     if (form.password !== form.confirmPassword) {
-      setError('Les mots de passe ne correspondent pas.')
+      notifyError('Les mots de passe ne correspondent pas.')
       return
     }
 
     if (form.password.length < 6) {
-      setError('Le mot de passe doit contenir au moins 6 caractères.')
+      notifyError('Le mot de passe doit contenir au moins 6 caracteres.')
       return
     }
 
@@ -107,8 +107,9 @@ const RegisterPage = () => {
       if (data?.error) throw new Error(data.error)
 
       setStep('otp')
+      notifyInfo('Code de verification envoye par email.')
     } catch (err) {
-      setError(err.message || 'Une erreur est survenue.')
+      notifyError(err.message || 'Une erreur est survenue.')
     } finally {
       setLoading(false)
     }
@@ -116,10 +117,9 @@ const RegisterPage = () => {
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault()
-    setError('')
 
     if (otpCode.length !== OTP_LENGTH) {
-      setError('Veuillez saisir le code à 6 chiffres.')
+      notifyError('Veuillez saisir le code a 6 chiffres.')
       return
     }
 
@@ -143,15 +143,15 @@ const RegisterPage = () => {
       })
 
       setStep('success')
+      notifySuccess('Compte verifie avec succes.')
     } catch (err) {
-      setError(err.message || 'Code invalide ou expiré.')
+      notifyError(err.message || 'Code invalide ou expire.')
     } finally {
       setLoading(false)
     }
   }
 
   const handleResendCode = async () => {
-    setError('')
     setLoading(true)
     try {
       const { data, error: resendError } = await supabase.functions.invoke('custom-resend-otp', {
@@ -170,8 +170,9 @@ const RegisterPage = () => {
           return prev - 1
         })
       }, 1000)
+      notifyInfo('Un nouveau code a ete envoye.')
     } catch (err) {
-      setError(err.message || 'Impossible de renvoyer le code.')
+      notifyError(err.message || 'Impossible de renvoyer le code.')
     } finally {
       setLoading(false)
     }
@@ -235,13 +236,6 @@ const RegisterPage = () => {
           </div>
 
           <div className="bg-white rounded-2xl p-8 border border-brand-sand/60 shadow-sm">
-            {error && (
-              <div className="flex items-center gap-2 bg-red-50 text-red-600 text-sm p-3 rounded-xl mb-6">
-                <AlertCircle size={16} className="flex-shrink-0" />
-                {error}
-              </div>
-            )}
-
             <form onSubmit={handleVerifyOtp} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-brand-ink mb-3 text-center">
@@ -292,13 +286,6 @@ const RegisterPage = () => {
         </div>
 
         <div className="bg-white rounded-2xl p-8 border border-brand-sand/60 shadow-sm">
-          {error && (
-            <div className="flex items-center gap-2 bg-red-50 text-red-600 text-sm p-3 rounded-xl mb-6">
-              <AlertCircle size={16} className="flex-shrink-0" />
-              {error}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>

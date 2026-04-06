@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { X, Calendar, ArrowRight, Info } from 'lucide-react'
+import { useUiFeedback } from '../contexts/UiFeedbackContext'
 
 const RENTAL_DAYS = 5
 
 const RentalDateModal = ({ product, onConfirm, onClose }) => {
+  const { notifyError } = useUiFeedback()
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
   const minDate = tomorrow.toISOString().split('T')[0]
 
   const [startDate, setStartDate] = useState('')
-  const [error, setError] = useState('')
 
   const getEndDate = (start) => {
     if (!start) return ''
@@ -33,7 +34,7 @@ const RentalDateModal = ({ product, onConfirm, onClose }) => {
 
   const handleConfirm = () => {
     if (!startDate) {
-      setError('Veuillez sélectionner une date.')
+      notifyError('Veuillez selectionner une date de debut.')
       return
     }
     onConfirm({
@@ -93,11 +94,10 @@ const RentalDateModal = ({ product, onConfirm, onClose }) => {
                 type="date"
                 value={startDate}
                 min={minDate}
-                onChange={(e) => { setStartDate(e.target.value); setError('') }}
+                onChange={(e) => setStartDate(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 rounded-xl border border-brand-sand focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none text-sm bg-brand-ivory/50"
               />
             </div>
-            {error && <p className="text-red-500 text-xs mt-1.5">{error}</p>}
           </div>
 
           {/* Summary */}
