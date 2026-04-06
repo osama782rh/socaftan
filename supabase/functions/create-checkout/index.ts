@@ -213,6 +213,7 @@ serve(async (req) => {
     params.append('metadata[order_number]', String(order.order_number))
     params.append('metadata[user_id]', effectiveUserId)
     params.append('payment_method_types[0]', 'card')
+    params.append('allow_promotion_codes', 'true')
 
     lineItems.forEach((item, i) => {
       params.append(`line_items[${i}][price_data][currency]`, item.price_data.currency)
