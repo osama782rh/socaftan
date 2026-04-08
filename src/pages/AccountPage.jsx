@@ -6,7 +6,7 @@ import {
   Calendar, Heart, Trash2, ShoppingBag, Eye, Lock,
   MapPin, CreditCard, ChevronRight, Plus, Edit3,
   LayoutDashboard, Clock, TrendingUp, Star, Phone,
-  Mail, Shield, KeyRound, X, Menu, ArrowRight, EyeOff
+  Mail, Shield, KeyRound, X, Menu, ArrowRight, EyeOff, AlertCircle
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
