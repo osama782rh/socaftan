@@ -8,4 +8,4 @@ Disallow: /connexion
 Disallow: /inscription
 Disallow: /commande-confirmee
 
-Sitemap: https://socaftan.fr/sitemap.xml
+Sitemap: https://www.socaftan.fr/sitemap.xml

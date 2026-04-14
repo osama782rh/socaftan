@@ -14,56 +14,172 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="SO Caftan - Location de takchitas (90€) et karakous (100€), vente de caftans (150€) en Ile-de-France. WhatsApp Business et paiement securise." />
+
+    <!-- SEO Principal -->
+    <title>SO Caftan – Location Takchita & Karakou Île-de-France | Vente Caftan 180€</title>
+    <meta name="description" content="SO Caftan : location de takchita (90€) et karakou (100€) pour mariages et événements orientaux en Île-de-France (91, 92, 93, 94). Vente de caftan 180€. Réservation en ligne, paiement sécurisé, livraison disponible." />
+    <meta name="keywords" content="location takchita ile de france, location karakou paris, location caftan mariage, location caftan 91, location caftan essonne, location caftan oriental, vente caftan 180, caftan mariage, takchita mariage, karakou mariage, so caftan, caftan sur mesure, location tenue orientale" />
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta name="author" content="SO Caftan" />
-    <meta name="keywords" content="location takchita ile de france, location karakou paris, vente caftan 150, so caftan, caftan sur mesure" />
+    <meta name="geo.region" content="FR-91" />
+    <meta name="geo.placename" content="Tigery, Île-de-France" />
+
+    <!-- Canonical & Hreflang -->
     <link rel="canonical" href="https://www.socaftan.fr/" />
     <link rel="alternate" hreflang="fr-FR" href="https://www.socaftan.fr/" />
     <link rel="alternate" hreflang="x-default" href="https://www.socaftan.fr/" />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SO Caftan" />
     <meta property="og:locale" content="fr_FR" />
-    <meta property="og:title" content="SO Caftan | Location Takchitas/Karakous & Vente Caftans" />
-    <meta property="og:description" content="Location takchitas 90€, location karakous 100€, vente caftans 150€ en Ile-de-France." />
+    <meta property="og:title" content="SO Caftan – Location Takchita & Karakou pour Mariages | Île-de-France" />
+    <meta property="og:description" content="Location takchita 90€, karakou 100€ pour vos mariages et événements orientaux en Île-de-France. Vente caftan 180€. Livraison 91, 92, 93, 94. Réservez en ligne." />
     <meta property="og:url" content="https://www.socaftan.fr/" />
     <meta property="og:image" content="https://www.socaftan.fr/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="SO Caftan | Location Takchitas/Karakous & Vente Caftans" />
-    <meta name="twitter:description" content="Location et vente de tenues d exception en Ile-de-France." />
+    <meta name="twitter:title" content="SO Caftan – Location Takchita & Karakou Île-de-France" />
+    <meta name="twitter:description" content="Location de takchita, karakou et vente de caftan pour mariages orientaux en Île-de-France. Réservation en ligne." />
     <meta name="twitter:image" content="https://www.socaftan.fr/og-image.png" />
+
+    <!-- JSON-LD Structuré -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@graph": [
           {
             "@type": "WebSite",
-            "name": "SO Caftan",
+            "@id": "https://www.socaftan.fr/#website",
             "url": "https://www.socaftan.fr/",
-            "inLanguage": "fr-FR"
+            "name": "SO Caftan",
+            "description": "Location de takchita et karakou pour mariages orientaux en Île-de-France. Vente de caftan.",
+            "inLanguage": "fr-FR",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://www.socaftan.fr/?s={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
           },
           {
             "@type": "ClothingStore",
+            "@id": "https://www.socaftan.fr/#business",
             "name": "SO Caftan",
             "url": "https://www.socaftan.fr/",
+            "logo": "https://www.socaftan.fr/og-image.png",
+            "image": "https://www.socaftan.fr/og-image.png",
             "telephone": "+33184180326",
             "email": "contact@socaftan.fr",
+            "description": "SO Caftan est spécialisée dans la location de takchitas et karakous pour mariages et événements orientaux en Île-de-France, ainsi que la vente de caftans. Service de livraison disponible dans les départements 91, 92, 93 et 94.",
+            "priceRange": "90€ - 180€",
+            "currenciesAccepted": "EUR",
+            "paymentAccepted": "Carte bancaire, virement",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "20 rue du Commandant Maurice Lissac",
               "postalCode": "91250",
               "addressLocality": "Tigery",
+              "addressRegion": "Île-de-France",
               "addressCountry": "FR"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 48.6167,
+              "longitude": 2.5167
+            },
+            "areaServed": [
+              { "@type": "AdministrativeArea", "name": "Île-de-France" },
+              { "@type": "AdministrativeArea", "name": "Essonne" },
+              { "@type": "AdministrativeArea", "name": "Val-de-Marne" },
+              { "@type": "AdministrativeArea", "name": "Hauts-de-Seine" },
+              { "@type": "AdministrativeArea", "name": "Seine-Saint-Denis" },
+              { "@type": "City", "name": "Paris" },
+              { "@type": "City", "name": "Évry" },
+              { "@type": "City", "name": "Créteil" },
+              { "@type": "City", "name": "Versailles" }
+            ],
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Tenues orientales SO Caftan",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Location Takchita Île-de-France",
+                    "description": "Location de takchita pour mariage, henna et événements orientaux en Île-de-France"
+                  },
+                  "price": "90",
+                  "priceCurrency": "EUR"
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Location Karakou Île-de-France",
+                    "description": "Location de karakou pour mariage et événements orientaux en Île-de-France"
+                  },
+                  "price": "100",
+                  "priceCurrency": "EUR"
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Product",
+                    "name": "Vente Caftan",
+                    "description": "Caftan de qualité supérieure à l'achat pour mariages et cérémonies"
+                  },
+                  "price": "180",
+                  "priceCurrency": "EUR"
+                }
+              ]
             }
           }
         ]
       }
     </script>
+
     <meta name="theme-color" content="#2b201a" />
-    <title>SO Caftan | Location Takchitas/Karakous & Vente Caftans</title>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Contenu visible pour les moteurs de recherche (affiché si JS désactivé) -->
+    <noscript>
+      <header>
+        <h1>SO Caftan – Location Takchita & Karakou en Île-de-France</h1>
+      </header>
+      <main>
+        <section>
+          <h2>Location de Takchita et Karakou pour vos mariages orientaux</h2>
+          <p>
+            SO Caftan est votre spécialiste de la location de tenues orientales en Île-de-France.
+            Nous proposons la location de takchitas à 90€ et la location de karakous à 100€ pour
+            vos mariages, hennas et événements orientaux. Nous livrons dans les départements
+            91 (Essonne), 92 (Hauts-de-Seine), 93 (Seine-Saint-Denis) et 94 (Val-de-Marne).
+          </p>
+        </section>
+        <section>
+          <h2>Vente de Caftan – 180€</h2>
+          <p>
+            Achetez votre caftan de qualité supérieure à 180€. Nos caftans sont disponibles
+            pour l'achat en Île-de-France avec livraison à domicile.
+          </p>
+        </section>
+        <section>
+          <h2>Location Caftan Mariage Oriental</h2>
+          <p>
+            Spécialiste de la tenue orientale pour mariages marocains, algériens et tunisiens
+            en Île-de-France. Réservation en ligne simple et rapide. Paiement sécurisé.
+          </p>
+        </section>
+        <p>Contact : contact@socaftan.fr – Tél : 01 84 18 03 26 – Tigery (91250), Île-de-France</p>
+      </main>
+    </noscript>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
