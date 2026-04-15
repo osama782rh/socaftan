@@ -130,6 +130,132 @@ const routeSeoMap = {
       ]),
     ],
   },
+  '/location-caftan-mariage': {
+    title: 'Location Caftan Mariage Oriental Ile-de-France – des 90€',
+    description:
+      'Louez votre caftan, takchita ou karakou pour votre mariage oriental en Ile-de-France. SO Caftan : location des 90€, livraison 91/92/93/94. Mariage marocain, algerien, tunisien.',
+    keywords: [
+      'location caftan mariage',
+      'location takchita mariage',
+      'tenue mariage oriental ile de france',
+      'location robe mariage marocain',
+      'caftan mariage pas cher',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildServiceSchema({
+        name: 'Location Caftan Mariage Oriental',
+        description: 'Location de caftans, takchitas et karakous pour mariages orientaux en Ile-de-France.',
+        path: '/location-caftan-mariage',
+        price: 90,
+      }),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Location Caftan Mariage', path: '/location-caftan-mariage' },
+      ]),
+    ],
+  },
+  '/location-caftan-essonne': {
+    title: 'Location Caftan Essonne (91) – Takchita et Karakou des 90€',
+    description:
+      'SO Caftan a Tigery (91250) : location de takchita 90€ et karakou 100€ en Essonne. Livraison Evry, Corbeil, Massy, Grigny et tout le 91.',
+    keywords: [
+      'location caftan essonne',
+      'location caftan 91',
+      'location takchita essonne',
+      'location karakou 91',
+      'caftan tigery',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildServiceSchema({
+        name: 'Location Caftan Essonne',
+        description: 'Location de takchitas et karakous en Essonne (91). Basee a Tigery.',
+        path: '/location-caftan-essonne',
+        price: 90,
+      }),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Location Caftan Essonne', path: '/location-caftan-essonne' },
+      ]),
+    ],
+  },
+  '/location-caftan-evry': {
+    title: 'Location Caftan Evry-Courcouronnes – Takchita et Karakou des 90€',
+    description:
+      'Louez un caftan, takchita ou karakou pres d Evry-Courcouronnes. SO Caftan a Tigery (10 min). Livraison Evry, Corbeil, Ris-Orangis, Grigny.',
+    keywords: [
+      'location caftan evry',
+      'location takchita evry',
+      'caftan evry-courcouronnes',
+      'location robe orientale evry',
+      'caftan grand paris sud',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildServiceSchema({
+        name: 'Location Caftan Evry-Courcouronnes',
+        description: 'Location de tenues orientales pres d Evry-Courcouronnes, Essonne.',
+        path: '/location-caftan-evry',
+        price: 90,
+      }),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Location Caftan Essonne', path: '/location-caftan-essonne' },
+        { name: 'Location Caftan Evry', path: '/location-caftan-evry' },
+      ]),
+    ],
+  },
+  '/location-tenue-henna': {
+    title: 'Location Tenue Henna Ile-de-France – Takchita et Karakou des 90€',
+    description:
+      'Louez votre tenue de henna en Ile-de-France : takchita pour henna marocaine (90€), karakou pour henna algerienne (100€). SO Caftan, livraison en IDF.',
+    keywords: [
+      'location tenue henna',
+      'tenue henna mariage',
+      'takchita henna location',
+      'karakou henna algerienne',
+      'robe henne ile de france',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildServiceSchema({
+        name: 'Location Tenue Henna',
+        description: 'Location de takchitas et karakous pour soirees henna en Ile-de-France.',
+        path: '/location-tenue-henna',
+        price: 90,
+      }),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Location Tenue Henna', path: '/location-tenue-henna' },
+      ]),
+    ],
+  },
+  '/location-caftan-pas-cher': {
+    title: 'Location Caftan Pas Cher Ile-de-France – des 90€ | SO Caftan',
+    description:
+      'Location de caftan pas cher en Ile-de-France : takchita 90€, karakou 100€. Les meilleurs tarifs pour une tenue orientale de qualite. SO Caftan, Tigery (91).',
+    keywords: [
+      'location caftan pas cher',
+      'location takchita pas cher paris',
+      'caftan pas cher ile de france',
+      'location robe orientale pas cher',
+      'caftan petit budget',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildServiceSchema({
+        name: 'Location Caftan Pas Cher IDF',
+        description: 'Location de tenues orientales aux meilleurs prix en Ile-de-France.',
+        path: '/location-caftan-pas-cher',
+        price: 90,
+      }),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Location Caftan Pas Cher', path: '/location-caftan-pas-cher' },
+      ]),
+    ],
+  },
   '/sur-mesure': {
     title: 'Creation Caftan Sur-Mesure Ile-de-France',
     description:

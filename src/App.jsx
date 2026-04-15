@@ -14,6 +14,11 @@ import HomePage from './pages/HomePage'
 const LocationTakchitaPage = lazy(() => import('./pages/LocationTakchitaPage'))
 const LocationKarakouPage = lazy(() => import('./pages/LocationKarakouPage'))
 const VenteCaftanPage = lazy(() => import('./pages/VenteCaftanPage'))
+const LocationCaftanMariagePage = lazy(() => import('./pages/LocationCaftanMariagePage'))
+const LocationCaftanEssonnePage = lazy(() => import('./pages/LocationCaftanEssonnePage'))
+const LocationCaftanEvryPage = lazy(() => import('./pages/LocationCaftanEvryPage'))
+const LocationTenueHennaPage = lazy(() => import('./pages/LocationTenueHennaPage'))
+const LocationCaftanPasCherPage = lazy(() => import('./pages/LocationCaftanPasCherPage'))
 const CustomPage = lazy(() => import('./pages/CustomPage'))
 const Cgv = lazy(() => import('./pages/Cgv'))
 const Cgu = lazy(() => import('./pages/Cgu'))
@@ -50,6 +55,11 @@ function App() {
                   <Route path="/location-takchita-ile-de-france" element={<LocationTakchitaPage />} />
                   <Route path="/location-karakou-ile-de-france" element={<LocationKarakouPage />} />
                   <Route path="/vente-caftan-ile-de-france" element={<VenteCaftanPage />} />
+                  <Route path="/location-caftan-mariage" element={<LocationCaftanMariagePage />} />
+                  <Route path="/location-caftan-essonne" element={<LocationCaftanEssonnePage />} />
+                  <Route path="/location-caftan-evry" element={<LocationCaftanEvryPage />} />
+                  <Route path="/location-tenue-henna" element={<LocationTenueHennaPage />} />
+                  <Route path="/location-caftan-pas-cher" element={<LocationCaftanPasCherPage />} />
                   <Route path="/sur-mesure" element={<CustomPage />} />
                   <Route path="/cgv" element={<Cgv />} />
                   <Route path="/cgu" element={<Cgu />} />
