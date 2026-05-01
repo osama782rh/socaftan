@@ -49,6 +49,10 @@ const LocationCaftanEvryPage = () => {
         'Profitez de votre evenement et restituez sous 3 a 5 jours',
       ]}
       faq={faq}
+      breadcrumb={[
+        { label: 'Location Caftan Essonne', to: '/location-caftan-essonne' },
+        { label: 'Evry-Courcouronnes' },
+      ]}
       relatedLinks={[
         { href: '/location-caftan-essonne', title: 'Location Caftan Essonne', description: 'Toutes nos offres dans le 91.' },
         { href: '/location-takchita-ile-de-france', title: 'Location Takchita', description: 'Takchitas en location a 90€.' },

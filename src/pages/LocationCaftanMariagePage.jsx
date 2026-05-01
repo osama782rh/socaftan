@@ -49,6 +49,7 @@ const LocationCaftanMariagePage = () => {
         'Restituez la piece dans les 3 a 5 jours suivants',
       ]}
       faq={faq}
+      breadcrumb={[{ label: 'Location Caftan Mariage' }]}
       relatedLinks={[
         { href: '/location-takchita-ile-de-france', title: 'Location Takchita', description: 'Takchitas en location a 90€ en Ile-de-France.' },
         { href: '/location-karakou-ile-de-france', title: 'Location Karakou', description: 'Karakous en location a 100€ en Ile-de-France.' },

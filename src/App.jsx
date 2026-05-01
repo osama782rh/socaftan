@@ -19,6 +19,8 @@ const LocationCaftanEssonnePage = lazy(() => import('./pages/LocationCaftanEsson
 const LocationCaftanEvryPage = lazy(() => import('./pages/LocationCaftanEvryPage'))
 const LocationTenueHennaPage = lazy(() => import('./pages/LocationTenueHennaPage'))
 const LocationCaftanPasCherPage = lazy(() => import('./pages/LocationCaftanPasCherPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
+const AProposPage = lazy(() => import('./pages/AProposPage'))
 const CustomPage = lazy(() => import('./pages/CustomPage'))
 const Cgv = lazy(() => import('./pages/Cgv'))
 const Cgu = lazy(() => import('./pages/Cgu'))
@@ -60,6 +62,8 @@ function App() {
                   <Route path="/location-caftan-evry" element={<LocationCaftanEvryPage />} />
                   <Route path="/location-tenue-henna" element={<LocationTenueHennaPage />} />
                   <Route path="/location-caftan-pas-cher" element={<LocationCaftanPasCherPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/a-propos" element={<AProposPage />} />
                   <Route path="/sur-mesure" element={<CustomPage />} />
                   <Route path="/cgv" element={<Cgv />} />
                   <Route path="/cgu" element={<Cgu />} />

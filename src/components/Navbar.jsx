@@ -36,15 +36,14 @@ const Navbar = () => {
   }, [])
 
   const navLinks = [
-    { name: 'Accueil', href: '/#hero' },
-    { name: 'Collection', href: '/#collection' },
+    { name: 'Accueil', href: '/' },
     { name: 'Takchitas', href: '/location-takchita-ile-de-france' },
     { name: 'Karakous', href: '/location-karakou-ile-de-france' },
     { name: 'Caftans', href: '/vente-caftan-ile-de-france' },
-    { name: 'Services', href: '/#services' },
-    { name: 'Tarifs', href: '/#pricing' },
+    { name: 'Mariage', href: '/location-caftan-mariage' },
     { name: 'Sur-mesure', href: '/sur-mesure' },
-    { name: 'Contact', href: '/#contact' },
+    { name: 'A propos', href: '/a-propos' },
+    { name: 'Contact', href: '/contact' },
   ]
 
   const canAccessAdmin = isAdminEmail(user?.email)

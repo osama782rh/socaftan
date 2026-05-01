@@ -49,6 +49,7 @@ const LocationCaftanPasCherPage = () => {
         'Restituez et recuperez votre caution integralement',
       ]}
       faq={faq}
+      breadcrumb={[{ label: 'Location Caftan Pas Cher' }]}
       relatedLinks={[
         { href: '/location-takchita-ile-de-france', title: 'Location Takchita 90€', description: 'Notre offre la plus accessible.' },
         { href: '/location-karakou-ile-de-france', title: 'Location Karakou 100€', description: 'Karakou a prix competitif.' },

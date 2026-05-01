@@ -49,6 +49,7 @@ const LocationTenueHennaPage = () => {
         'Restituez la piece dans les 3 a 5 jours suivants',
       ]}
       faq={faq}
+      breadcrumb={[{ label: 'Location Tenue Henna' }]}
       relatedLinks={[
         { href: '/location-takchita-ile-de-france', title: 'Location Takchita', description: 'Takchitas en location a 90€ pour mariage et henna.' },
         { href: '/location-karakou-ile-de-france', title: 'Location Karakou', description: 'Karakous en location a 100€ pour henna algerienne.' },

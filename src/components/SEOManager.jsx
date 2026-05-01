@@ -256,6 +256,44 @@ const routeSeoMap = {
       ]),
     ],
   },
+  '/contact': {
+    title: 'Contact SO Caftan – WhatsApp, Telephone, Email',
+    description:
+      'Contactez SO Caftan pour la location de takchita, karakou ou la vente de caftan en Ile-de-France. WhatsApp +33 1 84 18 03 26, contact@socaftan.fr, Tigery (91250).',
+    keywords: [
+      'contact so caftan',
+      'so caftan whatsapp',
+      'so caftan telephone',
+      'so caftan tigery',
+      'so caftan ile de france contact',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Contact', path: '/contact' },
+      ]),
+    ],
+  },
+  '/a-propos': {
+    title: 'A propos de SO Caftan – Location de Tenues Orientales en Ile-de-France',
+    description:
+      'Decouvrez SO Caftan : maison specialisee dans la location de takchita, karakou et la vente de caftan en Ile-de-France. Notre histoire, nos valeurs et notre engagement qualite.',
+    keywords: [
+      'a propos so caftan',
+      'so caftan presentation',
+      'so caftan histoire',
+      'maison so caftan ile de france',
+      'qui est so caftan',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'A propos', path: '/a-propos' },
+      ]),
+    ],
+  },
   '/sur-mesure': {
     title: 'Creation Caftan Sur-Mesure Ile-de-France',
     description:

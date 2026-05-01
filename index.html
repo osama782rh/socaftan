@@ -142,6 +142,74 @@
       }
     </script>
 
+    <!-- Organization Schema (signal de marque pour Google Sitelinks) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": "https://www.socaftan.fr/#organization",
+        "name": "SO Caftan",
+        "alternateName": "SOCaftan",
+        "url": "https://www.socaftan.fr",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.socaftan.fr/og-image.png",
+          "width": 1200,
+          "height": 630
+        },
+        "image": "https://www.socaftan.fr/og-image.png",
+        "description": "SO Caftan : location de takchita, karakou et vente de caftan pour mariages orientaux en Île-de-France.",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "20 rue du Commandant Maurice Lissac",
+          "postalCode": "91250",
+          "addressLocality": "Tigery",
+          "addressRegion": "Île-de-France",
+          "addressCountry": "FR"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+33184180326",
+          "email": "contact@socaftan.fr",
+          "contactType": "customer service",
+          "areaServed": "FR",
+          "availableLanguage": ["French"]
+        },
+        "sameAs": [
+          "https://www.instagram.com/so_caftan91/",
+          "https://www.tiktok.com/@so_caftan91"
+        ]
+      }
+    </script>
+
+    <!-- Navigation Schema (aide Google à proposer des sitelinks) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SiteNavigationElement",
+        "name": [
+          "Accueil",
+          "Location Takchita",
+          "Location Karakou",
+          "Vente Caftan",
+          "Caftan Mariage",
+          "Sur-mesure",
+          "À propos",
+          "Contact"
+        ],
+        "url": [
+          "https://www.socaftan.fr/",
+          "https://www.socaftan.fr/location-takchita-ile-de-france",
+          "https://www.socaftan.fr/location-karakou-ile-de-france",
+          "https://www.socaftan.fr/vente-caftan-ile-de-france",
+          "https://www.socaftan.fr/location-caftan-mariage",
+          "https://www.socaftan.fr/sur-mesure",
+          "https://www.socaftan.fr/a-propos",
+          "https://www.socaftan.fr/contact"
+        ]
+      }
+    </script>
+
     <meta name="theme-color" content="#2b201a" />
   </head>
   <body>

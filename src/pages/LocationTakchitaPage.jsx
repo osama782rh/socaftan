@@ -37,6 +37,7 @@ const LocationTakchitaPage = () => {
         'Restituez la piece a la date prevue',
       ]}
       faq={faq}
+      breadcrumb={[{ label: 'Location Takchita Île-de-France' }]}
       relatedLinks={[
         { href: '/location-karakou-ile-de-france', title: 'Location Karakou', description: 'Karakous en location a 100€.' },
         { href: '/vente-caftan-ile-de-france', title: 'Vente Caftan', description: 'Caftans disponibles a la vente a 180€.' },

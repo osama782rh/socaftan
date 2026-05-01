@@ -1,5 +1,6 @@
 import { ArrowRight, CheckCircle2, MessageCircle, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
+import Breadcrumb from './Breadcrumb'
 
 const ServiceLandingPage = ({
   badge,
@@ -11,10 +12,16 @@ const ServiceLandingPage = ({
   process,
   faq,
   relatedLinks,
+  breadcrumb,
 }) => {
   return (
-    <div className="min-h-screen bg-brand-ivory pt-28 pb-20 px-5 md:px-10">
-      <div className="container-custom max-w-6xl">
+    <div className="min-h-screen bg-brand-ivory pt-28 pb-20">
+      {breadcrumb && breadcrumb.length > 0 && (
+        <div className="max-w-6xl mx-auto">
+          <Breadcrumb items={breadcrumb} />
+        </div>
+      )}
+      <div className="container-custom max-w-6xl px-5 md:px-10">
         <motion.section
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}

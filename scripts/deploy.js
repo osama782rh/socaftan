@@ -10,6 +10,8 @@ const PRERENDERED_ROUTES = [
   'location-caftan-evry',
   'location-tenue-henna',
   'location-caftan-pas-cher',
+  'contact',
+  'a-propos',
   'sur-mesure',
   'cgv',
   'cgu',

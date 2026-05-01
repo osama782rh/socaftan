@@ -49,6 +49,7 @@ const LocationCaftanEssonnePage = () => {
         'Restituez la piece sous 3 a 5 jours apres votre evenement',
       ]}
       faq={faq}
+      breadcrumb={[{ label: 'Location Caftan Essonne (91)' }]}
       relatedLinks={[
         { href: '/location-takchita-ile-de-france', title: 'Location Takchita', description: 'Takchitas en location a 90€.' },
         { href: '/location-karakou-ile-de-france', title: 'Location Karakou', description: 'Karakous en location a 100€.' },

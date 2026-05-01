@@ -18,15 +18,16 @@ const Footer = () => {
   ]
 
   const quickLinks = [
-    { name: 'Accueil', href: '/#hero' },
-    { name: 'Collection', href: '/#collection' },
+    { name: 'Accueil', href: '/' },
     { name: 'Location Takchita', href: '/location-takchita-ile-de-france' },
     { name: 'Location Karakou', href: '/location-karakou-ile-de-france' },
     { name: 'Vente Caftan', href: '/vente-caftan-ile-de-france' },
-    { name: 'Services', href: '/#services' },
-    { name: 'Tarifs', href: '/#pricing' },
-    { name: 'Sur-mesure', href: '/sur-mesure#custom' },
-    { name: 'Contact', href: '/#contact' },
+    { name: 'Caftan Mariage', href: '/location-caftan-mariage' },
+    { name: 'Tenue Henna', href: '/location-tenue-henna' },
+    { name: 'Caftan Essonne (91)', href: '/location-caftan-essonne' },
+    { name: 'Sur-mesure', href: '/sur-mesure' },
+    { name: 'A propos', href: '/a-propos' },
+    { name: 'Contact', href: '/contact' },
   ]
 
   const legalLinks = [

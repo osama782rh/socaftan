@@ -36,6 +36,7 @@ const VenteCaftanPage = () => {
         'Recuperez votre commande selon les modalites convenues',
       ]}
       faq={faq}
+      breadcrumb={[{ label: 'Vente Caftan Île-de-France' }]}
       relatedLinks={[
         { href: '/location-takchita-ile-de-france', title: 'Location Takchita', description: 'Takchitas en location a 90€.' },
         { href: '/location-karakou-ile-de-france', title: 'Location Karakou', description: 'Karakous en location a 100€.' },

@@ -19,6 +19,20 @@ const seoCards = [
   },
 ]
 
+// Liens internes par usage (aide Google a comprendre la structure)
+const useCaseLinks = [
+  { href: '/location-caftan-mariage', title: 'Caftan pour Mariage', description: 'Tenue ideale pour mariage marocain ou algerien.' },
+  { href: '/location-tenue-henna', title: 'Tenue pour Henna', description: 'Takchita ou karakou pour votre nuit du henne.' },
+  { href: '/location-caftan-pas-cher', title: 'Caftan Pas Cher', description: 'Les meilleurs tarifs en Ile-de-France des 90€.' },
+  { href: '/sur-mesure', title: 'Caftan Sur-Mesure', description: 'Creation personnalisee selon vos envies.' },
+]
+
+// Liens internes par zone geographique
+const zoneLinks = [
+  { href: '/location-caftan-essonne', title: 'Essonne (91)', description: 'Tigery, Evry, Corbeil, Massy, Grigny.' },
+  { href: '/location-caftan-evry', title: 'Evry-Courcouronnes', description: 'Livraison express dans Grand Paris Sud.' },
+]
+
 const faq = [
   {
     question: 'SO Caftan propose-t-il des locations en Ile-de-France ?',
@@ -51,7 +65,7 @@ const SEOContentSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-4 mb-10">
+        <div className="grid md:grid-cols-3 gap-4 mb-8">
           {seoCards.map((card) => (
             <a
               key={card.href}
@@ -64,6 +78,39 @@ const SEOContentSection = () => {
                 Voir la page
                 <ArrowRight size={14} />
               </span>
+            </a>
+          ))}
+        </div>
+
+        {/* Liens par usage (maillage interne) */}
+        <h3 className="text-xl font-bold text-brand-ink mb-4">Trouvez la tenue selon votre evenement</h3>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          {useCaseLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="rounded-2xl border border-brand-sand/60 bg-white p-4 hover:border-brand-gold/50 transition-colors"
+            >
+              <p className="font-semibold text-brand-ink text-sm">{link.title}</p>
+              <p className="text-brand-ink/55 text-xs mt-1 leading-relaxed">{link.description}</p>
+            </a>
+          ))}
+        </div>
+
+        {/* Liens par zone (SEO local) */}
+        <h3 className="text-xl font-bold text-brand-ink mb-4">SO Caftan pres de chez vous</h3>
+        <div className="grid sm:grid-cols-2 gap-3 mb-10">
+          {zoneLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="rounded-2xl border border-brand-sand/60 bg-white p-4 hover:border-brand-gold/50 transition-colors flex items-center gap-3"
+            >
+              <MapPin size={18} className="text-brand-gold shrink-0" />
+              <div>
+                <p className="font-semibold text-brand-ink text-sm">{link.title}</p>
+                <p className="text-brand-ink/55 text-xs mt-0.5">{link.description}</p>
+              </div>
             </a>
           ))}
         </div>
