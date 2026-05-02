@@ -46,99 +46,22 @@
     <meta name="twitter:description" content="Location de takchita, karakou et vente de caftan pour mariages orientaux en Île-de-France. Réservation en ligne." />
     <meta name="twitter:image" content="https://www.socaftan.fr/og-image.png" />
 
-    <!-- JSON-LD Structuré -->
+    <!-- WebSite Schema (search action signal) -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "WebSite",
-            "@id": "https://www.socaftan.fr/#website",
-            "url": "https://www.socaftan.fr/",
-            "name": "SO Caftan",
-            "description": "Location de takchita et karakou pour mariages orientaux en Île-de-France. Vente de caftan.",
-            "inLanguage": "fr-FR",
-            "potentialAction": {
-              "@type": "SearchAction",
-              "target": "https://www.socaftan.fr/?s={search_term_string}",
-              "query-input": "required name=search_term_string"
-            }
-          },
-          {
-            "@type": "ClothingStore",
-            "@id": "https://www.socaftan.fr/#business",
-            "name": "SO Caftan",
-            "url": "https://www.socaftan.fr/",
-            "logo": "https://www.socaftan.fr/og-image.png",
-            "image": "https://www.socaftan.fr/og-image.png",
-            "telephone": "+33184180326",
-            "email": "contact@socaftan.fr",
-            "description": "SO Caftan est spécialisée dans la location de takchitas et karakous pour mariages et événements orientaux en Île-de-France, ainsi que la vente de caftans. Service de livraison disponible dans les départements 91, 92, 93 et 94.",
-            "priceRange": "90€ - 180€",
-            "currenciesAccepted": "EUR",
-            "paymentAccepted": "Carte bancaire, virement",
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": "20 rue du Commandant Maurice Lissac",
-              "postalCode": "91250",
-              "addressLocality": "Tigery",
-              "addressRegion": "Île-de-France",
-              "addressCountry": "FR"
-            },
-            "geo": {
-              "@type": "GeoCoordinates",
-              "latitude": 48.6167,
-              "longitude": 2.5167
-            },
-            "areaServed": [
-              { "@type": "AdministrativeArea", "name": "Île-de-France" },
-              { "@type": "AdministrativeArea", "name": "Essonne" },
-              { "@type": "AdministrativeArea", "name": "Val-de-Marne" },
-              { "@type": "AdministrativeArea", "name": "Hauts-de-Seine" },
-              { "@type": "AdministrativeArea", "name": "Seine-Saint-Denis" },
-              { "@type": "City", "name": "Paris" },
-              { "@type": "City", "name": "Évry" },
-              { "@type": "City", "name": "Créteil" },
-              { "@type": "City", "name": "Versailles" }
-            ],
-            "hasOfferCatalog": {
-              "@type": "OfferCatalog",
-              "name": "Tenues orientales SO Caftan",
-              "itemListElement": [
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Service",
-                    "name": "Location Takchita Île-de-France",
-                    "description": "Location de takchita pour mariage, henna et événements orientaux en Île-de-France"
-                  },
-                  "price": "90",
-                  "priceCurrency": "EUR"
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Service",
-                    "name": "Location Karakou Île-de-France",
-                    "description": "Location de karakou pour mariage et événements orientaux en Île-de-France"
-                  },
-                  "price": "100",
-                  "priceCurrency": "EUR"
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Service",
-                    "name": "Vente Caftan Île-de-France",
-                    "description": "Vente de caftan de qualité supérieure pour mariages et cérémonies orientales en Île-de-France"
-                  },
-                  "price": "180",
-                  "priceCurrency": "EUR"
-                }
-              ]
-            }
-          }
-        ]
+        "@type": "WebSite",
+        "@id": "https://www.socaftan.fr/#website",
+        "url": "https://www.socaftan.fr/",
+        "name": "SO Caftan",
+        "description": "Location de takchita et karakou pour mariages orientaux en Île-de-France. Vente de caftan.",
+        "inLanguage": "fr-FR",
+        "publisher": { "@id": "https://www.socaftan.fr/#organization" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.socaftan.fr/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
       }
     </script>
 
