@@ -27,15 +27,17 @@ const homeFaqs = [
 
 const routeSeoMap = {
   '/': {
-    title: 'Location Takchita et Karakou en Ile-de-France, Vente Caftan 180€',
+    title: 'SO Caftan – Location Takchita, Karakou & Vente Caftan en Ile-de-France',
     description:
-      "SO Caftan propose la location de takchitas (90€), la location de karakous (100€) et la vente de caftans (180€) en Ile-de-France. Reservation rapide et paiement securise.",
+      "SO Caftan, votre specialiste de la location de takchitas (90€), karakous (100€) et de la vente de caftans (180€) en Ile-de-France. Reservation rapide, paiement securise, livraison 91/92/93/94.",
     keywords: [
+      'so caftan',
+      'socaftan',
+      'so caftan ile de france',
       'location takchita ile de france',
       'location karakou paris',
       'vente caftan 180',
       'boutique caftan ile de france',
-      'so caftan',
     ],
     schema: [
       buildWebsiteSchema(),

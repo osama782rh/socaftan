@@ -104,6 +104,7 @@ const Hero = () => {
             variants={itemVariants}
             className="text-display font-bold text-white mb-6 md:mb-8"
           >
+            <span className="block text-brand-goldSoft text-2xl md:text-3xl lg:text-4xl tracking-[0.15em] uppercase font-light mb-2 md:mb-3">SO Caftan</span>
             Sublimez vos
             <br />
             <span className="italic font-light text-brand-goldSoft">plus beaux moments</span>
