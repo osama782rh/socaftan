@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import heroPoster from '../assets/JAWHARA.jpeg'
+import heroPoster from '../assets/JAWHARA.webp'
 
 const easePremium = [0.22, 1, 0.36, 1]
 
@@ -55,11 +55,11 @@ const Hero = () => {
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="none"
           poster={heroPoster}
           className="w-full h-full object-cover"
         >
-          <source src="https://cdn.coverr.co/videos/coverr-elegant-fashion-model-9193/1080p.mp4" type="video/mp4" />
+          <source src="https://cdn.coverr.co/videos/coverr-elegant-fashion-model-9193/720p.mp4" type="video/mp4" />
         </video>
 
         <motion.div

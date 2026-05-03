@@ -1,7 +1,7 @@
 import { Heart, Award, Clock } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
-import jawharaImage from '../assets/JAWHARA.jpeg'
-import emeraudeImage from '../assets/EMERAUDE.png'
+import jawharaImage from '../assets/JAWHARA.webp'
+import emeraudeImage from '../assets/EMERAUDE.webp'
 
 const easePremium = [0.22, 1, 0.36, 1]
 

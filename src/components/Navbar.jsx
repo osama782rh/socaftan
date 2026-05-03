@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
 import { isAdminEmail } from '../lib/admin'
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.webp'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
