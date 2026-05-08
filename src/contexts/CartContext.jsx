@@ -1,10 +1,13 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
 import { trackEvent } from '../lib/analytics'
+import { supabase } from '../lib/supabase'
+import { useAuth } from './AuthContext'
 
 const CartContext = createContext(null)
 
 const CART_STORAGE_KEY = 'socaftan_cart'
 const RENTAL_DEPOSIT = 100
+const CART_SYNC_DEBOUNCE_MS = 1500
 
 export const useCart = () => {
   const ctx = useContext(CartContext)
@@ -13,6 +16,7 @@ export const useCart = () => {
 }
 
 export const CartProvider = ({ children }) => {
+  const { user } = useAuth()
   const [items, setItems] = useState(() => {
     try {
       const saved = localStorage.getItem(CART_STORAGE_KEY)
@@ -22,10 +26,100 @@ export const CartProvider = ({ children }) => {
     }
   })
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const syncTimerRef = useRef(null)
+  const initialLoadDoneRef = useRef(false)
 
+  // Persistance localStorage (toujours active)
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items))
   }, [items])
+
+  // Au login : charger le panier serveur et le merger avec le panier local
+  useEffect(() => {
+    if (!user) {
+      initialLoadDoneRef.current = false
+      return
+    }
+    if (initialLoadDoneRef.current) return
+
+    let cancelled = false
+    ;(async () => {
+      try {
+        const { data, error } = await supabase
+          .from('user_carts')
+          .select('items')
+          .eq('user_id', user.id)
+          .maybeSingle()
+
+        if (cancelled) return
+        if (error) {
+          console.warn('[cart] Load server cart failed:', error.message)
+          initialLoadDoneRef.current = true
+          return
+        }
+
+        const serverItems = Array.isArray(data?.items) ? data.items : []
+        // Merge server + local : on garde les items locaux + on ajoute ceux du serveur absents en local
+        setItems((local) => {
+          if (local.length === 0) return serverItems
+          if (serverItems.length === 0) return local
+          // Merge basique : par productId+type, on garde la quantite max
+          const map = new Map()
+          for (const item of [...serverItems, ...local]) {
+            const key = `${item.productId}-${item.type}-${item.rentalStartDate || ''}`
+            const existing = map.get(key)
+            if (!existing || item.quantity > existing.quantity) {
+              map.set(key, item)
+            }
+          }
+          return [...map.values()]
+        })
+        initialLoadDoneRef.current = true
+      } catch (err) {
+        console.warn('[cart] Load error:', err)
+        initialLoadDoneRef.current = true
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [user])
+
+  // Sync debounced du panier vers la DB pour les utilisateurs connectes
+  useEffect(() => {
+    if (!user) return
+    if (!initialLoadDoneRef.current) return
+
+    if (syncTimerRef.current) {
+      clearTimeout(syncTimerRef.current)
+    }
+
+    syncTimerRef.current = setTimeout(async () => {
+      try {
+        const subtotalLocal = items.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0)
+        const depositLocal = items
+          .filter((i) => i.type === 'location')
+          .reduce((sum, i) => sum + RENTAL_DEPOSIT * i.quantity, 0)
+        const totalLocal = subtotalLocal + depositLocal
+
+        await supabase
+          .from('user_carts')
+          .upsert({
+            user_id: user.id,
+            items,
+            subtotal: subtotalLocal,
+            total: totalLocal,
+          }, { onConflict: 'user_id' })
+      } catch (err) {
+        console.warn('[cart] Sync error:', err)
+      }
+    }, CART_SYNC_DEBOUNCE_MS)
+
+    return () => {
+      if (syncTimerRef.current) clearTimeout(syncTimerRef.current)
+    }
+  }, [items, user])
 
   const addItem = useCallback((product, type = 'location', rentalDates = null) => {
     setItems(prev => {

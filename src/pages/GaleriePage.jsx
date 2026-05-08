@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, ChevronRight, Heart, MessageCircle, X, Sparkles } from 'lucide-react'
+import { Home, ChevronRight, Heart, MessageCircle, X, Sparkles, Camera, Upload } from 'lucide-react'
 import { resolveProductImage } from '../lib/productImages'
+import { supabase } from '../lib/supabase'
 
 // Galerie inspiration - chaque entree pointe vers un modele du catalogue
 // Quand des photos clientes seront disponibles, elles remplaceront ces visuels
@@ -115,6 +116,28 @@ const categoryLabels = {
 const GaleriePage = () => {
   const [activeCategory, setActiveCategory] = useState('all')
   const [zoomedItem, setZoomedItem] = useState(null)
+  const [customerPhotos, setCustomerPhotos] = useState([])
+
+  // Charge les photos clientes approuvees
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const { data } = await supabase
+          .from('customer_photos')
+          .select('id, public_url, caption, occasion, product_name, submitter_name, approved_at')
+          .eq('status', 'approved')
+          .order('approved_at', { ascending: false })
+          .limit(20)
+        if (!cancelled) setCustomerPhotos(data || [])
+      } catch {
+        // silencieux
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const filteredItems =
     activeCategory === 'all'
@@ -217,38 +240,95 @@ const GaleriePage = () => {
         )}
       </section>
 
-      {/* Bandeau temoignage / partage */}
-      <section className="container-custom px-5 md:px-10 py-8">
-        <div className="bg-white rounded-2xl border border-brand-sand/60 p-6 md:p-10 text-center">
-          <div className="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center mx-auto mb-4">
-            <Heart size={20} className="text-rose-500" />
+      {/* Photos de la communaute (UGC approuvees) */}
+      {customerPhotos.length > 0 && (
+        <section className="container-custom px-5 md:px-10 py-10">
+          <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-600 text-[10px] font-semibold uppercase tracking-wide mb-2">
+                <Heart size={10} className="fill-current" />
+                Communaute
+              </span>
+              <h2 className="font-serif text-2xl md:text-3xl font-bold text-brand-ink">
+                Nos clientes en SO Caftan
+              </h2>
+              <p className="text-sm text-brand-ink/55 mt-1">
+                Les photos partagees par notre communaute (publiees avec autorisation)
+              </p>
+            </div>
+            <Link
+              to="/galerie/partager"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-brand-gold hover:bg-brand-gold/90 text-white text-xs font-semibold transition-colors"
+            >
+              <Upload size={12} />
+              Partager ma photo
+            </Link>
           </div>
-          <h2 className="font-serif text-2xl md:text-3xl font-bold text-brand-ink mb-3">
-            Partagez votre experience
-          </h2>
-          <p className="text-brand-ink/65 max-w-xl mx-auto mb-5">
-            Vous avez porte une tenue SO Caftan ? Envoyez-nous votre photo via WhatsApp avec votre accord
-            pour figurer dans notre galerie. Cela inspire d'autres futures mariees a osez la beaute orientale.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <a
-              href="https://wa.me/33184180326?text=Bonjour%20SO%20Caftan%2C%20voici%20une%20photo%20de%20moi%20avec%20votre%20tenue%20%E2%9D%A4%EF%B8%8F"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold transition-colors"
-            >
-              <MessageCircle size={15} />
-              Partager sur WhatsApp
-            </a>
-            <a
-              href="https://www.instagram.com/so_caftan91/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-brand-sand text-brand-ink text-sm font-semibold hover:border-brand-gold transition-colors"
-            >
-              <Sparkles size={15} className="text-brand-gold" />
-              Tagez @so_caftan91
-            </a>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {customerPhotos.map((photo, idx) => (
+              <motion.figure
+                key={photo.id}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.35, delay: Math.min(idx * 0.04, 0.3) }}
+                className="aspect-square overflow-hidden rounded-2xl bg-brand-sand/30 relative group"
+              >
+                <img
+                  src={photo.public_url}
+                  alt={`Photo cliente ${photo.submitter_name || ''} - ${photo.occasion || ''}`.trim()}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                {(photo.submitter_name || photo.occasion) && (
+                  <figcaption className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-brand-ink/85 to-transparent text-white">
+                    {photo.submitter_name && (
+                      <p className="text-xs font-semibold">{photo.submitter_name}</p>
+                    )}
+                    {photo.occasion && (
+                      <p className="text-[10px] text-white/70 capitalize">{photo.occasion}</p>
+                    )}
+                  </figcaption>
+                )}
+              </motion.figure>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Bandeau partage */}
+      <section className="container-custom px-5 md:px-10 py-8">
+        <div className="bg-gradient-to-br from-brand-ink via-brand-night to-brand-ink rounded-2xl p-6 md:p-10 text-center text-white relative overflow-hidden">
+          <div aria-hidden="true" className="absolute top-0 right-0 w-40 h-40 bg-brand-gold/15 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl" />
+          <div className="relative">
+            <div className="w-14 h-14 rounded-full bg-rose-500/20 flex items-center justify-center mx-auto mb-4">
+              <Camera size={22} className="text-rose-300" />
+            </div>
+            <h2 className="font-serif text-2xl md:text-3xl font-bold mb-3">
+              Partagez votre experience
+            </h2>
+            <p className="text-white/65 max-w-xl mx-auto mb-5 text-sm md:text-base">
+              Vous avez porte une tenue SO Caftan ? Envoyez-nous votre photo et figurez dans notre galerie.
+              Cela inspire d'autres futures mariees a oser la beaute orientale.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link
+                to="/galerie/partager"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-gold hover:bg-brand-gold/90 text-white text-sm font-semibold transition-colors"
+              >
+                <Upload size={15} />
+                Envoyer ma photo
+              </Link>
+              <a
+                href="https://www.instagram.com/so_caftan91/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors"
+              >
+                <Sparkles size={15} className="text-brand-gold" />
+                Tagez @so_caftan91
+              </a>
+            </div>
           </div>
         </div>
       </section>

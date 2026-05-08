@@ -31,6 +31,8 @@ const BlogIndexPage = lazy(() => import('./pages/BlogIndexPage'))
 const BlogChoisirTakchita = lazy(() => import('./pages/blog/ChoisirTakchitaMariageMarocainPage'))
 const BlogHennaMarocaineAlgerienne = lazy(() => import('./pages/blog/HennaMarocaineVsAlgeriennePage'))
 const BlogCoutLocationIDF = lazy(() => import('./pages/blog/CoutLocationCaftanIDFPage'))
+const SharedWishlistPage = lazy(() => import('./pages/SharedWishlistPage'))
+const PartagerPhotoPage = lazy(() => import('./pages/PartagerPhotoPage'))
 const CustomPage = lazy(() => import('./pages/CustomPage'))
 const Cgv = lazy(() => import('./pages/Cgv'))
 const Cgu = lazy(() => import('./pages/Cgu'))
@@ -80,6 +82,8 @@ function App() {
                   <Route path="/blog/choisir-takchita-mariage-marocain" element={<BlogChoisirTakchita />} />
                   <Route path="/blog/henna-marocaine-vs-algerienne" element={<BlogHennaMarocaineAlgerienne />} />
                   <Route path="/blog/cout-location-caftan-ile-de-france" element={<BlogCoutLocationIDF />} />
+                  <Route path="/wishlist/:token" element={<SharedWishlistPage />} />
+                  <Route path="/galerie/partager" element={<PartagerPhotoPage />} />
                   <Route path="/sur-mesure" element={<CustomPage />} />
                   <Route path="/cgv" element={<Cgv />} />
                   <Route path="/cgu" element={<Cgu />} />

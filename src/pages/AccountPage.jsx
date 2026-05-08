@@ -11,6 +11,8 @@ import {
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import { useUiFeedback } from '../contexts/UiFeedbackContext'
+import LoyaltyProgressCard from '../components/LoyaltyProgressCard'
+import WishlistShareCard from '../components/WishlistShareCard'
 
 const statusLabels = {
   pending: { label: 'En attente', color: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-400' },
@@ -447,6 +449,9 @@ const AccountPage = () => {
               {/* ===== ORDERS ===== */}
               {activeTab === 'orders' && (
                 <div className="space-y-5">
+                  {/* Programme fidelite */}
+                  <LoyaltyProgressCard />
+
                   <div className="flex items-center justify-between">
                     <div>
                       <h1 className="text-xl md:text-2xl font-bold text-brand-ink font-serif">Mes commandes</h1>
@@ -615,6 +620,9 @@ const AccountPage = () => {
               {/* ===== WISHLIST ===== */}
               {activeTab === 'wishlist' && (
                 <div className="space-y-5">
+                  {/* Carte de partage */}
+                  <WishlistShareCard />
+
                   <div className="flex items-center justify-between">
                     <div>
                       <h1 className="text-xl md:text-2xl font-bold text-brand-ink font-serif">Ma wishlist</h1>

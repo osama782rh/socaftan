@@ -7,6 +7,7 @@ const TikTokIcon = ({ size = 18 }) => (
 )
 import { Link } from 'react-router-dom'
 import logo from '../assets/logo.webp'
+import NewsletterSignup from './NewsletterSignup'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -43,6 +44,11 @@ const Footer = () => {
   return (
     <footer className="bg-brand-ink text-white">
       <div className="container-custom px-5 md:px-10 lg:px-20 pt-16 md:pt-20 pb-8">
+
+        {/* Newsletter signup band */}
+        <div className="mb-14 pb-12 border-b border-white/10">
+          <NewsletterSignup variant="feature" source="footer" />
+        </div>
 
         {/* Main Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">

@@ -359,10 +359,58 @@ const AdminOrdersPage = () => {
       acc[order.status] = (acc[order.status] || 0) + 1
       return acc
     }, {})
-    const revenue = orders
-      .filter((order) => !['pending', 'cancelled'].includes(order.status))
-      .reduce((sum, order) => sum + Number(order.total || 0), 0)
+
+    const revenueOrders = orders.filter((order) => !['pending', 'cancelled'].includes(order.status))
+    const revenue = revenueOrders.reduce((sum, order) => sum + Number(order.total || 0), 0)
     const activeOrders = orders.filter((order) => ['paid', 'confirmed', 'preparing', 'ready'].includes(order.status)).length
+
+    // Periodes
+    const now = new Date()
+    const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+    const startOfLast7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+    const startOfLast30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+
+    const inRange = (order, start, end = null) => {
+      const t = new Date(order.created_at).getTime()
+      if (Number.isNaN(t)) return false
+      if (t < start.getTime()) return false
+      if (end && t >= end.getTime()) return false
+      return true
+    }
+
+    const ordersThisMonth = revenueOrders.filter((o) => inRange(o, startOfThisMonth))
+    const ordersLastMonth = revenueOrders.filter((o) => inRange(o, startOfLastMonth, startOfThisMonth))
+    const ordersLast7 = revenueOrders.filter((o) => inRange(o, startOfLast7Days))
+    const ordersLast30 = revenueOrders.filter((o) => inRange(o, startOfLast30Days))
+
+    const sumTotal = (arr) => arr.reduce((s, o) => s + Number(o.total || 0), 0)
+    const revenueThisMonth = sumTotal(ordersThisMonth)
+    const revenueLastMonth = sumTotal(ordersLastMonth)
+    const revenueLast30 = sumTotal(ordersLast30)
+    const revenueLast7 = sumTotal(ordersLast7)
+
+    // Variation mois
+    const monthlyDelta = revenueLastMonth > 0
+      ? ((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100
+      : (revenueThisMonth > 0 ? 100 : 0)
+
+    // Panier moyen
+    const avgOrderValue = revenueOrders.length > 0
+      ? revenue / revenueOrders.length
+      : 0
+
+    // Mix location vs achat
+    const orderTypes = revenueOrders.reduce(
+      (acc, order) => {
+        const t = order.order_type === 'achat' ? 'achat' : 'location'
+        acc[t] = (acc[t] || 0) + 1
+        return acc
+      },
+      { location: 0, achat: 0 },
+    )
+
+    // Top modeles
     const topModelsMap = new Map()
     orders.forEach((order) => {
       ;(order.items || []).forEach((item) => {
@@ -371,6 +419,30 @@ const AdminOrdersPage = () => {
       })
     })
     const topModels = [...topModelsMap.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)
+
+    // Avis : envoyes / en attente / livrees
+    const reviewEmailsSent = orders.filter((o) => o.review_email_sent_at).length
+    const reviewEmailsPending = orders.filter((o) => o.status === 'delivered' && !o.review_email_sent_at).length
+    const deliveredCount = orders.filter((o) => o.status === 'delivered').length
+
+    // Sparkline 30 jours (CA par jour)
+    const dailyRevenue = []
+    for (let i = 29; i >= 0; i--) {
+      const dayStart = new Date(now)
+      dayStart.setHours(0, 0, 0, 0)
+      dayStart.setDate(dayStart.getDate() - i)
+      const dayEnd = new Date(dayStart)
+      dayEnd.setDate(dayEnd.getDate() + 1)
+      const dayTotal = revenueOrders
+        .filter((o) => inRange(o, dayStart, dayEnd))
+        .reduce((s, o) => s + Number(o.total || 0), 0)
+      dailyRevenue.push({
+        date: dayStart,
+        value: dayTotal,
+      })
+    }
+    const maxDailyRevenue = Math.max(1, ...dailyRevenue.map((d) => d.value))
+
     return {
       countByStatus,
       revenue,
@@ -378,6 +450,22 @@ const AdminOrdersPage = () => {
       totalOrders: orders.length,
       totalProducts: products.length,
       topModels,
+      // Nouveau
+      revenueThisMonth,
+      revenueLastMonth,
+      revenueLast30,
+      revenueLast7,
+      ordersThisMonth: ordersThisMonth.length,
+      ordersLast30: ordersLast30.length,
+      ordersLast7: ordersLast7.length,
+      monthlyDelta,
+      avgOrderValue,
+      orderTypes,
+      reviewEmailsSent,
+      reviewEmailsPending,
+      deliveredCount,
+      dailyRevenue,
+      maxDailyRevenue,
     }
   }, [orders, products])
 
@@ -643,22 +731,230 @@ const AdminOrdersPage = () => {
 
         {activeTab === 'overview' && (
           <div className="space-y-4">
-            <div className="grid sm:grid-cols-2 xl:grid-cols-5 gap-3">
-              <div className="bg-white rounded-2xl border border-brand-sand/60 p-4"><p className="text-xs text-brand-ink/45 uppercase tracking-wide">Commandes totales</p><p className="text-2xl font-bold text-brand-ink mt-1">{summary.totalOrders}</p></div>
-              <div className="bg-white rounded-2xl border border-brand-sand/60 p-4"><p className="text-xs text-brand-ink/45 uppercase tracking-wide">En cours</p><p className="text-2xl font-bold text-amber-700 mt-1">{summary.activeOrders}</p></div>
-              <div className="bg-white rounded-2xl border border-brand-sand/60 p-4"><p className="text-xs text-brand-ink/45 uppercase tracking-wide">Livrees</p><p className="text-2xl font-bold text-emerald-700 mt-1">{summary.countByStatus.delivered || 0}</p></div>
-              <div className="bg-white rounded-2xl border border-brand-sand/60 p-4"><p className="text-xs text-brand-ink/45 uppercase tracking-wide">Modeles actifs</p><p className="text-2xl font-bold text-brand-ink mt-1">{summary.totalProducts}</p></div>
-              <div className="bg-white rounded-2xl border border-brand-sand/60 p-4"><p className="text-xs text-brand-ink/45 uppercase tracking-wide">Chiffre suivi</p><p className="text-2xl font-bold text-brand-ink mt-1">{formatCurrency(summary.revenue)}</p></div>
+            {/* KPI principaux : revenue + commandes + AOV */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* CA mois en cours */}
+              <div className="bg-gradient-to-br from-brand-ink to-brand-night text-white rounded-2xl p-5">
+                <p className="text-[11px] text-white/60 uppercase tracking-wide font-semibold">CA ce mois</p>
+                <p className="text-3xl font-bold text-brand-gold font-serif mt-1.5">{formatCurrency(summary.revenueThisMonth)}</p>
+                <div className="mt-2 flex items-center gap-1.5 text-xs">
+                  {summary.monthlyDelta !== 0 && (
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-semibold ${summary.monthlyDelta > 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}`}>
+                      {summary.monthlyDelta > 0 ? '↑' : '↓'} {Math.abs(summary.monthlyDelta).toFixed(0)}%
+                    </span>
+                  )}
+                  <span className="text-white/50">vs {formatCurrency(summary.revenueLastMonth)} mois dernier</span>
+                </div>
+              </div>
+
+              {/* Commandes ce mois */}
+              <div className="bg-white rounded-2xl border border-brand-sand/60 p-5">
+                <p className="text-[11px] text-brand-ink/45 uppercase tracking-wide font-semibold">Commandes ce mois</p>
+                <p className="text-3xl font-bold text-brand-ink font-serif mt-1.5">{summary.ordersThisMonth}</p>
+                <p className="text-xs text-brand-ink/50 mt-2">
+                  <span className="font-semibold text-brand-ink">{summary.ordersLast7}</span> sur 7 derniers jours
+                </p>
+              </div>
+
+              {/* Panier moyen */}
+              <div className="bg-white rounded-2xl border border-brand-sand/60 p-5">
+                <p className="text-[11px] text-brand-ink/45 uppercase tracking-wide font-semibold">Panier moyen</p>
+                <p className="text-3xl font-bold text-brand-ink font-serif mt-1.5">{formatCurrency(summary.avgOrderValue)}</p>
+                <p className="text-xs text-brand-ink/50 mt-2">
+                  Sur <span className="font-semibold text-brand-ink">{summary.totalOrders}</span> commandes au total
+                </p>
+              </div>
+
+              {/* En cours de traitement */}
+              <div className="bg-white rounded-2xl border border-brand-sand/60 p-5">
+                <p className="text-[11px] text-brand-ink/45 uppercase tracking-wide font-semibold">A traiter</p>
+                <p className="text-3xl font-bold text-amber-600 font-serif mt-1.5">{summary.activeOrders}</p>
+                <p className="text-xs text-brand-ink/50 mt-2">
+                  Payees, en preparation ou pretes
+                </p>
+              </div>
             </div>
 
-            <div className="grid xl:grid-cols-2 gap-4">
-              <div className="bg-white rounded-2xl border border-brand-sand/60 p-4 md:p-5">
-                <h2 className="text-lg font-bold text-brand-ink font-serif mb-3">Distribution des statuts</h2>
-                <div className="space-y-2">{statusOptions.map((status) => <div key={status.value} className="flex items-center justify-between text-sm"><span className="text-brand-ink/70">{status.label}</span><span className="font-semibold text-brand-ink">{summary.countByStatus[status.value] || 0}</span></div>)}</div>
+            {/* Sparkline 30 jours */}
+            <div className="bg-white rounded-2xl border border-brand-sand/60 p-5 md:p-6">
+              <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+                <div>
+                  <h2 className="text-lg font-bold text-brand-ink font-serif">Activite des 30 derniers jours</h2>
+                  <p className="text-xs text-brand-ink/55 mt-0.5">CA quotidien · {formatCurrency(summary.revenueLast30)} cumules</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-bold text-brand-gold font-serif">{summary.ordersLast30}</p>
+                  <p className="text-[11px] text-brand-ink/45 uppercase tracking-wide">commandes</p>
+                </div>
               </div>
-              <div className="bg-white rounded-2xl border border-brand-sand/60 p-4 md:p-5">
-                <h2 className="text-lg font-bold text-brand-ink font-serif mb-3">Modeles les plus commandes</h2>
-                {summary.topModels.length === 0 ? <p className="text-sm text-brand-ink/50">Pas assez de donnees.</p> : <div className="space-y-2">{summary.topModels.map(([name, qty], index) => <div key={`${name}-${index}`} className="flex items-center justify-between text-sm"><span className="text-brand-ink/75">{index + 1}. {name}</span><span className="font-semibold text-brand-ink">{qty}</span></div>)}</div>}
+              <div className="flex items-end gap-1 h-28">
+                {summary.dailyRevenue.map((day, idx) => {
+                  const heightPct = summary.maxDailyRevenue > 0
+                    ? (day.value / summary.maxDailyRevenue) * 100
+                    : 0
+                  const isToday = idx === summary.dailyRevenue.length - 1
+                  return (
+                    <div
+                      key={day.date.toISOString()}
+                      className="flex-1 group relative"
+                      title={`${day.date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}: ${formatCurrency(day.value)}`}
+                    >
+                      <div
+                        className={`w-full rounded-t transition-colors ${day.value > 0 ? (isToday ? 'bg-brand-gold' : 'bg-brand-ink/65 group-hover:bg-brand-gold') : 'bg-brand-sand/40'}`}
+                        style={{ height: `${Math.max(2, heightPct)}%` }}
+                      />
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="flex items-center justify-between text-[10px] text-brand-ink/40 mt-2">
+                <span>{summary.dailyRevenue[0]?.date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}</span>
+                <span>Aujourd'hui</span>
+              </div>
+            </div>
+
+            {/* Section : Mix location/achat + Avis Google */}
+            <div className="grid lg:grid-cols-3 gap-4">
+              {/* Mix location vs achat */}
+              <div className="bg-white rounded-2xl border border-brand-sand/60 p-5 md:p-6">
+                <h2 className="text-lg font-bold text-brand-ink font-serif mb-4">Type de commande</h2>
+                {summary.orderTypes.location + summary.orderTypes.achat === 0 ? (
+                  <p className="text-sm text-brand-ink/45">Pas encore de commandes.</p>
+                ) : (
+                  <>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex justify-between text-sm mb-1.5">
+                          <span className="text-brand-ink/70">Location</span>
+                          <span className="font-semibold text-brand-ink">{summary.orderTypes.location}</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-brand-sand/40 overflow-hidden">
+                          <div
+                            className="h-full bg-brand-gold rounded-full"
+                            style={{ width: `${(summary.orderTypes.location / Math.max(1, summary.orderTypes.location + summary.orderTypes.achat)) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-sm mb-1.5">
+                          <span className="text-brand-ink/70">Achat</span>
+                          <span className="font-semibold text-brand-ink">{summary.orderTypes.achat}</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-brand-sand/40 overflow-hidden">
+                          <div
+                            className="h-full bg-brand-ink rounded-full"
+                            style={{ width: `${(summary.orderTypes.achat / Math.max(1, summary.orderTypes.location + summary.orderTypes.achat)) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Avis Google */}
+              <div className="bg-white rounded-2xl border border-brand-sand/60 p-5 md:p-6">
+                <h2 className="text-lg font-bold text-brand-ink font-serif mb-4">Demandes d'avis</h2>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-brand-ink/65">Livrees</span>
+                    <span className="font-semibold text-brand-ink">{summary.deliveredCount}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-brand-ink/65">Demandes envoyees</span>
+                    <span className="font-semibold text-emerald-600">{summary.reviewEmailsSent}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-brand-ink/65">En attente d'envoi</span>
+                    <span className={`font-semibold ${summary.reviewEmailsPending > 0 ? 'text-amber-600' : 'text-brand-ink/45'}`}>
+                      {summary.reviewEmailsPending}
+                    </span>
+                  </div>
+                </div>
+                {summary.reviewEmailsPending > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('orders')}
+                    className="mt-4 w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition-colors"
+                  >
+                    <Star size={11} className="fill-current" />
+                    Voir les commandes a relancer
+                  </button>
+                )}
+              </div>
+
+              {/* Distribution des statuts */}
+              <div className="bg-white rounded-2xl border border-brand-sand/60 p-5 md:p-6">
+                <h2 className="text-lg font-bold text-brand-ink font-serif mb-3">Distribution des statuts</h2>
+                <div className="space-y-2 max-h-56 overflow-y-auto">
+                  {statusOptions.map((status) => {
+                    const count = summary.countByStatus[status.value] || 0
+                    if (count === 0) return null
+                    return (
+                      <div key={status.value} className="flex items-center justify-between text-sm">
+                        <span className="text-brand-ink/65">{status.label}</span>
+                        <span className="font-semibold text-brand-ink">{count}</span>
+                      </div>
+                    )
+                  })}
+                  {orders.length === 0 && (
+                    <p className="text-sm text-brand-ink/45">Aucune commande pour l'instant.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Top modeles + Lien rapide */}
+            <div className="grid lg:grid-cols-2 gap-4">
+              <div className="bg-white rounded-2xl border border-brand-sand/60 p-5 md:p-6">
+                <h2 className="text-lg font-bold text-brand-ink font-serif mb-4">Modeles les plus commandes</h2>
+                {summary.topModels.length === 0 ? (
+                  <p className="text-sm text-brand-ink/45">Pas assez de donnees pour le moment.</p>
+                ) : (
+                  <div className="space-y-2.5">
+                    {summary.topModels.map(([name, qty], index) => {
+                      const maxQty = summary.topModels[0][1] || 1
+                      const widthPct = (qty / maxQty) * 100
+                      return (
+                        <div key={`${name}-${index}`}>
+                          <div className="flex items-center justify-between text-sm mb-1">
+                            <span className="text-brand-ink/75 font-medium">
+                              <span className="text-brand-gold mr-2">#{index + 1}</span>
+                              {name}
+                            </span>
+                            <span className="font-semibold text-brand-ink">{qty}</span>
+                          </div>
+                          <div className="h-1.5 rounded-full bg-brand-sand/40 overflow-hidden">
+                            <div className="h-full bg-brand-gold rounded-full" style={{ width: `${widthPct}%` }} />
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Recap CA total */}
+              <div className="bg-gradient-to-br from-brand-sand/30 via-white to-brand-ivory rounded-2xl border border-brand-sand/60 p-5 md:p-6">
+                <h2 className="text-lg font-bold text-brand-ink font-serif mb-4">Synthese</h2>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between items-center pb-3 border-b border-brand-sand/40">
+                    <span className="text-brand-ink/65">CA total</span>
+                    <span className="font-bold text-brand-ink text-lg font-serif">{formatCurrency(summary.revenue)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-brand-ink/65">Commandes totales</span>
+                    <span className="font-semibold text-brand-ink">{summary.totalOrders}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-brand-ink/65">Modeles au catalogue</span>
+                    <span className="font-semibold text-brand-ink">{summary.totalProducts}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-brand-ink/65">CA moyen / commande</span>
+                    <span className="font-semibold text-brand-ink">{formatCurrency(summary.avgOrderValue)}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
