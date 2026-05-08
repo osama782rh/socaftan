@@ -27,6 +27,7 @@ const Footer = () => {
     { name: 'Caftan Essonne (91)', href: '/location-caftan-essonne' },
     { name: 'Galerie', href: '/galerie' },
     { name: 'Avis clients', href: '/avis-clients' },
+    { name: 'Blog', href: '/blog' },
     { name: 'Sur-mesure', href: '/sur-mesure' },
     { name: 'A propos', href: '/a-propos' },
     { name: 'Contact', href: '/contact' },

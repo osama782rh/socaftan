@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Tag, Check, Copy } from 'lucide-react'
+import { trackEvent } from '../lib/analytics'
 
 const PROMO_CODE = 'SOCAFTAN20'
 const STORAGE_KEY_DISMISSED = 'socaftan_promo_dismissed_at'
@@ -85,6 +86,7 @@ const PromoPopup = () => {
       } catch {
         // ignore
       }
+      trackEvent('promo_code_copied', { code: PROMO_CODE })
       setTimeout(() => setCopied(false), 3000)
     } catch {
       setCopied(false)

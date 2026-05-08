@@ -1,17 +1,36 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { CheckCircle, Package, ArrowRight } from 'lucide-react'
 import { useCart } from '../contexts/CartContext'
+import { trackPurchase } from '../lib/analytics'
 
 const OrderSuccessPage = () => {
   const [searchParams] = useSearchParams()
-  const { clearCart } = useCart()
+  const { items, total, clearCart } = useCart()
   const sessionId = searchParams.get('session_id')
+  const purchaseTracked = useRef(false)
 
   useEffect(() => {
+    // Track la conversion (1 fois max, AVANT clearCart) - critique pour Meta/GA
+    if (!purchaseTracked.current && items.length > 0 && total > 0) {
+      purchaseTracked.current = true
+      trackPurchase({
+        value: total,
+        currency: 'EUR',
+        orderId: sessionId || `order_${Date.now()}`,
+        items: items.map((item) => ({
+          item_id: item.productId,
+          item_name: item.name,
+          item_category: item.category,
+          item_variant: item.type,
+          price: item.unitPrice,
+          quantity: item.quantity,
+        })),
+      })
+    }
     clearCart()
-  }, [clearCart])
+  }, [clearCart, items, total, sessionId])
 
   return (
     <div className="min-h-screen bg-brand-ivory flex items-center justify-center px-5 pt-28 pb-20">

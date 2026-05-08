@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X } from 'lucide-react'
+import { trackEvent } from '../lib/analytics'
 
 const PHONE = '33184180326'
 const PRESET_MESSAGE = 'Bonjour SO Caftan, je souhaite me renseigner sur la location d\'une tenue.'
@@ -99,6 +100,7 @@ const WhatsAppFloatingButton = () => {
         rel="noopener noreferrer"
         aria-label="Contacter SO Caftan sur WhatsApp"
         title="Contacter SO Caftan sur WhatsApp"
+        onClick={() => trackEvent('whatsapp_click', { source: 'floating_button', path: pathname })}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.4, type: 'spring', stiffness: 280, damping: 22 }}

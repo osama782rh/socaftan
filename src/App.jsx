@@ -10,6 +10,8 @@ import ScrollToTop from './components/ScrollToTop'
 import CartDrawer from './components/CartDrawer'
 import WhatsAppFloatingButton from './components/WhatsAppFloatingButton'
 import PromoPopup from './components/PromoPopup'
+import AnalyticsScripts from './components/AnalyticsScripts'
+import CookieConsent, { CookieReopenButton } from './components/CookieConsent'
 import ProtectedRoute from './components/ProtectedRoute'
 import HomePage from './pages/HomePage'
 
@@ -25,6 +27,10 @@ const ContactPage = lazy(() => import('./pages/ContactPage'))
 const AProposPage = lazy(() => import('./pages/AProposPage'))
 const GaleriePage = lazy(() => import('./pages/GaleriePage'))
 const AvisClientsPage = lazy(() => import('./pages/AvisClientsPage'))
+const BlogIndexPage = lazy(() => import('./pages/BlogIndexPage'))
+const BlogChoisirTakchita = lazy(() => import('./pages/blog/ChoisirTakchitaMariageMarocainPage'))
+const BlogHennaMarocaineAlgerienne = lazy(() => import('./pages/blog/HennaMarocaineVsAlgeriennePage'))
+const BlogCoutLocationIDF = lazy(() => import('./pages/blog/CoutLocationCaftanIDFPage'))
 const CustomPage = lazy(() => import('./pages/CustomPage'))
 const Cgv = lazy(() => import('./pages/Cgv'))
 const Cgu = lazy(() => import('./pages/Cgu'))
@@ -70,6 +76,10 @@ function App() {
                   <Route path="/a-propos" element={<AProposPage />} />
                   <Route path="/galerie" element={<GaleriePage />} />
                   <Route path="/avis-clients" element={<AvisClientsPage />} />
+                  <Route path="/blog" element={<BlogIndexPage />} />
+                  <Route path="/blog/choisir-takchita-mariage-marocain" element={<BlogChoisirTakchita />} />
+                  <Route path="/blog/henna-marocaine-vs-algerienne" element={<BlogHennaMarocaineAlgerienne />} />
+                  <Route path="/blog/cout-location-caftan-ile-de-france" element={<BlogCoutLocationIDF />} />
                   <Route path="/sur-mesure" element={<CustomPage />} />
                   <Route path="/cgv" element={<Cgv />} />
                   <Route path="/cgu" element={<Cgu />} />
@@ -92,6 +102,9 @@ function App() {
               <Footer />
               <WhatsAppFloatingButton />
               <PromoPopup />
+              <AnalyticsScripts />
+              <CookieConsent />
+              <CookieReopenButton />
             </div>
           </UiFeedbackProvider>
         </CartProvider>

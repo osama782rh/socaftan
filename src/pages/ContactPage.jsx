@@ -115,6 +115,42 @@ const ContactPage = () => {
         </div>
       </section>
 
+      {/* Carte Google Maps */}
+      <section className="container-custom px-5 md:px-10 pb-8">
+        <div className="bg-white rounded-2xl border border-brand-sand/60 overflow-hidden">
+          <div className="px-5 py-4 md:px-7 md:py-5 border-b border-brand-sand/40 flex items-center justify-between gap-3 flex-wrap">
+            <div className="flex items-center gap-2">
+              <MapPin size={16} className="text-brand-gold" />
+              <h2 className="font-serif text-lg md:text-xl font-bold text-brand-ink">Notre adresse</h2>
+            </div>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=20+rue+du+Commandant+Maurice+Lissac+91250+Tigery"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-brand-gold font-semibold hover:underline inline-flex items-center gap-1"
+            >
+              Itineraire Google Maps →
+            </a>
+          </div>
+          <div className="aspect-[16/9] md:aspect-[21/9] bg-brand-sand/20">
+            <iframe
+              title="SO Caftan - Tigery, Ile-de-France"
+              src="https://www.google.com/maps?q=20+rue+du+Commandant+Maurice+Lissac+91250+Tigery&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+          <div className="px-5 py-3 md:px-7 md:py-4 bg-brand-ivory/40 text-xs text-brand-ink/55 leading-relaxed">
+            <strong className="text-brand-ink">SO Caftan</strong> · 20 rue du Commandant Maurice Lissac · 91250 Tigery · Ile-de-France ·
+            <span className="ml-1">Retrait sur rendez-vous uniquement</span>
+          </div>
+        </div>
+      </section>
+
       {/* Form Contact */}
       <Contact />
 

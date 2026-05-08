@@ -13,15 +13,35 @@ import {
 const homeFaqs = [
   {
     question: 'Quels sont les tarifs des locations SO Caftan ?',
-    answer: 'Les takchitas sont en location a 90€, les karakous a 100€, avec une caution de 100€ par piece.',
+    answer: 'Les takchitas sont en location a 90€, les karakous a 100€, avec une caution de 100€ par piece. Les caftans sont disponibles a l\'achat a 180€.',
   },
   {
     question: 'Quel est le prix de vente des caftans ?',
-    answer: 'Les caftans de la collection sont proposes a 180€ en vente.',
+    answer: 'Les caftans de la collection sont proposes a 180€ en vente. Pour la location, optez pour une takchita (90€) ou un karakou (100€).',
   },
   {
     question: 'Dans quelles villes livrez-vous ou organisez-vous le retrait ?',
-    answer: "SO Caftan intervient principalement en Ile-de-France, notamment Paris et sa region.",
+    answer: "SO Caftan intervient principalement en Ile-de-France : Paris, Essonne (91), Seine-et-Marne, Yvelines, Hauts-de-Seine (92), Seine-Saint-Denis (93), Val-de-Marne (94) et Val-d'Oise. Le retrait se fait sur rendez-vous a Tigery (91250).",
+  },
+  {
+    question: 'Combien de temps a l\'avance dois-je reserver ?',
+    answer: "Nous recommandons de reserver 3 a 4 semaines avant votre evenement, surtout en haute saison (mai a septembre). Pour les mariages, plus c'est tot, mieux c'est.",
+  },
+  {
+    question: 'La caution est-elle vraiment remboursee ?',
+    answer: 'Oui, la caution de 100€ est integralement remboursee apres restitution de la piece en bon etat, sous 3 a 5 jours. Aucun frais cache.',
+  },
+  {
+    question: 'Et si la robe ne me va pas le jour de l\'essayage ?',
+    answer: 'Nous etudions les tailles avec vous avant la livraison via WhatsApp. En cas de probleme majeur a la reception, contactez-nous immediatement et nous trouverons une solution.',
+  },
+  {
+    question: 'Puis-je acheter le caftan apres l\'avoir loue ?',
+    answer: 'Certaines pieces sont disponibles a la fois en location et a l\'achat. Renseignez-vous via WhatsApp pour le modele qui vous interesse.',
+  },
+  {
+    question: 'Quel mode de paiement acceptez-vous ?',
+    answer: 'Nous acceptons les cartes bancaires via Stripe (paiement securise PCI-DSS) et les virements. Le paiement se fait en ligne au moment de la reservation.',
   },
 ]
 
@@ -312,6 +332,85 @@ const routeSeoMap = {
       buildBreadcrumbSchema([
         { name: 'Accueil', path: '/' },
         { name: 'Galerie', path: '/galerie' },
+      ]),
+    ],
+  },
+  '/blog': {
+    title: 'Blog SO Caftan – Conseils & traditions sur les tenues orientales',
+    description:
+      'Conseils, traditions et inspirations sur la location et le choix des takchitas, karakous et caftans en Ile-de-France. Le blog SO Caftan.',
+    keywords: [
+      'blog so caftan',
+      'conseils takchita',
+      'blog mariage oriental',
+      'tradition caftan',
+      'tendance caftan',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Blog', path: '/blog' },
+      ]),
+    ],
+  },
+  '/blog/choisir-takchita-mariage-marocain': {
+    title: 'Comment choisir sa takchita pour un mariage marocain – Guide complet',
+    description:
+      'Guide complet pour choisir la takchita parfaite pour votre mariage marocain : couleurs, tissus, broderies, traditions et tarifs. SO Caftan.',
+    keywords: [
+      'choisir takchita mariage marocain',
+      'takchita mariage couleurs',
+      'guide takchita',
+      'takchita mariee',
+      'takchita henna',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Blog', path: '/blog' },
+        { name: 'Choisir sa takchita', path: '/blog/choisir-takchita-mariage-marocain' },
+      ]),
+    ],
+  },
+  '/blog/henna-marocaine-vs-algerienne': {
+    title: 'Henna marocaine vs algerienne : quelles tenues porter ?',
+    description:
+      'Differences entre la henna marocaine (takchita verte) et la henna algerienne (karakou, chedda). Quelle tenue porter selon la tradition ?',
+    keywords: [
+      'henna marocaine algerienne',
+      'tenue henna mariage',
+      'difference takchita karakou',
+      'chedda tlemcen',
+      'karakou algerien',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Blog', path: '/blog' },
+        { name: 'Henna marocaine vs algerienne', path: '/blog/henna-marocaine-vs-algerienne' },
+      ]),
+    ],
+  },
+  '/blog/cout-location-caftan-ile-de-france': {
+    title: 'Combien coute une location de caftan en Ile-de-France ?',
+    description:
+      'Tarifs detailles de location de caftan, takchita et karakou en Ile-de-France 2026. Prix, caution, livraison et comparaison achat vs location.',
+    keywords: [
+      'prix location caftan',
+      'tarif location takchita',
+      'cout location karakou',
+      'caftan ile de france prix',
+      'location caftan pas cher',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Blog', path: '/blog' },
+        { name: 'Cout location caftan IDF', path: '/blog/cout-location-caftan-ile-de-france' },
       ]),
     ],
   },

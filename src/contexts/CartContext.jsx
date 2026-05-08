@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { trackEvent } from '../lib/analytics'
 
 const CartContext = createContext(null)
 
@@ -67,6 +68,22 @@ export const CartProvider = ({ children }) => {
         rentalEndDate: rentalDates?.endDate || null,
       }]
     })
+
+    // Track add to cart
+    const unitPrice = type === 'location' ? product.rentalPrice : product.purchasePrice
+    trackEvent('add_to_cart', {
+      currency: 'EUR',
+      value: unitPrice || 0,
+      items: [{
+        item_id: product.id,
+        item_name: product.name,
+        item_category: product.category,
+        item_variant: type,
+        price: unitPrice,
+        quantity: 1,
+      }],
+    })
+
     setIsCartOpen(true)
   }, [])
 

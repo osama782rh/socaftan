@@ -36,15 +36,23 @@ const zoneLinks = [
 const faq = [
   {
     question: 'SO Caftan propose-t-il des locations en Ile-de-France ?',
-    answer: 'Oui, nous proposons la location de takchitas et karakous avec retrait organise en Ile-de-France.',
+    answer: 'Oui, nous proposons la location de takchitas (90€) et karakous (100€) avec retrait organise en Ile-de-France et livraison dans le 91, 92, 93, 94 et Paris.',
   },
   {
     question: 'Comment contacter SO Caftan rapidement ?',
-    answer: 'Vous pouvez nous contacter via WhatsApp Business au +33 184180326 ou depuis le formulaire de contact.',
+    answer: 'Vous pouvez nous contacter via WhatsApp Business au +33 1 84 18 03 26 (reponse rapide), par e-mail a contact@socaftan.fr ou depuis le formulaire de contact.',
   },
   {
     question: 'Quel est le montant de la caution location ?',
-    answer: 'La caution est de 100€ par piece louee.',
+    answer: 'La caution est de 100€ par piece louee, integralement remboursee sous 3 a 5 jours apres restitution.',
+  },
+  {
+    question: 'Combien de temps a l\'avance dois-je reserver ?',
+    answer: 'Nous recommandons 3 a 4 semaines avant l\'evenement, surtout en haute saison (mai-septembre).',
+  },
+  {
+    question: 'Le paiement est-il securise ?',
+    answer: 'Oui, paiement chiffre via Stripe, conforme aux standards bancaires PCI-DSS.',
   },
 ]
 

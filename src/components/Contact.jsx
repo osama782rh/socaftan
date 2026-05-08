@@ -3,6 +3,7 @@ import { Mail, Phone, MapPin, Send, Clock, X, Loader2, MessageCircle } from 'luc
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { useUiFeedback } from '../contexts/UiFeedbackContext'
+import { trackEvent } from '../lib/analytics'
 
 const easePremium = [0.22, 1, 0.36, 1]
 
@@ -75,6 +76,10 @@ const Contact = () => {
         if (error) throw error
       }
 
+      trackEvent('contact_form_submit', {
+        service: formData.service || 'general',
+        products_count: selectedProducts.length,
+      })
       notifySuccess('Merci pour votre message. Nous vous recontactons tres vite.')
       setFormData({ name: '', email: '', phone: '', service: '', date: '', message: '' })
       setSelectedProducts([])

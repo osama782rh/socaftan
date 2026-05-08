@@ -6,6 +6,7 @@ import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import { useUiFeedback } from '../contexts/UiFeedbackContext'
+import { trackEvent } from '../lib/analytics'
 
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
 
@@ -240,6 +241,11 @@ const CheckoutPage = () => {
       }
 
       if (stripeData?.url) {
+        trackEvent('begin_checkout', {
+          currency: 'EUR',
+          value: total,
+          num_items: items.length,
+        })
         window.location.href = stripeData.url
       } else if (stripeData?.error) {
         throw new Error(stripeData.error)
@@ -435,6 +441,38 @@ const CheckoutPage = () => {
                 <p className="text-[11px] text-brand-ink/30 text-center mt-3">
                   Paiement sécurisé par Stripe
                 </p>
+
+                {/* Badges de réassurance */}
+                <div className="mt-5 pt-5 border-t border-brand-sand/40 grid grid-cols-2 gap-2">
+                  <div className="flex items-start gap-2 text-[11px] text-brand-ink/55">
+                    <Lock size={13} className="text-emerald-600 mt-0.5 shrink-0" />
+                    <div>
+                      <p className="font-semibold text-brand-ink">Paiement chiffré</p>
+                      <p className="text-brand-ink/50">Cartes via Stripe (PCI-DSS)</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 text-[11px] text-brand-ink/55">
+                    <ArrowLeft size={13} className="text-emerald-600 mt-0.5 shrink-0 rotate-180" />
+                    <div>
+                      <p className="font-semibold text-brand-ink">Caution remboursée</p>
+                      <p className="text-brand-ink/50">Sous 3 à 5 jours</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 text-[11px] text-brand-ink/55">
+                    <Truck size={13} className="text-emerald-600 mt-0.5 shrink-0" />
+                    <div>
+                      <p className="font-semibold text-brand-ink">Livraison Île-de-France</p>
+                      <p className="text-brand-ink/50">91, 92, 93, 94 et Paris</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 text-[11px] text-brand-ink/55">
+                    <Calendar size={13} className="text-emerald-600 mt-0.5 shrink-0" />
+                    <div>
+                      <p className="font-semibold text-brand-ink">Réservation flexible</p>
+                      <p className="text-brand-ink/50">Annulation possible</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
