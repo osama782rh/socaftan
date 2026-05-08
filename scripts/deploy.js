@@ -1,5 +1,5 @@
 import { execSync } from 'child_process'
-import { cpSync, mkdirSync } from 'fs'
+import { cpSync, mkdirSync, existsSync, unlinkSync } from 'fs'
 
 const PRERENDERED_ROUTES = [
   'location-takchita-ile-de-france',
@@ -28,6 +28,21 @@ const PRERENDERED_ROUTES = [
 const run = (cmd) => {
   console.log(`\n> ${cmd}`)
   execSync(cmd, { stdio: 'inherit' })
+}
+
+// IMPORTANT : ce script build LOCALEMENT (Vercel ne peut pas executer Puppeteer
+// sur leurs runners). Les variables d'environnement utilisees par le frontend
+// (VITE_*) doivent donc etre dans .env (a la racine du projet).
+// Les variables Vercel chiffrees ne sont pas accessibles localement.
+//
+// Si vous avez ajoute une nouvelle env var sur Vercel, ajoutez-la AUSSI
+// dans le .env local pour qu'elle soit incluse dans le bundle.
+
+// Cleanup d'un eventuel .env.production.local genere par un vercel env pull
+// qui aurait des valeurs chiffrees vides (overrides .env avec une string vide)
+if (existsSync('.env.production.local')) {
+  unlinkSync('.env.production.local')
+  console.log('[deploy] Cleaned .env.production.local (avoid empty encrypted values overriding .env)')
 }
 
 // 1. Build with Vite + prerender to dist/
