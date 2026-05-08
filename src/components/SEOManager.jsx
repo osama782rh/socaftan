@@ -296,6 +296,44 @@ const routeSeoMap = {
       ]),
     ],
   },
+  '/galerie': {
+    title: 'Galerie SO Caftan – Realisations & inspirations en Ile-de-France',
+    description:
+      'Decouvrez la galerie SO Caftan : takchitas, karakous et caftans portes par nos clientes pour leurs mariages et evenements orientaux en Ile-de-France.',
+    keywords: [
+      'galerie caftan',
+      'realisation takchita',
+      'inspiration karakou',
+      'photos caftan mariage',
+      'so caftan galerie',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Galerie', path: '/galerie' },
+      ]),
+    ],
+  },
+  '/avis-clients': {
+    title: 'Avis Clients SO Caftan – Temoignages verifies en Ile-de-France',
+    description:
+      'Decouvrez les avis de nos clientes sur SO Caftan : qualite des tenues, service, livraison et caution. Note moyenne 5/5 sur l\'ensemble de nos prestations.',
+    keywords: [
+      'avis so caftan',
+      'temoignage location takchita',
+      'avis location caftan',
+      'so caftan reviews',
+      'so caftan satisfaction',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Avis clients', path: '/avis-clients' },
+      ]),
+    ],
+  },
   '/sur-mesure': {
     title: 'Creation Caftan Sur-Mesure Ile-de-France',
     description:

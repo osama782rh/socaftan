@@ -13,6 +13,7 @@ import {
   RefreshCw,
   Save,
   ShoppingBag,
+  Star,
   Tag,
   Trash2,
   Truck,
@@ -172,6 +173,7 @@ const AdminOrdersPage = () => {
   })
 
   const [expandedOrderId, setExpandedOrderId] = useState('')
+  const [sendingReviewOrderId, setSendingReviewOrderId] = useState('')
 
   const [loadingOrders, setLoadingOrders] = useState(true)
   const [loadingProducts, setLoadingProducts] = useState(true)
@@ -395,6 +397,43 @@ const AdminOrdersPage = () => {
       setError(toFriendlyError(err?.message))
     } finally {
       setSavingOrderId('')
+    }
+  }
+
+  const handleSendReviewEmail = async (orderId) => {
+    const order = orders.find((item) => item.id === orderId)
+    if (!order) return
+
+    const confirmed = await confirmAction({
+      title: 'Envoyer la demande d\'avis Google',
+      message: `Envoyer un email a la cliente de la commande ${order.order_number || orderId} pour lui demander un avis Google ?`,
+      confirmLabel: 'Envoyer',
+      cancelLabel: 'Annuler',
+      variant: 'primary',
+    })
+    if (!confirmed) return
+
+    setSendingReviewOrderId(orderId)
+    setError('')
+    setSuccess('')
+    try {
+      const result = await invokeAdminFunction('send-review-request', { mode: 'manual', orderId })
+      if (result?.warning) {
+        setSuccess(result.warning)
+      } else if (result?.status === 'sent') {
+        setOrders((prev) => prev.map((item) =>
+          item.id === orderId ? { ...item, review_email_sent_at: new Date().toISOString() } : item,
+        ))
+        setSuccess(`Email d'avis envoye a ${result.recipient}.`)
+      } else if (result?.status === 'skipped') {
+        setError(`Envoi ignore : ${result.reason || 'raison inconnue'}.`)
+      } else {
+        setSuccess('Email envoye.')
+      }
+    } catch (err) {
+      setError(toFriendlyError(err?.message))
+    } finally {
+      setSendingReviewOrderId('')
     }
   }
 
@@ -841,6 +880,37 @@ const AdminOrdersPage = () => {
                                           <p className="text-brand-ink/35 text-center pt-1">Pas de paiement Stripe enregistre</p>
                                         )}
                                       </div>
+                                    </div>
+
+                                    {/* Section Avis Google */}
+                                    <div className="bg-white rounded-lg px-3 py-3 border border-brand-sand/40 mt-2">
+                                      <p className="text-xs text-brand-ink/50 uppercase tracking-wide font-semibold mb-2 flex items-center gap-1.5">
+                                        <Star size={11} className="text-amber-500" />
+                                        Avis Google
+                                      </p>
+                                      {order.review_email_sent_at ? (
+                                        <div className="text-xs">
+                                          <p className="text-emerald-700 font-semibold">✓ Demande envoyee</p>
+                                          <p className="text-brand-ink/45 mt-0.5">{formatDateTime(order.review_email_sent_at)}</p>
+                                        </div>
+                                      ) : (
+                                        <>
+                                          <p className="text-xs text-brand-ink/55 mb-2">
+                                            {order.status === 'delivered'
+                                              ? 'Demande pas encore envoyee.'
+                                              : 'Disponible apres livraison de la commande.'}
+                                          </p>
+                                          <button
+                                            type="button"
+                                            onClick={() => handleSendReviewEmail(order.id)}
+                                            disabled={sendingReviewOrderId === order.id}
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600 disabled:opacity-60"
+                                          >
+                                            <Mail size={11} />
+                                            {sendingReviewOrderId === order.id ? 'Envoi en cours...' : 'Envoyer la demande d\'avis'}
+                                          </button>
+                                        </>
+                                      )}
                                     </div>
                                   </div>
                                 </div>

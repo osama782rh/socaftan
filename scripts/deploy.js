@@ -12,6 +12,8 @@ const PRERENDERED_ROUTES = [
   'location-caftan-pas-cher',
   'contact',
   'a-propos',
+  'galerie',
+  'avis-clients',
   'sur-mesure',
   'cgv',
   'cgu',

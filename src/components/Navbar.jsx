@@ -40,9 +40,9 @@ const Navbar = () => {
     { name: 'Takchitas', href: '/location-takchita-ile-de-france' },
     { name: 'Karakous', href: '/location-karakou-ile-de-france' },
     { name: 'Caftans', href: '/vente-caftan-ile-de-france' },
-    { name: 'Mariage', href: '/location-caftan-mariage' },
+    { name: 'Galerie', href: '/galerie' },
+    { name: 'Avis', href: '/avis-clients' },
     { name: 'Sur-mesure', href: '/sur-mesure' },
-    { name: 'A propos', href: '/a-propos' },
     { name: 'Contact', href: '/contact' },
   ]
 

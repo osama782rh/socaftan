@@ -8,6 +8,8 @@ import Footer from './components/Footer'
 import SEOManager from './components/SEOManager'
 import ScrollToTop from './components/ScrollToTop'
 import CartDrawer from './components/CartDrawer'
+import WhatsAppFloatingButton from './components/WhatsAppFloatingButton'
+import PromoPopup from './components/PromoPopup'
 import ProtectedRoute from './components/ProtectedRoute'
 import HomePage from './pages/HomePage'
 
@@ -21,6 +23,8 @@ const LocationTenueHennaPage = lazy(() => import('./pages/LocationTenueHennaPage
 const LocationCaftanPasCherPage = lazy(() => import('./pages/LocationCaftanPasCherPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
 const AProposPage = lazy(() => import('./pages/AProposPage'))
+const GaleriePage = lazy(() => import('./pages/GaleriePage'))
+const AvisClientsPage = lazy(() => import('./pages/AvisClientsPage'))
 const CustomPage = lazy(() => import('./pages/CustomPage'))
 const Cgv = lazy(() => import('./pages/Cgv'))
 const Cgu = lazy(() => import('./pages/Cgu'))
@@ -64,6 +68,8 @@ function App() {
                   <Route path="/location-caftan-pas-cher" element={<LocationCaftanPasCherPage />} />
                   <Route path="/contact" element={<ContactPage />} />
                   <Route path="/a-propos" element={<AProposPage />} />
+                  <Route path="/galerie" element={<GaleriePage />} />
+                  <Route path="/avis-clients" element={<AvisClientsPage />} />
                   <Route path="/sur-mesure" element={<CustomPage />} />
                   <Route path="/cgv" element={<Cgv />} />
                   <Route path="/cgu" element={<Cgu />} />
@@ -84,6 +90,8 @@ function App() {
                 </Routes>
               </Suspense>
               <Footer />
+              <WhatsAppFloatingButton />
+              <PromoPopup />
             </div>
           </UiFeedbackProvider>
         </CartProvider>

@@ -1,0 +1,109 @@
+<!--
+  SO Caftan - Demande d'avis Google (J+7 apres livraison)
+  =========================================================
+  Envoye via Edge Function send-review-request (Resend)
+  Variables : {{firstName}}, {{orderNumber}}, {{googleReviewUrl}}, {{whatsappUrl}}
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>SO Caftan - Votre avis compte</title>
+</head>
+<body style="margin:0;padding:0;background-color:#faf6f1;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2b201a;">
+<div style="max-width:520px;margin:0 auto;padding:20px;">
+
+  <!-- Header -->
+  <div style="background-color:#2b201a;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
+    <h1 style="color:#c9a46b;font-size:28px;margin:0;font-family:Georgia,'Times New Roman',serif;letter-spacing:2px;">SO CAFTAN</h1>
+    <p style="color:rgba(255,255,255,0.5);font-size:11px;margin:8px 0 0;letter-spacing:3px;text-transform:uppercase;">L'art du caftan oriental</p>
+  </div>
+
+  <!-- Body -->
+  <div style="background-color:#ffffff;padding:40px 32px;">
+
+    <!-- Heart icon -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="width:56px;height:56px;background-color:#fef3f2;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;line-height:56px;">
+        <span style="font-size:28px;">💛</span>
+      </div>
+      <h2 style="margin:0;font-size:22px;color:#2b201a;font-family:Georgia,'Times New Roman',serif;font-weight:600;line-height:1.3;">
+        Bonjour {{firstName}},
+      </h2>
+      <p style="margin:14px 0 0;color:#6b5d52;font-size:15px;line-height:1.6;">
+        Nous esperons que votre evenement s'est deroule a merveille et que vous avez ete sublime dans votre tenue SO Caftan.
+      </p>
+    </div>
+
+    <!-- Message principal -->
+    <div style="background-color:#faf6f1;border-radius:12px;padding:24px;margin:24px 0;">
+      <p style="margin:0 0 12px;font-size:15px;line-height:1.7;color:#2b201a;">
+        Votre satisfaction est notre plus belle recompense. Si l'experience vous a plu, nous serions honorees que vous partagiez votre ressenti avec une autre future cliente.
+      </p>
+      <p style="margin:0;font-size:15px;line-height:1.7;color:#2b201a;">
+        <strong>Un avis Google de 30 secondes</strong> nous aide enormement a continuer de proposer des tenues d'exception accessibles a toutes.
+      </p>
+    </div>
+
+    <!-- CTA Avis Google -->
+    <div style="text-align:center;margin:32px 0;">
+      <a href="{{googleReviewUrl}}" target="_blank" rel="noopener noreferrer"
+         style="display:inline-block;background-color:#c9a46b;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:999px;font-weight:600;font-size:15px;letter-spacing:0.3px;">
+        ⭐ Laisser un avis Google
+      </a>
+      <p style="margin:12px 0 0;font-size:12px;color:#9b8b7d;">
+        Cela nous prend a peine 30 secondes
+      </p>
+    </div>
+
+    <!-- Separateur -->
+    <div style="height:1px;background-color:#f5e6d3;margin:32px 0;"></div>
+
+    <!-- Reference commande -->
+    <p style="margin:0 0 16px;font-size:13px;color:#9b8b7d;text-align:center;">
+      Commande de reference : <strong style="color:#2b201a;">{{orderNumber}}</strong>
+    </p>
+
+    <!-- Petit mot supplementaire -->
+    <div style="background-color:#fdfaf5;border-left:3px solid #c9a46b;padding:16px 18px;margin:20px 0;border-radius:4px;">
+      <p style="margin:0;font-size:13px;line-height:1.6;color:#6b5d52;">
+        <strong style="color:#2b201a;">Un souci ou une question ?</strong> Contactez-nous directement sur WhatsApp, nous traitons toutes les demandes personnellement.
+      </p>
+      <a href="{{whatsappUrl}}" target="_blank" rel="noopener noreferrer"
+         style="display:inline-block;margin-top:10px;color:#c9a46b;font-size:13px;font-weight:600;text-decoration:none;">
+        Ouvrir WhatsApp →
+      </a>
+    </div>
+
+    <!-- Programme parrainage teaser -->
+    <div style="text-align:center;margin:28px 0 8px;padding:20px;background:linear-gradient(135deg,#faf6f1 0%,#fdfaf5 100%);border-radius:12px;">
+      <p style="margin:0 0 6px;font-size:14px;font-weight:600;color:#2b201a;">
+        🎁 Parrainez une amie
+      </p>
+      <p style="margin:0;font-size:13px;color:#6b5d52;line-height:1.6;">
+        Avec le code <strong style="color:#c9a46b;font-family:Courier,monospace;">SOCAFTAN20</strong>, vous beneficiez toutes les deux de <strong>-20%</strong> sur votre prochaine location.
+      </p>
+    </div>
+
+    <!-- Signature -->
+    <p style="margin:32px 0 0;font-size:14px;color:#6b5d52;text-align:center;line-height:1.7;">
+      Avec toute notre gratitude,<br>
+      <strong style="color:#2b201a;">L'equipe SO Caftan</strong>
+    </p>
+
+  </div>
+
+  <!-- Footer -->
+  <div style="background-color:#2b201a;padding:24px;text-align:center;border-radius:0 0 12px 12px;">
+    <p style="margin:0;color:rgba(255,255,255,0.5);font-size:11px;line-height:1.6;">
+      SO Caftan — Tigery (91250), Ile-de-France<br>
+      <a href="https://www.socaftan.fr" style="color:#c9a46b;text-decoration:none;">www.socaftan.fr</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:contact@socaftan.fr" style="color:#c9a46b;text-decoration:none;">contact@socaftan.fr</a>
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

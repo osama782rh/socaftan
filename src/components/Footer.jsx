@@ -25,6 +25,8 @@ const Footer = () => {
     { name: 'Caftan Mariage', href: '/location-caftan-mariage' },
     { name: 'Tenue Henna', href: '/location-tenue-henna' },
     { name: 'Caftan Essonne (91)', href: '/location-caftan-essonne' },
+    { name: 'Galerie', href: '/galerie' },
+    { name: 'Avis clients', href: '/avis-clients' },
     { name: 'Sur-mesure', href: '/sur-mesure' },
     { name: 'A propos', href: '/a-propos' },
     { name: 'Contact', href: '/contact' },
