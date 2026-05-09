@@ -159,12 +159,13 @@ const Footer = () => {
       </div>
 
       {/* Back to top */}
+      {/* Bouton retour en haut - positionne AU-DESSUS du bouton WhatsApp flottant */}
       <a
         href="#hero"
-        className="fixed bottom-6 right-6 w-11 h-11 bg-brand-ink border border-white/10 rounded-full flex items-center justify-center shadow-lg hover:bg-brand-ink/80 transition-colors z-50"
+        className="fixed bottom-24 right-5 md:bottom-28 md:right-7 w-11 h-11 bg-brand-ink/85 backdrop-blur-sm border border-white/10 rounded-full flex items-center justify-center shadow-lg hover:bg-brand-ink transition-colors z-30"
         aria-label="Retour en haut"
       >
-        <ChevronUp size={18} className="text-white/60" />
+        <ChevronUp size={18} className="text-white/70" />
       </a>
     </footer>
   )
