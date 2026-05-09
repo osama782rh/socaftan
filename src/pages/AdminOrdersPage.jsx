@@ -5,7 +5,9 @@ import {
   BarChart3,
   ChevronDown,
   ChevronUp,
+  Check,
   ExternalLink,
+  Image,
   Mail,
   MapPin,
   Pencil,
@@ -174,6 +176,12 @@ const AdminOrdersPage = () => {
 
   const [expandedOrderId, setExpandedOrderId] = useState('')
   const [sendingReviewOrderId, setSendingReviewOrderId] = useState('')
+
+  // Photos UGC
+  const [photos, setPhotos] = useState([])
+  const [photoStatusFilter, setPhotoStatusFilter] = useState('pending')
+  const [loadingPhotos, setLoadingPhotos] = useState(false)
+  const [actionPhotoId, setActionPhotoId] = useState('')
 
   const [loadingOrders, setLoadingOrders] = useState(true)
   const [loadingProducts, setLoadingProducts] = useState(true)
@@ -525,6 +533,89 @@ const AdminOrdersPage = () => {
     }
   }
 
+  const loadPhotos = useCallback(async (status = 'pending') => {
+    setLoadingPhotos(true)
+    setError('')
+    try {
+      const data = await invokeAdminFunction('admin-moderate-photo', { action: 'list', status })
+      setPhotos(Array.isArray(data?.photos) ? data.photos : [])
+    } catch (err) {
+      setError(toFriendlyError(err?.message))
+    } finally {
+      setLoadingPhotos(false)
+    }
+  }, [invokeAdminFunction])
+
+  const handleApprovePhoto = async (photoId) => {
+    setActionPhotoId(photoId)
+    setError('')
+    setSuccess('')
+    try {
+      await invokeAdminFunction('admin-moderate-photo', { action: 'approve', photoId })
+      setPhotos((prev) => prev.filter((p) => p.id !== photoId))
+      setSuccess('Photo approuvee. La cliente est notifiee par email.')
+    } catch (err) {
+      setError(toFriendlyError(err?.message))
+    } finally {
+      setActionPhotoId('')
+    }
+  }
+
+  const handleRejectPhoto = async (photoId) => {
+    const confirmed = await confirmAction({
+      title: 'Refuser la photo',
+      message: 'Refuser cette photo la supprimera definitivement du stockage. Confirmer ?',
+      confirmLabel: 'Refuser',
+      cancelLabel: 'Annuler',
+      variant: 'danger',
+    })
+    if (!confirmed) return
+
+    setActionPhotoId(photoId)
+    setError('')
+    setSuccess('')
+    try {
+      await invokeAdminFunction('admin-moderate-photo', { action: 'reject', photoId })
+      setPhotos((prev) => prev.filter((p) => p.id !== photoId))
+      setSuccess('Photo refusee et supprimee.')
+    } catch (err) {
+      setError(toFriendlyError(err?.message))
+    } finally {
+      setActionPhotoId('')
+    }
+  }
+
+  const handleDeletePhoto = async (photoId) => {
+    const confirmed = await confirmAction({
+      title: 'Supprimer la photo',
+      message: 'Cette photo sera definitivement supprimee du site et du stockage. Confirmer ?',
+      confirmLabel: 'Supprimer',
+      cancelLabel: 'Annuler',
+      variant: 'danger',
+    })
+    if (!confirmed) return
+
+    setActionPhotoId(photoId)
+    setError('')
+    setSuccess('')
+    try {
+      await invokeAdminFunction('admin-moderate-photo', { action: 'delete', photoId })
+      setPhotos((prev) => prev.filter((p) => p.id !== photoId))
+      setSuccess('Photo supprimee.')
+    } catch (err) {
+      setError(toFriendlyError(err?.message))
+    } finally {
+      setActionPhotoId('')
+    }
+  }
+
+  // Charge automatiquement les photos quand on ouvre l'onglet
+  useEffect(() => {
+    if (activeTab === 'photos') {
+      loadPhotos(photoStatusFilter)
+    }
+  }, [activeTab, photoStatusFilter, loadPhotos])
+
   const handleCreateModel = async (event) => {
     event.preventDefault()
     const name = String(newModelForm.name || '').trim()
@@ -727,6 +818,7 @@ const AdminOrdersPage = () => {
           <button onClick={() => setActiveTab('overview')} className={`px-4 py-2 rounded-full text-sm font-semibold border ${activeTab === 'overview' ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}><BarChart3 size={14} className="inline mr-1.5" />Vue globale</button>
           <button onClick={() => setActiveTab('orders')} className={`px-4 py-2 rounded-full text-sm font-semibold border ${activeTab === 'orders' ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}><ShoppingBag size={14} className="inline mr-1.5" />Commandes</button>
           <button onClick={() => setActiveTab('models')} className={`px-4 py-2 rounded-full text-sm font-semibold border ${activeTab === 'models' ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}><Truck size={14} className="inline mr-1.5" />Modeles</button>
+          <button onClick={() => setActiveTab('photos')} className={`px-4 py-2 rounded-full text-sm font-semibold border ${activeTab === 'photos' ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}><Image size={14} className="inline mr-1.5" />Photos clientes</button>
         </div>
 
         {activeTab === 'overview' && (
@@ -1218,6 +1310,152 @@ const AdminOrdersPage = () => {
                     })}
                   </tbody>
                 </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'photos' && (
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl border border-brand-sand/60 p-4 md:p-5">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div>
+                  <h2 className="text-lg font-bold text-brand-ink font-serif">Photos clientes</h2>
+                  <p className="text-xs text-brand-ink/55 mt-0.5">Moderation des photos uploadees via /galerie/partager</p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { value: 'pending', label: 'En attente', color: 'amber' },
+                    { value: 'approved', label: 'Approuvees', color: 'emerald' },
+                    { value: 'rejected', label: 'Refusees', color: 'rose' },
+                  ].map((opt) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setPhotoStatusFilter(opt.value)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors ${photoStatusFilter === opt.value ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => loadPhotos(photoStatusFilter)}
+                    disabled={loadingPhotos}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border border-brand-sand/70 text-brand-ink/65 hover:bg-brand-sand/20"
+                  >
+                    <RefreshCw size={11} className={loadingPhotos ? 'animate-spin' : ''} />
+                    Rafraichir
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {loadingPhotos ? (
+              <div className="bg-white rounded-2xl border border-brand-sand/60 p-10 text-center text-brand-ink/45">
+                Chargement...
+              </div>
+            ) : photos.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-brand-sand/60 p-12 text-center">
+                <Image size={28} className="text-brand-ink/20 mx-auto mb-3" />
+                <p className="text-brand-ink/55 text-sm">
+                  {photoStatusFilter === 'pending'
+                    ? 'Aucune photo en attente de moderation.'
+                    : photoStatusFilter === 'approved'
+                      ? 'Aucune photo approuvee pour le moment.'
+                      : 'Aucune photo refusee.'}
+                </p>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {photos.map((photo) => (
+                  <div key={photo.id} className="bg-white rounded-2xl border border-brand-sand/60 overflow-hidden">
+                    <div className="aspect-[4/5] bg-brand-sand/30">
+                      {photo.public_url ? (
+                        <img
+                          src={photo.public_url}
+                          alt={photo.caption || 'Photo cliente'}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-brand-ink/30">
+                          <Image size={28} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4 text-sm space-y-2">
+                      <div>
+                        <p className="font-semibold text-brand-ink">{photo.submitter_name || 'Anonyme'}</p>
+                        {photo.submitter_email && (
+                          <p className="text-xs text-brand-ink/45 truncate" title={photo.submitter_email}>
+                            {photo.submitter_email}
+                          </p>
+                        )}
+                      </div>
+                      {photo.occasion && (
+                        <p className="text-xs">
+                          <span className="text-brand-ink/45">Occasion : </span>
+                          <span className="text-brand-ink capitalize">{photo.occasion}</span>
+                        </p>
+                      )}
+                      {photo.product_name && (
+                        <p className="text-xs">
+                          <span className="text-brand-ink/45">Modele : </span>
+                          <span className="text-brand-ink">{photo.product_name}</span>
+                        </p>
+                      )}
+                      {photo.caption && (
+                        <p className="text-xs text-brand-ink/65 italic line-clamp-3 leading-relaxed">
+                          "{photo.caption}"
+                        </p>
+                      )}
+                      <p className="text-[10px] text-brand-ink/40">
+                        {formatDateTime(photo.created_at)}
+                      </p>
+
+                      {/* Actions */}
+                      <div className="flex flex-wrap gap-1.5 pt-2 border-t border-brand-sand/30">
+                        {photo.status === 'pending' && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => handleApprovePhoto(photo.id)}
+                              disabled={actionPhotoId === photo.id}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 disabled:opacity-60"
+                            >
+                              <Check size={11} />
+                              Approuver
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleRejectPhoto(photo.id)}
+                              disabled={actionPhotoId === photo.id}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-rose-200 text-rose-600 text-xs font-semibold hover:bg-rose-50 disabled:opacity-60"
+                            >
+                              <X size={11} />
+                              Refuser
+                            </button>
+                          </>
+                        )}
+                        {photo.status === 'approved' && (
+                          <button
+                            type="button"
+                            onClick={() => handleDeletePhoto(photo.id)}
+                            disabled={actionPhotoId === photo.id}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-rose-200 text-rose-600 text-xs font-semibold hover:bg-rose-50 disabled:opacity-60"
+                          >
+                            <Trash2 size={11} />
+                            Retirer
+                          </button>
+                        )}
+                        {photo.status === 'rejected' && (
+                          <span className="text-xs text-brand-ink/40 italic">Photo refusee</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
