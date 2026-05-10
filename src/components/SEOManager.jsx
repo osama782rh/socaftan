@@ -509,6 +509,7 @@ const resolveRouteSeo = (pathname) => {
   if (pathname.startsWith('/commande-confirmee')) return buildNoIndexConfig(pathname)
   if (pathname.startsWith('/wishlist/')) return buildNoIndexConfig(pathname) // pages de partage perso, pas d'indexation
   if (pathname === '/galerie/partager') return buildNoIndexConfig(pathname) // formulaire, pas d'indexation
+  if (pathname.startsWith('/newsletter/')) return buildNoIndexConfig(pathname) // pages d'etat newsletter, pas d'indexation
   if (pathname === '/politique-confidentialite') return routeSeoMap['/confidentialite']
 
   return routeSeoMap[pathname] || {

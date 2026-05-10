@@ -141,10 +141,11 @@ serve(async (req) => {
         .eq('confirmation_token', token)
 
       if (error) return errorResponse(500, 'Erreur de desabonnement.')
-      return new Response(
-        `<html><head><meta charset="UTF-8"><title>Desabonnement</title></head><body style="font-family:Arial;text-align:center;padding:60px;background:#faf6f1;color:#2b201a;"><h1>Vous avez ete desabonnee</h1><p>Nous sommes desolees de vous voir partir. Vos donnees ont ete retirees de la newsletter.</p><p><a href="${siteUrl}" style="color:#c9a46b;">Retour sur SO Caftan</a></p></body></html>`,
-        { headers: { 'Content-Type': 'text/html; charset=utf-8' }, status: 200 },
-      )
+      // Redirige vers une page propre sur le site
+      return new Response(null, {
+        status: 302,
+        headers: { Location: `${siteUrl}/newsletter/desabonne` },
+      })
     }
 
     // Confirmation
@@ -155,10 +156,10 @@ serve(async (req) => {
       .maybeSingle()
 
     if (lookupError || !existing) {
-      return new Response(
-        `<html><head><meta charset="UTF-8"><title>Lien invalide</title></head><body style="font-family:Arial;text-align:center;padding:60px;background:#faf6f1;color:#2b201a;"><h1>Lien invalide ou expire</h1><p>Veuillez vous reinscrire depuis le site.</p><p><a href="${siteUrl}" style="color:#c9a46b;">Retour sur SO Caftan</a></p></body></html>`,
-        { headers: { 'Content-Type': 'text/html; charset=utf-8' }, status: 404 },
-      )
+      return new Response(null, {
+        status: 302,
+        headers: { Location: `${siteUrl}/newsletter/lien-invalide` },
+      })
     }
 
     // Marque comme confirme et envoie email de bienvenue si pas deja fait
@@ -186,10 +187,12 @@ serve(async (req) => {
       }).catch(() => {})
     }
 
-    return new Response(
-      `<html><head><meta charset="UTF-8"><title>Inscription confirmee</title></head><body style="font-family:Arial;text-align:center;padding:60px;background:#faf6f1;color:#2b201a;"><h1 style="color:#c9a46b;">✓ Inscription confirmee !</h1><p>Bienvenue ${existing.first_name || ''} dans la newsletter SO Caftan.</p><p>Verifiez votre boite mail pour recevoir votre code promo de bienvenue.</p><p style="margin-top:40px;"><a href="${siteUrl}" style="background:#2b201a;color:white;padding:12px 28px;border-radius:999px;text-decoration:none;">Decouvrir SO Caftan</a></p></body></html>`,
-      { headers: { 'Content-Type': 'text/html; charset=utf-8' }, status: 200 },
-    )
+    // Redirige vers une page propre sur le site avec le prenom en query param
+    const firstName = encodeURIComponent(existing.first_name || '')
+    return new Response(null, {
+      status: 302,
+      headers: { Location: `${siteUrl}/newsletter/confirme?name=${firstName}` },
+    })
   }
 
   // ===== POST = inscription =====

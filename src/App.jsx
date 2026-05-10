@@ -34,6 +34,7 @@ const BlogCoutLocationIDF = lazy(() => import('./pages/blog/CoutLocationCaftanID
 const SharedWishlistPage = lazy(() => import('./pages/SharedWishlistPage'))
 const PartagerPhotoPage = lazy(() => import('./pages/PartagerPhotoPage'))
 const QuizPage = lazy(() => import('./pages/QuizPage'))
+const NewsletterStatusPage = lazy(() => import('./pages/NewsletterStatusPage'))
 const CustomPage = lazy(() => import('./pages/CustomPage'))
 const Cgv = lazy(() => import('./pages/Cgv'))
 const Cgu = lazy(() => import('./pages/Cgu'))
@@ -86,6 +87,9 @@ function App() {
                   <Route path="/wishlist/:token" element={<SharedWishlistPage />} />
                   <Route path="/galerie/partager" element={<PartagerPhotoPage />} />
                   <Route path="/quiz" element={<QuizPage />} />
+                  <Route path="/newsletter/confirme" element={<NewsletterStatusPage variant="confirmed" />} />
+                  <Route path="/newsletter/desabonne" element={<NewsletterStatusPage variant="unsubscribed" />} />
+                  <Route path="/newsletter/lien-invalide" element={<NewsletterStatusPage variant="invalid" />} />
                   <Route path="/sur-mesure" element={<CustomPage />} />
                   <Route path="/cgv" element={<Cgv />} />
                   <Route path="/cgu" element={<Cgu />} />
