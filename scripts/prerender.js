@@ -21,6 +21,7 @@ const ROUTES = [
   '/a-propos',
   '/galerie',
   '/avis-clients',
+  '/quiz',
   '/blog',
   '/blog/choisir-takchita-mariage-marocain',
   '/blog/henna-marocaine-vs-algerienne',

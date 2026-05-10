@@ -33,6 +33,7 @@ const BlogHennaMarocaineAlgerienne = lazy(() => import('./pages/blog/HennaMaroca
 const BlogCoutLocationIDF = lazy(() => import('./pages/blog/CoutLocationCaftanIDFPage'))
 const SharedWishlistPage = lazy(() => import('./pages/SharedWishlistPage'))
 const PartagerPhotoPage = lazy(() => import('./pages/PartagerPhotoPage'))
+const QuizPage = lazy(() => import('./pages/QuizPage'))
 const CustomPage = lazy(() => import('./pages/CustomPage'))
 const Cgv = lazy(() => import('./pages/Cgv'))
 const Cgu = lazy(() => import('./pages/Cgu'))
@@ -84,6 +85,7 @@ function App() {
                   <Route path="/blog/cout-location-caftan-ile-de-france" element={<BlogCoutLocationIDF />} />
                   <Route path="/wishlist/:token" element={<SharedWishlistPage />} />
                   <Route path="/galerie/partager" element={<PartagerPhotoPage />} />
+                  <Route path="/quiz" element={<QuizPage />} />
                   <Route path="/sur-mesure" element={<CustomPage />} />
                   <Route path="/cgv" element={<Cgv />} />
                   <Route path="/cgu" element={<Cgu />} />

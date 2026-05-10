@@ -335,6 +335,25 @@ const routeSeoMap = {
       ]),
     ],
   },
+  '/quiz': {
+    title: 'Quiz – Quelle tenue est faite pour vous ? | SO Caftan',
+    description:
+      'Decouvrez en 1 minute la takchita, le karakou ou le caftan ideal pour votre mariage, henna ou ceremonie orientale. Quiz personnalise + code promo -20%.',
+    keywords: [
+      'quiz caftan',
+      'quel caftan choisir',
+      'quelle takchita pour mariage',
+      'quiz mode orientale',
+      'tenue mariage personnalisee',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Quiz', path: '/quiz' },
+      ]),
+    ],
+  },
   '/blog': {
     title: 'Blog SO Caftan – Conseils & traditions sur les tenues orientales',
     description:
