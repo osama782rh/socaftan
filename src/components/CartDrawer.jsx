@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight, Calendar } from 'lucide-react'
 import { useCart } from '../contexts/CartContext'
+import SizeGuideButton from './SizeGuideButton'
 
 const CartDrawer = () => {
   const { items, itemCount, subtotal, deposit, total, isCartOpen, setIsCartOpen, removeItem, updateQuantity } = useCart()
@@ -156,6 +157,10 @@ const CartDrawer = () => {
                   Commander
                   <ArrowRight size={16} />
                 </Link>
+
+                <div className="mt-3 text-center">
+                  <SizeGuideButton variant="link" />
+                </div>
               </div>
             )}
           </motion.div>

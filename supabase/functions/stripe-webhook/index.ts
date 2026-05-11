@@ -34,6 +34,7 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const resendApiKey = Deno.env.get('RESEND_API_KEY')
+    const siteUrl = Deno.env.get('SITE_URL') || 'https://www.socaftan.fr'
 
     const body = await req.text()
     const signature = req.headers.get('stripe-signature')
@@ -53,6 +54,105 @@ serve(async (req) => {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object
 
+      // ===== Cas particulier : achat de carte cadeau =====
+      if (session.metadata?.type === 'gift_card') {
+        const giftCardId = session.metadata?.gift_card_id
+        if (!giftCardId) throw new Error('gift_card_id manquant dans metadata')
+
+        const { data: card, error: cardError } = await supabase
+          .from('gift_cards')
+          .update({
+            status: 'active',
+            stripe_payment_intent: typeof session.payment_intent === 'string'
+              ? session.payment_intent
+              : session.payment_intent?.id || null,
+            delivered_at: new Date().toISOString(),
+          })
+          .eq('id', giftCardId)
+          .select('*')
+          .single()
+
+        if (cardError) {
+          console.error('Gift card activation error:', cardError)
+          throw cardError
+        }
+
+        // Envoie 2 emails : confirmation acheteur + carte cadeau au beneficiaire
+        if (resendApiKey && card) {
+          const formatAmount = (n: number) => `${Number(n).toFixed(0)}€`
+
+          // Email 1 : confirmation a l'acheteur
+          const purchaserHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#faf6f1;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2b201a;">
+<div style="max-width:520px;margin:0 auto;padding:20px;">
+<div style="background:#2b201a;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
+<h1 style="color:#c9a46b;font-size:28px;margin:0;font-family:Georgia,serif;letter-spacing:2px;">SO CAFTAN</h1></div>
+<div style="background:#fff;padding:36px 30px;">
+<h2 style="margin:0 0 16px;font-family:Georgia,serif;color:#2b201a;">Merci ${card.purchaser_name} !</h2>
+<p style="color:#6b5d52;font-size:14px;line-height:1.6;">Votre carte cadeau de <strong>${formatAmount(card.initial_amount)}</strong> a bien ete cree et envoye a <strong>${card.recipient_name}</strong> a l'adresse <strong>${card.recipient_email}</strong>.</p>
+<div style="background:#faf6f1;border-radius:12px;padding:18px;margin:20px 0;text-align:center;">
+<p style="margin:0 0 4px;font-size:11px;color:#9b8b7d;text-transform:uppercase;letter-spacing:1px;">Code carte cadeau</p>
+<p style="margin:0;font-family:Courier,monospace;font-size:20px;font-weight:700;letter-spacing:3px;color:#c9a46b;">${card.code}</p>
+<p style="margin:6px 0 0;font-size:11px;color:#9b8b7d;">Valable jusqu'au ${new Date(card.expires_at).toLocaleDateString('fr-FR')}</p></div>
+<p style="color:#6b5d52;font-size:13px;line-height:1.6;">Si la beneficiaire ne recoit pas son email d'ici quelques minutes, partagez-lui le code ci-dessus.</p></div>
+<div style="background:#2b201a;padding:20px;text-align:center;border-radius:0 0 12px 12px;">
+<p style="margin:0;color:rgba(255,255,255,0.5);font-size:11px;">SO Caftan — Tigery (91250), Ile-de-France</p></div></div></body></html>`
+
+          // Email 2 : carte cadeau pour la beneficiaire
+          const recipientHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#faf6f1;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2b201a;">
+<div style="max-width:520px;margin:0 auto;padding:20px;">
+<div style="background:#2b201a;padding:32px 24px;text-align:center;border-radius:12px 12px 0 0;">
+<h1 style="color:#c9a46b;font-size:28px;margin:0;font-family:Georgia,serif;letter-spacing:2px;">SO CAFTAN</h1></div>
+<div style="background:#fff;padding:40px 30px;text-align:center;">
+<div style="font-size:48px;margin-bottom:14px;">🎁</div>
+<h2 style="margin:0 0 8px;font-family:Georgia,serif;color:#2b201a;font-size:24px;">Une surprise pour vous, ${card.recipient_name} !</h2>
+<p style="color:#6b5d52;font-size:14px;line-height:1.7;"><strong>${card.purchaser_name}</strong> vous offre une carte cadeau SO Caftan d'une valeur de <strong style="color:#c9a46b;font-size:18px;">${formatAmount(card.initial_amount)}</strong></p>
+${card.personal_message ? `<div style="background:#faf6f1;border-left:3px solid #c9a46b;padding:14px;margin:20px 0;text-align:left;border-radius:6px;"><p style="margin:0 0 4px;font-size:11px;color:#9b8b7d;text-transform:uppercase;letter-spacing:1px;">Message de ${card.purchaser_name}</p><p style="margin:0;font-style:italic;color:#2b201a;font-size:14px;">"${card.personal_message}"</p></div>` : ''}
+<div style="background:linear-gradient(135deg,#c9a46b 0%,#b08d54 100%);border-radius:14px;padding:24px;margin:24px 0;color:#fff;">
+<p style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:2px;opacity:0.85;">Votre code carte cadeau</p>
+<p style="margin:8px 0;font-family:Courier,monospace;font-size:24px;font-weight:700;letter-spacing:4px;">${card.code}</p>
+<p style="margin:0;font-size:13px;opacity:0.95;">Valable jusqu'au ${new Date(card.expires_at).toLocaleDateString('fr-FR')}</p></div>
+<a href="${siteUrl || 'https://www.socaftan.fr'}" style="display:inline-block;background:#2b201a;color:#fff;text-decoration:none;padding:14px 36px;border-radius:999px;font-weight:600;font-size:14px;margin-top:8px;">Decouvrir la collection</a>
+<p style="margin:24px 0 0;font-size:12px;color:#9b8b7d;">Utilisez votre code au moment du paiement. Vous pouvez l'utiliser en plusieurs fois jusqu'a epuisement du solde.</p></div>
+<div style="background:#2b201a;padding:20px;text-align:center;border-radius:0 0 12px 12px;">
+<p style="margin:0;color:rgba(255,255,255,0.5);font-size:11px;">SO Caftan — Tigery (91250), Ile-de-France</p></div></div></body></html>`
+
+          try {
+            await Promise.all([
+              fetch('https://api.resend.com/emails', {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${resendApiKey}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  from: 'SO Caftan <contact@socaftan.fr>',
+                  to: [card.purchaser_email],
+                  subject: `SO Caftan — Confirmation carte cadeau ${formatAmount(card.initial_amount)}`,
+                  html: purchaserHtml,
+                }),
+              }),
+              fetch('https://api.resend.com/emails', {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${resendApiKey}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  from: 'SO Caftan <contact@socaftan.fr>',
+                  to: [card.recipient_email],
+                  subject: `${card.purchaser_name} vous offre une carte cadeau SO Caftan 🎁`,
+                  html: recipientHtml,
+                }),
+              }),
+            ])
+          } catch (emailErr) {
+            console.warn('[gift-card] Email send error:', emailErr)
+          }
+        }
+
+        return new Response(JSON.stringify({ received: true, type: 'gift_card_activated' }), {
+          headers: { 'Content-Type': 'application/json' },
+          status: 200,
+        })
+      }
+
+      // ===== Cas standard : commande produit =====
       const orderId = session.metadata?.order_id
       if (!orderId) throw new Error('order_id manquant dans metadata')
 
@@ -69,6 +169,35 @@ serve(async (req) => {
         .eq('id', orderId)
         .select(`*, order_items (*, products:product_id (name, category))`)
         .single()
+
+      // ===== Consomme la carte cadeau si appliquee =====
+      const giftCardId = session.metadata?.gift_card_id
+      const giftCardAmount = Number(session.metadata?.gift_card_amount || 0)
+      if (giftCardId && giftCardAmount > 0) {
+        const { error: applyError } = await supabase.rpc('apply_gift_card', {
+          p_code: '', // on cherche par id en faisant un update direct ci-dessous
+          p_amount: giftCardAmount,
+          p_order_id: orderId,
+          p_user_id: order?.user_id || null,
+        })
+        if (applyError) {
+          // Fallback : update direct (la fonction RPC matche par code, pas par id)
+          // Recupere le code puis applique
+          const { data: card } = await supabase
+            .from('gift_cards')
+            .select('code')
+            .eq('id', giftCardId)
+            .single()
+          if (card?.code) {
+            await supabase.rpc('apply_gift_card', {
+              p_code: card.code,
+              p_amount: giftCardAmount,
+              p_order_id: orderId,
+              p_user_id: order?.user_id || null,
+            })
+          }
+        }
+      }
 
       if (updateError) {
         console.error('Update error:', updateError)

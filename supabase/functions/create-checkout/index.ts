@@ -203,6 +203,73 @@ serve(async (req) => {
       throw new Error('Email client manquant pour le paiement.')
     }
 
+    // ===== Gestion carte cadeau =====
+    // Si un code de carte cadeau est fourni, on le valide et on cree un coupon
+    // Stripe one-shot avec amount_off egal au min(balance carte, total commande).
+    const giftCardCodeRaw = typeof payload?.giftCardCode === 'string' ? payload.giftCardCode.trim().toUpperCase() : ''
+    let giftCardId: string | null = null
+    let giftCardAmountToConsume = 0
+    let giftCardCoupon: string | null = null
+
+    if (giftCardCodeRaw) {
+      const { data: card, error: cardError } = await serviceClient
+        .from('gift_cards')
+        .select('id, balance, status, expires_at')
+        .eq('code', giftCardCodeRaw)
+        .maybeSingle()
+
+      if (cardError) {
+        throw new Error('Erreur lors de la verification de la carte cadeau.')
+      }
+      if (!card) {
+        throw new Error('Carte cadeau invalide.')
+      }
+      if (!['active', 'partially_used'].includes(card.status)) {
+        throw new Error('Cette carte cadeau n\'est pas utilisable.')
+      }
+      if (new Date(card.expires_at) < new Date()) {
+        throw new Error('Cette carte cadeau a expire.')
+      }
+      const cardBalance = Number(card.balance || 0)
+      if (cardBalance <= 0) {
+        throw new Error('Cette carte cadeau a un solde nul.')
+      }
+
+      // Total a payer (en cents)
+      const subtotalCents = lineItems.reduce(
+        (sum, li) => sum + (li.price_data.unit_amount * li.quantity), 0,
+      )
+      const balanceCents = Math.round(cardBalance * 100)
+      const amountOffCents = Math.min(balanceCents, subtotalCents)
+
+      if (amountOffCents > 0) {
+        // Cree un coupon Stripe one-shot
+        const couponParams = new URLSearchParams()
+        couponParams.append('amount_off', String(amountOffCents))
+        couponParams.append('currency', 'eur')
+        couponParams.append('duration', 'once')
+        couponParams.append('name', `Carte cadeau ${giftCardCodeRaw}`)
+        couponParams.append('max_redemptions', '1')
+
+        const couponRes = await fetch('https://api.stripe.com/v1/coupons', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${stripeSecretKey}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: couponParams.toString(),
+        })
+        const couponData = await couponRes.json().catch(() => null)
+        if (!couponRes.ok || !couponData?.id) {
+          console.error('Stripe coupon error:', couponData)
+          throw new Error('Impossible d\'appliquer la carte cadeau.')
+        }
+        giftCardCoupon = couponData.id
+        giftCardId = card.id
+        giftCardAmountToConsume = amountOffCents / 100
+      }
+    }
+
     // Create Stripe Checkout session via REST API
     const params = new URLSearchParams()
     params.append('mode', 'payment')
@@ -213,7 +280,15 @@ serve(async (req) => {
     params.append('metadata[order_number]', String(order.order_number))
     params.append('metadata[user_id]', effectiveUserId)
     params.append('payment_method_types[0]', 'card')
-    params.append('allow_promotion_codes', 'true')
+
+    // Si carte cadeau appliquee, on ne peut pas avoir allow_promotion_codes en plus (Stripe limit)
+    if (giftCardCoupon && giftCardId) {
+      params.append('discounts[0][coupon]', giftCardCoupon)
+      params.append('metadata[gift_card_id]', giftCardId)
+      params.append('metadata[gift_card_amount]', String(giftCardAmountToConsume))
+    } else {
+      params.append('allow_promotion_codes', 'true')
+    }
 
     lineItems.forEach((item, i) => {
       params.append(`line_items[${i}][price_data][currency]`, item.price_data.currency)

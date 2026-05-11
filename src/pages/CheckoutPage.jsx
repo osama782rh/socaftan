@@ -25,6 +25,12 @@ const CheckoutPage = () => {
   })
   const [notes, setNotes] = useState('')
 
+  // Carte cadeau
+  const [giftCardCode, setGiftCardCode] = useState('')
+  const [giftCardInfo, setGiftCardInfo] = useState(null) // { valid, balance, ... }
+  const [giftCardError, setGiftCardError] = useState('')
+  const [validatingCard, setValidatingCard] = useState(false)
+
   const normalize = (value) =>
     String(value || '')
       .normalize('NFD')
@@ -231,6 +237,7 @@ const CheckoutPage = () => {
           userId: user.id,
           customerEmail: user.email,
           accessToken,
+          ...(giftCardInfo?.valid && giftCardCode ? { giftCardCode: giftCardCode.trim().toUpperCase() } : {}),
         },
         ...(Object.keys(gatewayHeaders).length > 0 ? { headers: gatewayHeaders } : {}),
       })
@@ -426,6 +433,77 @@ const CheckoutPage = () => {
                     <span className="text-brand-ink">Total</span>
                     <span className="text-brand-ink font-serif">{total.toFixed(2)}€</span>
                   </div>
+                </div>
+
+                {/* Carte cadeau */}
+                <div className="mt-5 pt-5 border-t border-brand-sand/40">
+                  <label className="block text-xs font-semibold text-brand-ink/70 mb-2">
+                    Code carte cadeau (optionnel)
+                  </label>
+                  {giftCardInfo?.valid ? (
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-sm">
+                      <div className="flex items-center justify-between gap-2">
+                        <div>
+                          <p className="font-semibold text-emerald-700 text-xs">✓ Carte appliquee</p>
+                          <p className="text-[11px] text-emerald-700/80 mt-0.5">
+                            Solde: {Number(giftCardInfo.balance).toFixed(2)}€ — applique au checkout Stripe
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => { setGiftCardCode(''); setGiftCardInfo(null); setGiftCardError('') }}
+                          className="text-[11px] text-emerald-700 hover:underline font-semibold"
+                        >
+                          Retirer
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={giftCardCode}
+                        onChange={(e) => { setGiftCardCode(e.target.value.toUpperCase()); setGiftCardError('') }}
+                        placeholder="XXXX-XXXX-XXXX"
+                        className="flex-1 px-3 py-2 rounded-xl border border-brand-sand/70 text-sm text-brand-ink font-mono uppercase tracking-wider"
+                      />
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (!giftCardCode.trim()) return
+                          setValidatingCard(true)
+                          setGiftCardError('')
+                          try {
+                            const { data, error: fnError } = await supabase.functions.invoke('gift-card-validate', {
+                              body: { code: giftCardCode.trim().toUpperCase() },
+                            })
+                            if (fnError) throw new Error(fnError.message || 'Erreur')
+                            if (data?.valid) {
+                              setGiftCardInfo(data)
+                            } else {
+                              setGiftCardError(
+                                data?.reason === 'expired' ? 'Carte expiree.'
+                                : data?.reason === 'depleted' ? 'Solde epuise.'
+                                : data?.reason === 'not_yet_active' ? 'Carte pas encore activee (paiement en attente).'
+                                : 'Code carte cadeau invalide.'
+                              )
+                            }
+                          } catch (err) {
+                            setGiftCardError('Erreur de verification.')
+                          } finally {
+                            setValidatingCard(false)
+                          }
+                        }}
+                        disabled={!giftCardCode.trim() || validatingCard}
+                        className="px-4 py-2 rounded-xl bg-brand-ink text-white text-xs font-semibold disabled:opacity-50 hover:bg-brand-night transition-colors"
+                      >
+                        {validatingCard ? '...' : 'Verifier'}
+                      </button>
+                    </div>
+                  )}
+                  {giftCardError && (
+                    <p className="text-xs text-rose-600 mt-2">{giftCardError}</p>
+                  )}
                 </div>
 
                 {/* Pay Button */}

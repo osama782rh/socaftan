@@ -335,6 +335,25 @@ const routeSeoMap = {
       ]),
     ],
   },
+  '/cartes-cadeaux': {
+    title: 'Cartes cadeaux SO Caftan – Offrir une tenue orientale',
+    description:
+      'Offrez une carte cadeau SO Caftan a partir de 30€. Anniversaire, fete des meres, Saint-Valentin : un cadeau unique pour celles qui aiment l\'elegance orientale. Livree par email instantanement.',
+    keywords: [
+      'carte cadeau caftan',
+      'cadeau caftan',
+      'cadeau takchita',
+      'offrir caftan',
+      'carte cadeau location robe orientale',
+    ],
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Cartes cadeaux', path: '/cartes-cadeaux' },
+      ]),
+    ],
+  },
   '/quiz': {
     title: 'Quiz – Quelle tenue est faite pour vous ? | SO Caftan',
     description:
@@ -510,6 +529,8 @@ const resolveRouteSeo = (pathname) => {
   if (pathname.startsWith('/wishlist/')) return buildNoIndexConfig(pathname) // pages de partage perso, pas d'indexation
   if (pathname === '/galerie/partager') return buildNoIndexConfig(pathname) // formulaire, pas d'indexation
   if (pathname.startsWith('/newsletter/')) return buildNoIndexConfig(pathname) // pages d'etat newsletter, pas d'indexation
+  if (pathname.startsWith('/suivi')) return buildNoIndexConfig(pathname) // page de suivi de commande, pas d'indexation
+  if (pathname === '/cartes-cadeaux/confirmation') return buildNoIndexConfig(pathname) // page post-paiement, pas d'indexation
   if (pathname === '/politique-confidentialite') return routeSeoMap['/confidentialite']
 
   return routeSeoMap[pathname] || {

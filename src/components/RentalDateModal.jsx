@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { X, Calendar, ArrowRight, Info } from 'lucide-react'
 import { useUiFeedback } from '../contexts/UiFeedbackContext'
+import SizeGuideButton from './SizeGuideButton'
 
 const RENTAL_DAYS = 5
 
@@ -115,6 +116,11 @@ const RentalDateModal = ({ product, onConfirm, onClose }) => {
               </div>
             </div>
           )}
+
+          {/* Lien guide des tailles */}
+          <div className="mt-4 text-center">
+            <SizeGuideButton variant="link" />
+          </div>
 
           {/* Actions */}
           <div className="flex gap-3">

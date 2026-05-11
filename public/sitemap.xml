@@ -79,6 +79,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.socaftan.fr/cartes-cadeaux</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.socaftan.fr/quiz</loc>
     <lastmod>2026-05-09</lastmod>
     <changefreq>monthly</changefreq>

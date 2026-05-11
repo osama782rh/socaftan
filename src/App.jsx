@@ -35,6 +35,9 @@ const SharedWishlistPage = lazy(() => import('./pages/SharedWishlistPage'))
 const PartagerPhotoPage = lazy(() => import('./pages/PartagerPhotoPage'))
 const QuizPage = lazy(() => import('./pages/QuizPage'))
 const NewsletterStatusPage = lazy(() => import('./pages/NewsletterStatusPage'))
+const OrderTrackingPage = lazy(() => import('./pages/OrderTrackingPage'))
+const GiftCardsPage = lazy(() => import('./pages/GiftCardsPage'))
+const GiftCardConfirmationPage = lazy(() => import('./pages/GiftCardConfirmationPage'))
 const CustomPage = lazy(() => import('./pages/CustomPage'))
 const Cgv = lazy(() => import('./pages/Cgv'))
 const Cgu = lazy(() => import('./pages/Cgu'))
@@ -90,6 +93,10 @@ function App() {
                   <Route path="/newsletter/confirme" element={<NewsletterStatusPage variant="confirmed" />} />
                   <Route path="/newsletter/desabonne" element={<NewsletterStatusPage variant="unsubscribed" />} />
                   <Route path="/newsletter/lien-invalide" element={<NewsletterStatusPage variant="invalid" />} />
+                  <Route path="/suivi" element={<OrderTrackingPage />} />
+                  <Route path="/suivi/:orderNumber" element={<OrderTrackingPage />} />
+                  <Route path="/cartes-cadeaux" element={<GiftCardsPage />} />
+                  <Route path="/cartes-cadeaux/confirmation" element={<GiftCardConfirmationPage />} />
                   <Route path="/sur-mesure" element={<CustomPage />} />
                   <Route path="/cgv" element={<Cgv />} />
                   <Route path="/cgu" element={<Cgu />} />
