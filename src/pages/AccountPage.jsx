@@ -6,7 +6,7 @@ import {
   Calendar, Heart, Trash2, ShoppingBag, Eye, Lock,
   MapPin, CreditCard, ChevronRight, Plus, Edit3,
   LayoutDashboard, Clock, TrendingUp, Star, Phone,
-  Mail, Shield, KeyRound, X, Menu, ArrowRight, EyeOff, AlertCircle
+  Mail, Shield, KeyRound, X, Menu, ArrowRight, EyeOff, AlertCircle, FileText
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
@@ -587,6 +587,46 @@ const AccountPage = () => {
                                       </div>
                                       <p className="text-base font-bold text-brand-ink font-serif">Total : {order.total?.toFixed(2)}€</p>
                                     </div>
+
+                                    {/* Facture Stripe */}
+                                    {(order.stripe_invoice_pdf_url || order.stripe_invoice_hosted_url) && (
+                                      <div className="rounded-xl border border-brand-sand/40 bg-white p-3 flex items-center justify-between gap-3 flex-wrap">
+                                        <div className="flex items-center gap-2.5 min-w-0">
+                                          <div className="w-9 h-9 rounded-lg bg-brand-gold/15 flex items-center justify-center shrink-0">
+                                            <FileText size={15} className="text-brand-gold" />
+                                          </div>
+                                          <div className="min-w-0">
+                                            <p className="text-xs font-semibold text-brand-ink">Facture officielle</p>
+                                            {order.stripe_invoice_number && (
+                                              <p className="text-[10px] text-brand-ink/45 font-mono">{order.stripe_invoice_number}</p>
+                                            )}
+                                          </div>
+                                        </div>
+                                        <div className="flex flex-wrap gap-1.5">
+                                          {order.stripe_invoice_pdf_url && (
+                                            <a
+                                              href={order.stripe_invoice_pdf_url}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-ink text-white text-[11px] font-semibold hover:bg-brand-night transition-colors"
+                                            >
+                                              <FileText size={11} />
+                                              Telecharger PDF
+                                            </a>
+                                          )}
+                                          {order.stripe_invoice_hosted_url && (
+                                            <a
+                                              href={order.stripe_invoice_hosted_url}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-brand-sand text-brand-ink/65 text-[11px] font-semibold hover:bg-brand-sand/20"
+                                            >
+                                              Voir en ligne
+                                            </a>
+                                          )}
+                                        </div>
+                                      </div>
+                                    )}
 
                                     {canRequestReview && (
                                       <div className="rounded-xl border border-brand-gold/35 bg-brand-gold/10 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">

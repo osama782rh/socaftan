@@ -290,6 +290,18 @@ serve(async (req) => {
       params.append('allow_promotion_codes', 'true')
     }
 
+    // ===== Activation des factures Stripe automatiques =====
+    // Genere une facture PDF + l'envoie par email a la cliente
+    params.append('invoice_creation[enabled]', 'true')
+    params.append('invoice_creation[invoice_data][description]', `Commande ${order.order_number}`)
+    params.append('invoice_creation[invoice_data][metadata][order_id]', String(orderId))
+    params.append('invoice_creation[invoice_data][metadata][order_number]', String(order.order_number))
+    // Footer fiscal (sera ajoute sous le total de la facture)
+    params.append(
+      'invoice_creation[invoice_data][footer]',
+      'SO Caftan · 20 rue du Commandant Maurice Lissac · 91250 Tigery · France · contact@socaftan.fr · Pour toute question concernant cette facture, repondez a cet email.',
+    )
+
     lineItems.forEach((item, i) => {
       params.append(`line_items[${i}][price_data][currency]`, item.price_data.currency)
       params.append(`line_items[${i}][price_data][product_data][name]`, item.price_data.product_data.name)

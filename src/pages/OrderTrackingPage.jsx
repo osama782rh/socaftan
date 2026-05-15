@@ -3,7 +3,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Home, ChevronRight, Package, Check, Clock, CreditCard,
-  Truck, Sparkles, Mail, Loader2, Search, MessageCircle, MapPin, Calendar,
+  Truck, Sparkles, Mail, Loader2, Search, MessageCircle, MapPin, Calendar, FileText,
 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
@@ -301,6 +301,44 @@ const OrderTrackingPage = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Facture */}
+              {(order.invoicePdfUrl || order.invoiceHostedUrl) && (
+                <div className="bg-white rounded-2xl border border-brand-sand/60 p-5 md:p-7">
+                  <h3 className="font-serif text-lg font-bold text-brand-ink mb-3 flex items-center gap-2">
+                    <FileText size={16} className="text-brand-gold" />
+                    Facture
+                  </h3>
+                  {order.invoiceNumber && (
+                    <p className="text-xs text-brand-ink/55 mb-3">
+                      N° <span className="font-mono text-brand-ink">{order.invoiceNumber}</span>
+                    </p>
+                  )}
+                  <div className="flex flex-wrap gap-2">
+                    {order.invoicePdfUrl && (
+                      <a
+                        href={order.invoicePdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-brand-ink text-white text-xs font-semibold hover:bg-brand-night transition-colors"
+                      >
+                        <FileText size={11} />
+                        Telecharger PDF
+                      </a>
+                    )}
+                    {order.invoiceHostedUrl && (
+                      <a
+                        href={order.invoiceHostedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-brand-sand text-brand-ink/70 text-xs font-semibold hover:bg-brand-sand/20"
+                      >
+                        Voir en ligne
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Livraison */}
               {(order.deliveryMethod || order.deliveryCity) && (

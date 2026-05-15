@@ -7,6 +7,7 @@ import {
   ChevronUp,
   Check,
   ExternalLink,
+  FileText,
   Image,
   Mail,
   MapPin,
@@ -1266,6 +1267,45 @@ const AdminOrdersPage = () => {
                                         )}
                                         {!order.stripe_payment_intent && !order.stripe_session_id && (
                                           <p className="text-brand-ink/35 text-center pt-1">Pas de paiement Stripe enregistre</p>
+                                        )}
+
+                                        {/* Facture Stripe */}
+                                        {order.stripe_invoice_id && (
+                                          <div className="border-t border-brand-sand/30 pt-1.5 mt-1.5 space-y-1">
+                                            <div className="flex justify-between items-center">
+                                              <span className="text-brand-ink/50 flex items-center gap-1">
+                                                <FileText size={10} />
+                                                Facture
+                                              </span>
+                                              {order.stripe_invoice_number && (
+                                                <span className="font-mono text-[10px] text-brand-ink/65">{order.stripe_invoice_number}</span>
+                                              )}
+                                            </div>
+                                            <div className="flex gap-1.5 flex-wrap">
+                                              {order.stripe_invoice_pdf_url && (
+                                                <a
+                                                  href={order.stripe_invoice_pdf_url}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-brand-ink text-white text-[10px] font-semibold hover:bg-brand-night"
+                                                >
+                                                  <FileText size={9} />
+                                                  PDF
+                                                </a>
+                                              )}
+                                              {order.stripe_invoice_hosted_url && (
+                                                <a
+                                                  href={order.stripe_invoice_hosted_url}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="inline-flex items-center gap-1 px-2 py-1 rounded-full border border-brand-sand/60 text-brand-ink/65 text-[10px] font-semibold hover:bg-brand-sand/20"
+                                                >
+                                                  <ExternalLink size={9} />
+                                                  En ligne
+                                                </a>
+                                              )}
+                                            </div>
+                                          </div>
                                         )}
                                       </div>
                                     </div>

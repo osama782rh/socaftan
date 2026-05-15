@@ -156,7 +156,42 @@ ${card.personal_message ? `<div style="background:#faf6f1;border-left:3px solid 
       const orderId = session.metadata?.order_id
       if (!orderId) throw new Error('order_id manquant dans metadata')
 
-      // Update order status to paid
+      // ===== Recupere la facture Stripe si elle existe =====
+      // Stripe genere la facture en async, on la fetch via l'API pour avoir les URLs
+      const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY')
+      let invoiceData: {
+        id?: string
+        number?: string
+        invoice_pdf?: string
+        hosted_invoice_url?: string
+      } | null = null
+
+      const invoiceId = typeof session.invoice === 'string'
+        ? session.invoice
+        : session.invoice?.id || null
+
+      if (invoiceId && stripeSecretKey) {
+        try {
+          const invoiceRes = await fetch(`https://api.stripe.com/v1/invoices/${invoiceId}`, {
+            headers: { Authorization: `Bearer ${stripeSecretKey}` },
+          })
+          if (invoiceRes.ok) {
+            const json = await invoiceRes.json()
+            invoiceData = {
+              id: json.id,
+              number: json.number,
+              invoice_pdf: json.invoice_pdf,
+              hosted_invoice_url: json.hosted_invoice_url,
+            }
+          } else {
+            console.warn('[stripe-webhook] invoice fetch non-ok:', invoiceRes.status)
+          }
+        } catch (e) {
+          console.warn('[stripe-webhook] invoice fetch error:', e)
+        }
+      }
+
+      // Update order status to paid (avec invoice si dispo)
       const { data: order, error: updateError } = await supabase
         .from('orders')
         .update({
@@ -165,6 +200,12 @@ ${card.personal_message ? `<div style="background:#faf6f1;border-left:3px solid 
           stripe_payment_intent: typeof session.payment_intent === 'string'
             ? session.payment_intent
             : session.payment_intent?.id || null,
+          ...(invoiceData ? {
+            stripe_invoice_id: invoiceData.id,
+            stripe_invoice_number: invoiceData.number,
+            stripe_invoice_pdf_url: invoiceData.invoice_pdf,
+            stripe_invoice_hosted_url: invoiceData.hosted_invoice_url,
+          } : {}),
         })
         .eq('id', orderId)
         .select(`*, order_items (*, products:product_id (name, category))`)
@@ -272,6 +313,27 @@ ${card.personal_message ? `<div style="background:#faf6f1;border-left:3px solid 
         } catch (emailErr) {
           console.error('Email send error:', emailErr)
         }
+      }
+    }
+
+    // ===== invoice.finalized : fallback pour les factures generees apres checkout.session.completed =====
+    // Permet de capter le PDF URL meme si l'invoice n'etait pas encore prete a la session
+    if (event.type === 'invoice.finalized' || event.type === 'invoice.paid') {
+      const invoice = event.data.object
+      const orderIdFromInvoice = invoice.metadata?.order_id
+
+      if (orderIdFromInvoice) {
+        await supabase
+          .from('orders')
+          .update({
+            stripe_invoice_id: invoice.id,
+            stripe_invoice_number: invoice.number,
+            stripe_invoice_pdf_url: invoice.invoice_pdf,
+            stripe_invoice_hosted_url: invoice.hosted_invoice_url,
+          })
+          .eq('id', orderIdFromInvoice)
+          // Ne pas ecraser si deja rempli avec une version plus recente
+          .is('stripe_invoice_id', null)
       }
     }
 

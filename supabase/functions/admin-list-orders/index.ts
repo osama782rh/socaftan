@@ -107,7 +107,7 @@ serve(async (req) => {
 
     let ordersQuery = serviceClient
       .from('orders')
-      .select('id, user_id, order_number, status, order_type, subtotal, deposit_amount, total, delivery_method, delivery_address, delivery_city, delivery_postal_code, notes, stripe_session_id, stripe_payment_intent, review_email_sent_at, delivered_at, created_at')
+      .select('id, user_id, order_number, status, order_type, subtotal, deposit_amount, total, delivery_method, delivery_address, delivery_city, delivery_postal_code, notes, stripe_session_id, stripe_payment_intent, stripe_invoice_id, stripe_invoice_number, stripe_invoice_pdf_url, stripe_invoice_hosted_url, review_email_sent_at, delivered_at, created_at')
       .order('created_at', { ascending: false })
       .limit(limit)
 
