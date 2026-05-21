@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
   BarChart3,
+  Calendar,
   ChevronDown,
   ChevronUp,
   Check,
@@ -28,6 +29,7 @@ import { useUiFeedback } from '../contexts/UiFeedbackContext'
 import { isAdminEmail } from '../lib/admin'
 import { PRODUCT_IMAGE_KEYS } from '../lib/productImageKeys'
 import { resolveProductImage } from '../lib/productImages'
+import AdminRentalPlanning from '../components/AdminRentalPlanning'
 
 const ADMIN_EMAIL_HINT = 'contact@socaftan.fr, sara.ltr@outlook.fr'
 
@@ -818,6 +820,7 @@ const AdminOrdersPage = () => {
         <div className="flex flex-wrap gap-2 mb-5">
           <button onClick={() => setActiveTab('overview')} className={`px-4 py-2 rounded-full text-sm font-semibold border ${activeTab === 'overview' ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}><BarChart3 size={14} className="inline mr-1.5" />Vue globale</button>
           <button onClick={() => setActiveTab('orders')} className={`px-4 py-2 rounded-full text-sm font-semibold border ${activeTab === 'orders' ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}><ShoppingBag size={14} className="inline mr-1.5" />Commandes</button>
+          <button onClick={() => setActiveTab('planning')} className={`px-4 py-2 rounded-full text-sm font-semibold border ${activeTab === 'planning' ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}><Calendar size={14} className="inline mr-1.5" />Planning</button>
           <button onClick={() => setActiveTab('models')} className={`px-4 py-2 rounded-full text-sm font-semibold border ${activeTab === 'models' ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}><Truck size={14} className="inline mr-1.5" />Modeles</button>
           <button onClick={() => setActiveTab('photos')} className={`px-4 py-2 rounded-full text-sm font-semibold border ${activeTab === 'photos' ? 'bg-brand-ink text-white border-brand-ink' : 'bg-white text-brand-ink/65 border-brand-sand/70'}`}><Image size={14} className="inline mr-1.5" />Photos clientes</button>
         </div>
@@ -1353,6 +1356,10 @@ const AdminOrdersPage = () => {
               </div>
             )}
           </div>
+        )}
+
+        {activeTab === 'planning' && (
+          <AdminRentalPlanning orders={orders} />
         )}
 
         {activeTab === 'photos' && (
