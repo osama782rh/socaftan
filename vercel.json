@@ -1,10 +1,133 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/((?!.*\\.).*)",
       "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/accueil",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/login",
+      "destination": "/connexion",
+      "permanent": true
+    },
+    {
+      "source": "/register",
+      "destination": "/inscription",
+      "permanent": true
+    },
+    {
+      "source": "/signup",
+      "destination": "/inscription",
+      "permanent": true
+    },
+    {
+      "source": "/wishlist",
+      "destination": "/compte?tab=wishlist",
+      "permanent": false
+    },
+    {
+      "source": "/account",
+      "destination": "/compte",
+      "permanent": true
+    },
+    {
+      "source": "/orders",
+      "destination": "/compte?tab=orders",
+      "permanent": false
+    },
+    {
+      "source": "/avis",
+      "destination": "/avis-clients",
+      "permanent": true
+    },
+    {
+      "source": "/gift-cards",
+      "destination": "/cartes-cadeaux",
+      "permanent": true
+    },
+    {
+      "source": "/gallery",
+      "destination": "/galerie",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/a-propos",
+      "permanent": true
+    },
+    {
+      "source": "/legal",
+      "destination": "/mentions-legales",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/confidentialite",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "/cgv",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(self), interest-cohort=()" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    },
+    {
+      "source": "/(.*).(jpg|jpeg|png|webp|avif|svg|gif|ico)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*).(js|css|woff|woff2|ttf)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
     }
   ]
 }

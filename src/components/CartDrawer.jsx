@@ -74,7 +74,9 @@ const CartDrawer = () => {
                     <div key={item.id} className="flex gap-4 bg-brand-ivory/50 rounded-xl p-3">
                       <img
                         src={item.image}
-                        alt={item.name}
+                        alt={`${item.name} - ${item.category || 'tenue'} dans votre panier SO Caftan`}
+                        loading="lazy"
+                        decoding="async"
                         className="w-20 h-24 rounded-lg object-cover flex-shrink-0"
                       />
                       <div className="flex-1 min-w-0">

@@ -1,146 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.socaftan.fr/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.socaftan.fr/og-image.png</image:loc>
+      <image:title>SO Caftan - Location takchita et karakou Ile-de-France</image:title>
+      <image:caption>Tenues orientales pour mariages et evenements en Ile-de-France</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://www.socaftan.fr/location-takchita-ile-de-france</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.socaftan.fr/og-image.png</image:loc>
+      <image:title>Location takchita Ile-de-France 90€</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.socaftan.fr/location-karakou-ile-de-france</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.socaftan.fr/og-image.png</image:loc>
+      <image:title>Location karakou Ile-de-France 100€</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.socaftan.fr/vente-caftan-ile-de-france</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.socaftan.fr/og-image.png</image:loc>
+      <image:title>Vente caftan Ile-de-France 180€</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.socaftan.fr/location-caftan-mariage</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/location-caftan-essonne</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/location-caftan-evry</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/location-tenue-henna</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/location-caftan-pas-cher</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/contact</loc>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/a-propos</loc>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/galerie</loc>
-    <lastmod>2026-05-08</lastmod>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.socaftan.fr/og-image.png</image:loc>
+      <image:title>Galerie SO Caftan - Realisations en Ile-de-France</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.socaftan.fr/avis-clients</loc>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.socaftan.fr/avis-clients</loc>
-    <lastmod>2026-05-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.socaftan.fr/quiz</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/cartes-cadeaux</loc>
-    <lastmod>2026-05-10</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.socaftan.fr/quiz</loc>
-    <lastmod>2026-05-09</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://www.socaftan.fr/blog</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/blog/choisir-takchita-mariage-marocain</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.socaftan.fr/og-image.png</image:loc>
+      <image:title>Guide choisir takchita mariage marocain</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.socaftan.fr/blog/henna-marocaine-vs-algerienne</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.socaftan.fr/og-image.png</image:loc>
+      <image:title>Henna marocaine vs algerienne - quelle tenue</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.socaftan.fr/blog/cout-location-caftan-ile-de-france</loc>
-    <lastmod>2026-05-09</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.socaftan.fr/og-image.png</image:loc>
+      <image:title>Cout location caftan Ile-de-France 2026</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.socaftan.fr/sur-mesure</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/cgv</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/cgu</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/confidentialite</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
     <loc>https://www.socaftan.fr/mentions-legales</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-05-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>

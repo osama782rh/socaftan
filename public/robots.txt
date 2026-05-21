@@ -1,11 +1,39 @@
+# SO Caftan - https://www.socaftan.fr
+# Location takchita, karakou et vente caftan en Ile-de-France
+
 User-agent: *
 Allow: /
 
-# Pages privees ou transactionnelles
+# Pages privees ou transactionnelles (pas d'indexation)
+Disallow: /admin
+Disallow: /admin/*
 Disallow: /compte
+Disallow: /compte/*
 Disallow: /checkout
 Disallow: /connexion
 Disallow: /inscription
 Disallow: /commande-confirmee
+Disallow: /wishlist/
+Disallow: /galerie/partager
+Disallow: /suivi
+Disallow: /suivi/*
+Disallow: /newsletter/
+Disallow: /cartes-cadeaux/confirmation
 
+# Eviter le crawl de parametres de query non SEO
+Disallow: /*?session_id=*
+Disallow: /*?gift_card_id=*
+Disallow: /*?tab=*
+Disallow: /*?cancelled=*
+
+# AI assistants : autorise pour etre cite dans ChatGPT, Claude, Gemini, etc.
+# (decommenter pour bloquer si besoin)
+# User-agent: GPTBot
+# Disallow: /
+# User-agent: ClaudeBot
+# Disallow: /
+# User-agent: Google-Extended
+# Disallow: /
+
+# Sitemap
 Sitemap: https://www.socaftan.fr/sitemap.xml

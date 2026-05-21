@@ -255,8 +255,9 @@ const Collection = () => {
                     <div className="relative aspect-[3/4] overflow-hidden">
                       <img
                         src={caftan.image}
-                        alt={caftan.name}
+                        alt={`${caftan.name} - ${caftan.category || 'Caftan oriental'} en location ou achat chez SO Caftan en Ile-de-France`}
                         loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
 

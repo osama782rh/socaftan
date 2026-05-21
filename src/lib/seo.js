@@ -2,6 +2,16 @@ const SITE_URL = 'https://www.socaftan.fr'
 const SITE_NAME = 'SO Caftan'
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`
 
+// Note d'agregat utilisee dans plusieurs schemas (mise a jour quand de
+// vrais avis Google seront disponibles). Reflete les 8 temoignages visibles
+// sur /avis-clients pour le moment.
+const AGGREGATE_RATING = {
+  ratingValue: '5.0',
+  bestRating: '5',
+  worstRating: '1',
+  reviewCount: '8',
+}
+
 const ensureMeta = (selector, attrs, content) => {
   let element = document.head.querySelector(selector)
 
@@ -14,6 +24,11 @@ const ensureMeta = (selector, attrs, content) => {
   }
 
   element.setAttribute('content', content)
+}
+
+const removeMeta = (selector) => {
+  const elements = document.head.querySelectorAll(selector)
+  elements.forEach((el) => el.remove())
 }
 
 const ensureLink = (selector, attrs) => {
@@ -67,6 +82,10 @@ const sanitizePath = (path = '/') => {
   return withoutHash || '/'
 }
 
+// =====================================================================
+// SCHEMA BUILDERS
+// =====================================================================
+
 export const buildBreadcrumbSchema = (items) => ({
   '@type': 'BreadcrumbList',
   itemListElement: items.map((item, index) => ({
@@ -77,18 +96,35 @@ export const buildBreadcrumbSchema = (items) => ({
   })),
 })
 
-export const buildFaqSchema = (faqs) => ({
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((faq) => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: faq.answer,
-    },
-  })),
-})
+/**
+ * FAQ schema avec Speakable pour Google Assistant / voice search.
+ * Speakable marque les questions comme "speakable" (lisibles a voix haute).
+ */
+export const buildFaqSchema = (faqs, { withSpeakable = true } = {}) => {
+  const base = {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  }
+  if (withSpeakable) {
+    base.speakable = {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['[itemprop=name]', '[itemprop=text]'],
+    }
+  }
+  return base
+}
 
+/**
+ * LocalBusiness schema enrichi pour SO Caftan.
+ * Inclut openingHours, aggregateRating, amenityFeature, founder.
+ */
 export const buildLocalBusinessSchema = () => ({
   '@type': 'ClothingStore',
   '@id': `${SITE_URL}/#business`,
@@ -100,7 +136,7 @@ export const buildLocalBusinessSchema = () => ({
   email: 'contact@socaftan.fr',
   description:
     "SO Caftan est specialisee dans la location de takchitas et karakous pour mariages et evenements orientaux en Ile-de-France, ainsi que la vente de caftans. Service de livraison disponible dans les departements 91, 92, 93 et 94.",
-  priceRange: '90€ - 180€',
+  priceRange: '90€ - 250€',
   currenciesAccepted: 'EUR',
   paymentAccepted: 'Carte bancaire, virement',
   address: {
@@ -116,6 +152,46 @@ export const buildLocalBusinessSchema = () => ({
     latitude: 48.6167,
     longitude: 2.5167,
   },
+  // Horaires (signal local SEO fort + utilise pour Google Knowledge Panel)
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '10:00',
+      closes: '19:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Saturday',
+      opens: '10:00',
+      closes: '18:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Sunday',
+      opens: '00:00',
+      closes: '00:00',
+      validFrom: '2026-01-01',
+      validThrough: '2026-12-31',
+      description: 'Sur rendez-vous uniquement',
+    },
+  ],
+  // Note d'agregat (passe a 5 etoiles dans les SERP quand assez d'avis)
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: AGGREGATE_RATING.ratingValue,
+    bestRating: AGGREGATE_RATING.bestRating,
+    worstRating: AGGREGATE_RATING.worstRating,
+    reviewCount: AGGREGATE_RATING.reviewCount,
+  },
+  // Equipements / particularites (Knowledge Panel)
+  amenityFeature: [
+    { '@type': 'LocationFeatureSpecification', name: 'Paiement carte bancaire', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Livraison disponible', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Retrait sur rendez-vous', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Service WhatsApp', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Caftan sur-mesure', value: true },
+  ],
   areaServed: [
     { '@type': 'AdministrativeArea', name: 'Ile-de-France' },
     { '@type': 'AdministrativeArea', name: 'Essonne' },
@@ -126,6 +202,16 @@ export const buildLocalBusinessSchema = () => ({
     { '@type': 'City', name: 'Evry' },
     { '@type': 'City', name: 'Creteil' },
     { '@type': 'City', name: 'Versailles' },
+  ],
+  knowsLanguage: ['fr', 'ar'],
+  knowsAbout: [
+    'Location takchita',
+    'Location karakou',
+    'Vente caftan',
+    'Mariage marocain',
+    'Mariage algerien',
+    'Soiree henna',
+    'Tenue orientale Ile-de-France',
   ],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
@@ -175,6 +261,17 @@ export const buildWebsiteSchema = () => ({
   url: SITE_URL,
   name: SITE_NAME,
   inLanguage: 'fr-FR',
+  publisher: {
+    '@id': `${SITE_URL}/#business`,
+  },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${SITE_URL}/?s={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
 })
 
 export const buildServiceSchema = ({ name, description, path, price }) => ({
@@ -182,9 +279,7 @@ export const buildServiceSchema = ({ name, description, path, price }) => ({
   name,
   description,
   provider: {
-    '@type': 'Organization',
-    name: SITE_NAME,
-    url: SITE_URL,
+    '@id': `${SITE_URL}/#business`,
   },
   areaServed: {
     '@type': 'Place',
@@ -198,7 +293,170 @@ export const buildServiceSchema = ({ name, description, path, price }) => ({
     availability: 'https://schema.org/InStock',
     url: toAbsoluteUrl(path),
   },
+  // Si plusieurs avis vraiment lies au service, on heritera de AggregateRating
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: AGGREGATE_RATING.ratingValue,
+    bestRating: AGGREGATE_RATING.bestRating,
+    worstRating: AGGREGATE_RATING.worstRating,
+    reviewCount: AGGREGATE_RATING.reviewCount,
+  },
 })
+
+/**
+ * Article schema pour les posts de blog.
+ * Crucial pour le SEO blog : permet l'apparition dans Google Discover,
+ * et donne aux articles un meilleur ranking sur les requetes informationnelles.
+ */
+export const buildArticleSchema = ({
+  title,
+  description,
+  path,
+  image,
+  publishedAt,
+  modifiedAt,
+  authorName = SITE_NAME,
+  articleSection,
+  keywords = [],
+}) => ({
+  '@type': 'Article',
+  headline: title,
+  description,
+  image: image ? (image.startsWith('http') ? image : toAbsoluteUrl(image)) : DEFAULT_IMAGE,
+  datePublished: publishedAt,
+  dateModified: modifiedAt || publishedAt,
+  author: {
+    '@type': 'Organization',
+    name: authorName,
+    url: SITE_URL,
+  },
+  publisher: {
+    '@id': `${SITE_URL}/#business`,
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': toAbsoluteUrl(path),
+  },
+  ...(articleSection ? { articleSection } : {}),
+  ...(keywords.length > 0 ? { keywords: keywords.join(', ') } : {}),
+  inLanguage: 'fr-FR',
+})
+
+/**
+ * Product schema pour un modele du catalogue (takchita, karakou, caftan).
+ * Affiche des "rich snippets" : prix, dispo, etoiles dans les SERP.
+ */
+export const buildProductSchema = ({
+  name,
+  description,
+  image,
+  category,
+  rentalPrice,
+  purchasePrice,
+  productId,
+  url,
+}) => {
+  const offers = []
+
+  if (rentalPrice && Number(rentalPrice) > 0) {
+    offers.push({
+      '@type': 'Offer',
+      name: `Location ${name}`,
+      price: String(rentalPrice),
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/UsedCondition',
+      url: url ? toAbsoluteUrl(url) : SITE_URL,
+      priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
+    })
+  }
+  if (purchasePrice && Number(purchasePrice) > 0) {
+    offers.push({
+      '@type': 'Offer',
+      name: `Achat ${name}`,
+      price: String(purchasePrice),
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
+      url: url ? toAbsoluteUrl(url) : SITE_URL,
+      priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
+    })
+  }
+
+  return {
+    '@type': 'Product',
+    name,
+    description: description || `${name} - tenue ${category} disponible en location ou a l'achat chez SO Caftan en Ile-de-France.`,
+    image: image ? (image.startsWith('http') ? image : toAbsoluteUrl(image)) : DEFAULT_IMAGE,
+    brand: {
+      '@type': 'Brand',
+      name: SITE_NAME,
+    },
+    category: category || 'Caftan',
+    ...(productId ? { sku: `socaftan-${productId}` } : {}),
+    offers: offers.length === 1 ? offers[0] : (offers.length > 1 ? {
+      '@type': 'AggregateOffer',
+      lowPrice: Math.min(...offers.map((o) => Number(o.price))),
+      highPrice: Math.max(...offers.map((o) => Number(o.price))),
+      priceCurrency: 'EUR',
+      offerCount: offers.length,
+      offers,
+    } : undefined),
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: AGGREGATE_RATING.ratingValue,
+      bestRating: AGGREGATE_RATING.bestRating,
+      worstRating: AGGREGATE_RATING.worstRating,
+      reviewCount: AGGREGATE_RATING.reviewCount,
+    },
+  }
+}
+
+/**
+ * ItemList schema pour les pages de listing (galerie, catalogue).
+ * Aide Google a comprendre que la page contient une liste de produits.
+ */
+export const buildItemListSchema = ({ name, items }) => ({
+  '@type': 'ItemList',
+  name,
+  numberOfItems: items.length,
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    item: {
+      '@type': 'Product',
+      name: item.name,
+      url: item.url ? toAbsoluteUrl(item.url) : SITE_URL,
+      ...(item.image ? { image: item.image.startsWith('http') ? item.image : toAbsoluteUrl(item.image) } : {}),
+    },
+  })),
+})
+
+/**
+ * Review schema pour les temoignages clients.
+ */
+export const buildReviewSchema = ({ author, datePublished, reviewBody, ratingValue = 5 }) => ({
+  '@type': 'Review',
+  author: {
+    '@type': 'Person',
+    name: author,
+  },
+  datePublished,
+  reviewBody,
+  reviewRating: {
+    '@type': 'Rating',
+    ratingValue: String(ratingValue),
+    bestRating: '5',
+    worstRating: '1',
+  },
+  itemReviewed: {
+    '@id': `${SITE_URL}/#business`,
+  },
+})
+
+// =====================================================================
+// applySeo - main function
+// =====================================================================
 
 export const applySeo = ({
   title,
@@ -209,10 +467,16 @@ export const applySeo = ({
   type = 'website',
   robots = 'index,follow',
   schema = [],
+  // Article-only props
+  publishedAt,
+  modifiedAt,
+  articleSection,
+  articleAuthor,
 }) => {
   const cleanPath = sanitizePath(path)
   const canonicalUrl = toAbsoluteUrl(cleanPath)
   const fullTitle = title?.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`
+  const absoluteImage = image && /^https?:\/\//i.test(image) ? image : toAbsoluteUrl(image || DEFAULT_IMAGE)
 
   document.documentElement.lang = 'fr'
   document.title = fullTitle
@@ -228,12 +492,34 @@ export const applySeo = ({
   ensureMeta('meta[property="og:title"]', { property: 'og:title' }, fullTitle)
   ensureMeta('meta[property="og:description"]', { property: 'og:description' }, description)
   ensureMeta('meta[property="og:url"]', { property: 'og:url' }, canonicalUrl)
-  ensureMeta('meta[property="og:image"]', { property: 'og:image' }, image)
+  ensureMeta('meta[property="og:image"]', { property: 'og:image' }, absoluteImage)
+  ensureMeta('meta[property="og:image:width"]', { property: 'og:image:width' }, '1200')
+  ensureMeta('meta[property="og:image:height"]', { property: 'og:image:height' }, '630')
+  ensureMeta('meta[property="og:image:alt"]', { property: 'og:image:alt' }, fullTitle)
 
   ensureMeta('meta[name="twitter:card"]', { name: 'twitter:card' }, 'summary_large_image')
   ensureMeta('meta[name="twitter:title"]', { name: 'twitter:title' }, fullTitle)
   ensureMeta('meta[name="twitter:description"]', { name: 'twitter:description' }, description)
-  ensureMeta('meta[name="twitter:image"]', { name: 'twitter:image' }, image)
+  ensureMeta('meta[name="twitter:image"]', { name: 'twitter:image' }, absoluteImage)
+
+  // Article-specific Open Graph tags
+  if (type === 'article') {
+    if (publishedAt) ensureMeta('meta[property="article:published_time"]', { property: 'article:published_time' }, publishedAt)
+    if (modifiedAt) ensureMeta('meta[property="article:modified_time"]', { property: 'article:modified_time' }, modifiedAt)
+    if (articleSection) ensureMeta('meta[property="article:section"]', { property: 'article:section' }, articleSection)
+    if (articleAuthor) ensureMeta('meta[property="article:author"]', { property: 'article:author' }, articleAuthor)
+    if (Array.isArray(keywords) && keywords.length > 0) {
+      // Tags (multiple article:tag meta possible, mais on regroupe)
+      ensureMeta('meta[property="article:tag"]', { property: 'article:tag' }, keywords.join(', '))
+    }
+  } else {
+    // Cleanup article tags si on change de page article -> page standard
+    removeMeta('meta[property="article:published_time"]')
+    removeMeta('meta[property="article:modified_time"]')
+    removeMeta('meta[property="article:section"]')
+    removeMeta('meta[property="article:author"]')
+    removeMeta('meta[property="article:tag"]')
+  }
 
   ensureLink('link[rel="canonical"]', { rel: 'canonical', href: canonicalUrl })
   ensureLink('link[rel="alternate"][hreflang="fr-FR"]', { rel: 'alternate', hreflang: 'fr-FR', href: canonicalUrl })
@@ -246,4 +532,5 @@ export const seoConfig = {
   siteName: SITE_NAME,
   siteUrl: SITE_URL,
   defaultImage: DEFAULT_IMAGE,
+  aggregateRating: AGGREGATE_RATING,
 }

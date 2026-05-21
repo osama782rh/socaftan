@@ -407,8 +407,9 @@ const QuizPage = () => {
                       <div className="aspect-[3/4] bg-brand-sand/30 relative overflow-hidden">
                         <img
                           src={resolveProductImage(product.image_key)}
-                          alt={product.name}
+                          alt={`${product.name} - ${product.category || 'Tenue orientale'} SO Caftan, recommande par le quiz personnalise`}
                           loading={idx === 0 ? 'eager' : 'lazy'}
+                          decoding="async"
                           className="w-full h-full object-cover"
                         />
                         {/* Badge match score */}

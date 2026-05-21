@@ -2,13 +2,60 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
   applySeo,
+  buildArticleSchema,
   buildBreadcrumbSchema,
   buildFaqSchema,
   buildLocalBusinessSchema,
+  buildReviewSchema,
   buildServiceSchema,
   buildWebsiteSchema,
   seoConfig,
 } from '../lib/seo'
+import { BLOG_POSTS, findPostBySlug } from '../lib/blog'
+import { resolveProductImage } from '../lib/productImages'
+import { REVIEWS } from '../lib/reviews'
+
+/**
+ * Construit la config SEO complete pour un article de blog a partir
+ * de son slug. Comprend : type 'article', meta OG article:*, Article schema,
+ * breadcrumb 3 niveaux. Centralise pour eviter la duplication.
+ */
+const buildBlogPostSeo = (slug, breadcrumbLabel) => {
+  const post = findPostBySlug(slug)
+  if (!post) return null
+  const path = `/blog/${slug}`
+  const image = post.imageKey ? resolveProductImage(post.imageKey) : undefined
+
+  return {
+    title: post.title,
+    description: post.description,
+    keywords: [],
+    type: 'article',
+    image,
+    publishedAt: post.publishedAt,
+    modifiedAt: post.publishedAt,
+    articleSection: post.category,
+    articleAuthor: 'SO Caftan',
+    schema: [
+      buildLocalBusinessSchema(),
+      buildBreadcrumbSchema([
+        { name: 'Accueil', path: '/' },
+        { name: 'Blog', path: '/blog' },
+        { name: breadcrumbLabel || post.title, path },
+      ]),
+      buildArticleSchema({
+        title: post.title,
+        description: post.description,
+        path,
+        image,
+        publishedAt: post.publishedAt,
+        modifiedAt: post.publishedAt,
+        articleSection: post.category,
+        keywords: [post.category.toLowerCase(), 'caftan', 'takchita', 'mariage oriental'],
+      }),
+    ],
+  }
+}
 
 const homeFaqs = [
   {
@@ -333,6 +380,43 @@ const routeSeoMap = {
         { name: 'Accueil', path: '/' },
         { name: 'Galerie', path: '/galerie' },
       ]),
+      // ItemList des modeles phares (rich result list view dans Google)
+      {
+        '@type': 'ItemList',
+        name: 'Modeles SO Caftan',
+        description: 'Selection de takchitas, karakous et caftans en location ou achat',
+        numberOfItems: 6,
+        itemListElement: [
+          { name: 'Takchita Andalouse', category: 'Takchita', price: 90 },
+          { name: 'Karakou Royale', category: 'Karakou', price: 100 },
+          { name: 'Caftan Emeraude', category: 'Caftan', price: 180 },
+          { name: 'Takchita Soultana de Fes', category: 'Takchita', price: 90 },
+          { name: 'Karakou Imperial', category: 'Karakou', price: 100 },
+          { name: 'Caftan Safran', category: 'Caftan', price: 180 },
+        ].map((p, idx) => ({
+          '@type': 'ListItem',
+          position: idx + 1,
+          item: {
+            '@type': 'Product',
+            name: p.name,
+            category: p.category,
+            brand: { '@type': 'Brand', name: 'SO Caftan' },
+            offers: {
+              '@type': 'Offer',
+              price: String(p.price),
+              priceCurrency: 'EUR',
+              availability: 'https://schema.org/InStock',
+            },
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: '5.0',
+              bestRating: '5',
+              worstRating: '1',
+              reviewCount: '8',
+            },
+          },
+        })),
+      },
     ],
   },
   '/cartes-cadeaux': {
@@ -392,66 +476,18 @@ const routeSeoMap = {
       ]),
     ],
   },
-  '/blog/choisir-takchita-mariage-marocain': {
-    title: 'Comment choisir sa takchita pour un mariage marocain – Guide complet',
-    description:
-      'Guide complet pour choisir la takchita parfaite pour votre mariage marocain : couleurs, tissus, broderies, traditions et tarifs. SO Caftan.',
-    keywords: [
-      'choisir takchita mariage marocain',
-      'takchita mariage couleurs',
-      'guide takchita',
-      'takchita mariee',
-      'takchita henna',
-    ],
-    schema: [
-      buildLocalBusinessSchema(),
-      buildBreadcrumbSchema([
-        { name: 'Accueil', path: '/' },
-        { name: 'Blog', path: '/blog' },
-        { name: 'Choisir sa takchita', path: '/blog/choisir-takchita-mariage-marocain' },
-      ]),
-    ],
-  },
-  '/blog/henna-marocaine-vs-algerienne': {
-    title: 'Henna marocaine vs algerienne : quelles tenues porter ?',
-    description:
-      'Differences entre la henna marocaine (takchita verte) et la henna algerienne (karakou, chedda). Quelle tenue porter selon la tradition ?',
-    keywords: [
-      'henna marocaine algerienne',
-      'tenue henna mariage',
-      'difference takchita karakou',
-      'chedda tlemcen',
-      'karakou algerien',
-    ],
-    schema: [
-      buildLocalBusinessSchema(),
-      buildBreadcrumbSchema([
-        { name: 'Accueil', path: '/' },
-        { name: 'Blog', path: '/blog' },
-        { name: 'Henna marocaine vs algerienne', path: '/blog/henna-marocaine-vs-algerienne' },
-      ]),
-    ],
-  },
-  '/blog/cout-location-caftan-ile-de-france': {
-    title: 'Combien coute une location de caftan en Ile-de-France ?',
-    description:
-      'Tarifs detailles de location de caftan, takchita et karakou en Ile-de-France 2026. Prix, caution, livraison et comparaison achat vs location.',
-    keywords: [
-      'prix location caftan',
-      'tarif location takchita',
-      'cout location karakou',
-      'caftan ile de france prix',
-      'location caftan pas cher',
-    ],
-    schema: [
-      buildLocalBusinessSchema(),
-      buildBreadcrumbSchema([
-        { name: 'Accueil', path: '/' },
-        { name: 'Blog', path: '/blog' },
-        { name: 'Cout location caftan IDF', path: '/blog/cout-location-caftan-ile-de-france' },
-      ]),
-    ],
-  },
+  '/blog/choisir-takchita-mariage-marocain': buildBlogPostSeo(
+    'choisir-takchita-mariage-marocain',
+    'Choisir sa takchita',
+  ),
+  '/blog/henna-marocaine-vs-algerienne': buildBlogPostSeo(
+    'henna-marocaine-vs-algerienne',
+    'Henna marocaine vs algerienne',
+  ),
+  '/blog/cout-location-caftan-ile-de-france': buildBlogPostSeo(
+    'cout-location-caftan-ile-de-france',
+    'Cout location caftan IDF',
+  ),
   '/avis-clients': {
     title: 'Avis Clients SO Caftan – Temoignages verifies en Ile-de-France',
     description:
@@ -469,6 +505,14 @@ const routeSeoMap = {
         { name: 'Accueil', path: '/' },
         { name: 'Avis clients', path: '/avis-clients' },
       ]),
+      // Review schemas : chaque temoignage devient un Review structure
+      // (permet l'apparition d'etoiles dans les SERP + onglet "Avis" sur Google)
+      ...REVIEWS.map((review) => buildReviewSchema({
+        author: review.name,
+        datePublished: review.datePublished,
+        reviewBody: review.quote,
+        ratingValue: review.rating,
+      })),
     ],
   },
   '/sur-mesure': {
@@ -555,9 +599,15 @@ const SEOManager = () => {
       description: routeSeo.description,
       keywords: routeSeo.keywords,
       path,
-      image: `${seoConfig.siteUrl}/og-image.png`,
+      image: routeSeo.image || `${seoConfig.siteUrl}/og-image.png`,
+      type: routeSeo.type || 'website',
       robots: routeSeo.robots || 'index,follow',
       schema: routeSeo.schema || [],
+      // Article-specific props (utilises uniquement si type=article)
+      publishedAt: routeSeo.publishedAt,
+      modifiedAt: routeSeo.modifiedAt,
+      articleSection: routeSeo.articleSection,
+      articleAuthor: routeSeo.articleAuthor,
     })
   }, [location.pathname])
 

@@ -72,7 +72,9 @@ const RentalDateModal = ({ product, onConfirm, onClose }) => {
           <div className="flex items-center gap-4 mb-6">
             <img
               src={product.image}
-              alt={product.name}
+              alt={`${product.name} - ${product.category || 'tenue orientale'} en location chez SO Caftan`}
+              loading="lazy"
+              decoding="async"
               className="w-16 h-20 rounded-xl object-cover"
             />
             <div>
