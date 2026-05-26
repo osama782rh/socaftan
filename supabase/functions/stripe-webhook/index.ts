@@ -288,7 +288,7 @@ ${card.personal_message ? `<div style="background:#faf6f1;border-left:3px solid 
       </tr></table>
     </div>
     <div style="text-align:center;margin-top:32px;">
-      <a href="https://socaftan.fr/compte?tab=orders" style="display:inline-block;background-color:#2b201a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:50px;font-size:14px;font-weight:600;">Suivre ma commande</a>
+      <a href="https://www.socaftan.fr/compte?tab=orders" style="display:inline-block;background-color:#2b201a;color:#ffffff;text-decoration:none;padding:14px 32px;border-radius:50px;font-size:14px;font-weight:600;">Suivre ma commande</a>
     </div>
   </div>
   <div style="background-color:#f5e6d3;padding:20px;text-align:center;border-radius:0 0 12px 12px;">
