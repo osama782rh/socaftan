@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Lock, Calendar, ShoppingBag, MapPin, Truck } from 'lucide-react'
@@ -9,6 +9,7 @@ import { useUiFeedback } from '../contexts/UiFeedbackContext'
 import { trackEvent } from '../lib/analytics'
 
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+const SHIPPING_FEE = 6.99 // Frais de livraison Ile-de-France
 
 const CheckoutPage = () => {
   const { items, subtotal, deposit, total, clearCart } = useCart()
@@ -30,6 +31,10 @@ const CheckoutPage = () => {
   const [giftCardInfo, setGiftCardInfo] = useState(null) // { valid, balance, ... }
   const [giftCardError, setGiftCardError] = useState('')
   const [validatingCard, setValidatingCard] = useState(false)
+
+  // Frais de livraison
+  const shippingFee = useMemo(() => (deliveryMethod === 'delivery' ? SHIPPING_FEE : 0), [deliveryMethod])
+  const finalTotal = useMemo(() => Number((total + shippingFee).toFixed(2)), [total, shippingFee])
 
   const normalize = (value) =>
     String(value || '')
@@ -186,7 +191,8 @@ const CheckoutPage = () => {
           order_type: orderType,
           subtotal,
           deposit_amount: deposit,
-          total,
+          shipping_fee: shippingFee,
+          total: finalTotal,
           delivery_method: deliveryMethod,
           delivery_address: deliveryMethod === 'delivery' ? deliveryInfo.address : '',
           delivery_city: deliveryMethod === 'delivery' ? deliveryInfo.city : '',
@@ -429,17 +435,39 @@ const CheckoutPage = () => {
                       <span className="text-brand-ink">{deposit.toFixed(2)}€</span>
                     </div>
                   )}
+                  {shippingFee > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-brand-ink/50 flex items-center gap-1.5">
+                        <Truck size={12} className="text-brand-gold" />
+                        Frais de livraison Ile-de-France
+                      </span>
+                      <span className="text-brand-ink">{shippingFee.toFixed(2)}€</span>
+                    </div>
+                  )}
+                  {deliveryMethod === 'pickup' && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-brand-ink/50 flex items-center gap-1.5">
+                        <MapPin size={12} className="text-emerald-600" />
+                        Retrait sur RDV
+                      </span>
+                      <span className="text-emerald-600 font-semibold">Gratuit</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-lg font-bold pt-2 border-t border-brand-sand/40">
                     <span className="text-brand-ink">Total</span>
-                    <span className="text-brand-ink font-serif">{total.toFixed(2)}€</span>
+                    <span className="text-brand-ink font-serif">{finalTotal.toFixed(2)}€</span>
                   </div>
                 </div>
 
                 {/* Carte cadeau */}
                 <div className="mt-5 pt-5 border-t border-brand-sand/40">
-                  <label className="block text-xs font-semibold text-brand-ink/70 mb-2">
+                  <label className="block text-xs font-semibold text-brand-ink/70 mb-1">
                     Code carte cadeau (optionnel)
                   </label>
+                  <p className="text-[11px] text-brand-ink/45 mb-2 leading-snug">
+                    Format : XXXX-XXXX-XXXX (recu par email lors de l'achat).
+                    Les codes promo type <strong>SOCAFTAN20</strong> se saisissent sur la page Stripe a l'etape suivante.
+                  </p>
                   {giftCardInfo?.valid ? (
                     <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-sm">
                       <div className="flex items-center justify-between gap-2">
@@ -513,7 +541,7 @@ const CheckoutPage = () => {
                   className="w-full mt-6 flex items-center justify-center gap-2 bg-brand-ink text-white py-4 rounded-full font-semibold text-sm hover:bg-brand-ink/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Lock size={16} />
-                  {loading ? 'Redirection vers le paiement...' : `Payer ${total.toFixed(2)}€`}
+                  {loading ? 'Redirection vers le paiement...' : `Payer ${finalTotal.toFixed(2)}€`}
                 </button>
 
                 <p className="text-[11px] text-brand-ink/30 text-center mt-3">

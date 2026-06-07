@@ -90,7 +90,7 @@ serve(async (req) => {
     // Fetch order (without relying on nested PostgREST relations)
     const { data: order, error: orderError } = await serviceClient
       .from('orders')
-      .select('id, user_id, order_number, deposit_amount')
+      .select('id, user_id, order_number, deposit_amount, shipping_fee, delivery_method')
       .eq('id', orderId)
       .eq('user_id', effectiveUserId)
       .single()
@@ -196,6 +196,25 @@ serve(async (req) => {
         },
         quantity: 1,
       })
+    }
+
+    // Add shipping fee as separate line item if delivery
+    const shippingFee = Number(order.shipping_fee || 0)
+    if (Number.isFinite(shippingFee) && shippingFee > 0) {
+      const shippingCents = Math.round(shippingFee * 100)
+      if (shippingCents >= 50) {
+        lineItems.push({
+          price_data: {
+            currency: 'eur',
+            product_data: {
+              name: 'Frais de livraison Ile-de-France',
+              description: 'Livraison a domicile dans les departements 91, 92, 93, 94 et Paris',
+            },
+            unit_amount: shippingCents,
+          },
+          quantity: 1,
+        })
+      }
     }
 
     const customerEmail = user?.email || customerEmailFromBody

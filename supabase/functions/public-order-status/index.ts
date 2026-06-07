@@ -64,7 +64,7 @@ serve(async (req) => {
   // Cherche la commande
   const { data: order, error: orderError } = await serviceClient
     .from('orders')
-    .select('id, user_id, order_number, status, order_type, subtotal, deposit_amount, total, delivery_method, delivery_city, delivered_at, created_at, stripe_invoice_pdf_url, stripe_invoice_hosted_url, stripe_invoice_number')
+    .select('id, user_id, order_number, status, order_type, subtotal, deposit_amount, shipping_fee, total, delivery_method, delivery_city, delivered_at, created_at, stripe_invoice_pdf_url, stripe_invoice_hosted_url, stripe_invoice_number')
     .eq('order_number', orderNumber)
     .single()
 
@@ -103,6 +103,7 @@ serve(async (req) => {
       total: Number(order.total || 0),
       subtotal: Number(order.subtotal || 0),
       deposit: Number(order.deposit_amount || 0),
+      shippingFee: Number(order.shipping_fee || 0),
       deliveryMethod: order.delivery_method,
       deliveryCity: order.delivery_city,
       createdAt: order.created_at,
