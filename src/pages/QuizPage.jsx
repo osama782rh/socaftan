@@ -300,8 +300,8 @@ const QuizPage = () => {
                 Recevez votre selection par email
               </h2>
               <p className="text-brand-ink/65 text-sm md:text-base leading-relaxed max-w-md mx-auto mb-6">
-                Nous vous enverrons votre selection personnalisee + un code <strong>SOCAFTAN20</strong> de
-                <strong> -20%</strong> sur votre premiere commande.
+                Nous vous enverrons votre selection personnalisee par email pour la consulter
+                tranquillement et la partager avec vos proches.
               </p>
 
               <div className="space-y-3 max-w-md mx-auto">
@@ -334,7 +334,7 @@ const QuizPage = () => {
                   ) : (
                     <>
                       <Sparkles size={14} />
-                      Voir mon resultat + code -20%
+                      Voir mon resultat
                     </>
                   )}
                 </button>

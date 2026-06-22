@@ -90,10 +90,6 @@ const buildEmailHtml = (params: {
       <p style="margin:0;font-size:13px;line-height:1.6;color:#6b5d52;"><strong style="color:#2b201a;">Un souci ou une question ?</strong> Contactez-nous directement sur WhatsApp.</p>
       <a href="${params.whatsappUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:10px;color:#c9a46b;font-size:13px;font-weight:600;text-decoration:none;">Ouvrir WhatsApp →</a>
     </div>
-    <div style="text-align:center;margin:28px 0 8px;padding:20px;background:linear-gradient(135deg,#faf6f1 0%,#fdfaf5 100%);border-radius:12px;">
-      <p style="margin:0 0 6px;font-size:14px;font-weight:600;color:#2b201a;">🎁 Parrainez une amie</p>
-      <p style="margin:0;font-size:13px;color:#6b5d52;line-height:1.6;">Avec le code <strong style="color:#c9a46b;font-family:Courier,monospace;">SOCAFTAN20</strong>, vous beneficiez toutes les deux de <strong>-20%</strong> sur votre prochaine location.</p>
-    </div>
     <p style="margin:32px 0 0;font-size:14px;color:#6b5d52;text-align:center;line-height:1.7;">Avec toute notre gratitude,<br><strong style="color:#2b201a;">L'equipe SO Caftan</strong></p>
   </div>
   <div style="background-color:#2b201a;padding:24px;text-align:center;border-radius:0 0 12px 12px;">

@@ -466,7 +466,7 @@ const CheckoutPage = () => {
                   </label>
                   <p className="text-[11px] text-brand-ink/45 mb-2 leading-snug">
                     Format : XXXX-XXXX-XXXX (recu par email lors de l'achat).
-                    Les codes promo type <strong>SOCAFTAN20</strong> se saisissent sur la page Stripe a l'etape suivante.
+                    Si vous avez un code promo Stripe, il se saisit sur la page de paiement a l'etape suivante.
                   </p>
                   {giftCardInfo?.valid ? (
                     <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-sm">

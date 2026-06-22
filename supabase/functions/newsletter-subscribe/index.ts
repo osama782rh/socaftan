@@ -3,7 +3,7 @@
 // =====================================================================
 // Inscription a la newsletter avec double opt-in :
 //   1. POST { email, firstName, source } -> insert + envoi email confirmation
-//   2. GET ?token=... -> confirmation -> envoi email de bienvenue + code SOCAFTAN20
+//   2. GET ?token=... -> confirmation -> envoi email de bienvenue
 //   3. GET ?unsubscribe=...&token=... -> desabonnement
 //
 // DEPLOY: npx supabase functions deploy newsletter-subscribe --no-verify-jwt
@@ -18,7 +18,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const PROMO_CODE_WELCOME = 'SOCAFTAN20'
 
 const errorResponse = (status: number, message: string) =>
   new Response(
@@ -45,7 +44,7 @@ const buildConfirmEmailHtml = (firstName: string, confirmUrl: string) => `<!DOCT
     <h2 style="margin:0;font-size:22px;color:#2b201a;font-family:Georgia,serif;">Bienvenue ${firstName} !</h2>
     <p style="margin:14px 0 24px;color:#6b5d52;font-size:15px;line-height:1.6;">
       Merci de vous etre inscrite a la newsletter SO Caftan.<br>
-      Confirmez votre adresse email pour recevoir votre <strong>code -20%</strong> et nos prochaines actualites.
+      Confirmez votre adresse email pour finaliser votre inscription et recevoir nos prochaines actualites.
     </p>
     <a href="${confirmUrl}" style="display:inline-block;background-color:#c9a46b;color:#ffffff;text-decoration:none;padding:14px 36px;border-radius:999px;font-weight:600;font-size:15px;">
       Confirmer mon inscription
@@ -73,14 +72,8 @@ const buildWelcomeEmailHtml = (firstName: string, siteUrl: string, unsubscribeUr
       <h2 style="margin:0;font-size:24px;color:#2b201a;font-family:Georgia,serif;font-weight:600;">Bienvenue ${firstName} !</h2>
       <p style="margin:14px 0 0;color:#6b5d52;font-size:15px;line-height:1.7;">
         Vous faites desormais partie de la communaute SO Caftan. <br>
-        Voici votre <strong>cadeau de bienvenue</strong> :
+        Vous recevrez nos nouveautes, conseils et inspirations en avant-premiere.
       </p>
-    </div>
-    <!-- Code promo -->
-    <div style="background:linear-gradient(135deg,#c9a46b 0%,#b08d54 100%);border-radius:14px;padding:28px;margin:28px 0;text-align:center;color:#ffffff;">
-      <p style="margin:0 0 8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:2px;opacity:0.85;">Cadeau de bienvenue</p>
-      <p style="margin:8px 0;font-family:Courier,monospace;font-size:34px;font-weight:700;letter-spacing:5px;">${PROMO_CODE_WELCOME}</p>
-      <p style="margin:0;font-size:14px;opacity:0.95;font-weight:600;">-20% sur votre premiere commande</p>
     </div>
     <!-- Decouvrir -->
     <div style="text-align:center;margin:30px 0 16px;">
@@ -181,7 +174,7 @@ serve(async (req) => {
         body: JSON.stringify({
           from: 'SO Caftan <contact@socaftan.fr>',
           to: [existing.email],
-          subject: 'SO Caftan — Bienvenue dans notre univers (-20% offert) 💛',
+          subject: 'SO Caftan — Bienvenue dans notre univers 💛',
           html,
         }),
       }).catch(() => {})

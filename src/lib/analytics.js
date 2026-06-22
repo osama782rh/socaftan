@@ -24,7 +24,7 @@
  *   - add_to_cart            -> ajout panier
  *   - begin_checkout         -> debut checkout
  *   - purchase               -> commande confirmee (avec value)
- *   - promo_code_copied      -> code SOCAFTAN20 copie
+ *   - promo_code_copied      -> code promo copie (deprecie, conserve pour historique GA4)
  */
 
 const CONSENT_KEY = 'socaftan_consent'

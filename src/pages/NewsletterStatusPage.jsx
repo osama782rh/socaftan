@@ -22,9 +22,8 @@ const NewsletterStatusPage = ({ variant = 'confirmed' }) => {
       subtitle: 'Vous etes desormais abonnee a la newsletter SO Caftan.',
       message: (
         <>
-          Verifiez votre boite mail pour recevoir votre <strong className="text-brand-ink">code promo de bienvenue</strong> :
-          <strong className="text-brand-gold font-mono mx-1.5">SOCAFTAN20</strong>
-          (-20% sur votre premiere commande).
+          Vous recevrez desormais nos actualites, nos nouveaux modeles et nos conseils
+          en avant-premiere. Merci de faire partie de la communaute SO Caftan.
         </>
       ),
       ctaPrimary: { label: 'Decouvrir le catalogue', to: '/' },

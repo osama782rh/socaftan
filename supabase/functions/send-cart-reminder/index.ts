@@ -2,7 +2,7 @@
 // SO Caftan - Edge Function: send-cart-reminder
 // =====================================================================
 // Trouve les paniers abandonnes (>= 1h sans modification, items > 0,
-// pas encore relances) et envoie un email avec code promo SOCAFTAN20.
+// pas encore relances) et envoie un email pour finaliser leur commande.
 //
 // MODE BATCH (cron, header x-cron-secret) :
 //   POST { mode: "batch" }
@@ -23,7 +23,6 @@ const corsHeaders = {
 }
 
 const ABANDONMENT_DELAY_MINUTES = 60 // 1h apres derniere modif
-const PROMO_CODE = 'SOCAFTAN20'
 
 const errorResponse = (status: number, message: string) =>
   new Response(
@@ -39,7 +38,6 @@ const buildEmailHtml = (params: {
   subtotal: number
   total: number
   cartUrl: string
-  promoCode: string
 }) => {
   const itemsHtml = params.items
     .map((item) => {
@@ -81,14 +79,6 @@ const buildEmailHtml = (params: {
         <p style="margin:0;font-weight:700;color:#2b201a;font-size:15px;">Total</p>
         <p style="margin:0;font-weight:700;color:#2b201a;font-size:15px;">${formatPrice(params.total)}</p>
       </div>
-    </div>
-
-    <!-- Code promo -->
-    <div style="background:linear-gradient(135deg,#c9a46b 0%,#b08d54 100%);border-radius:12px;padding:24px;margin:24px 0;text-align:center;color:#ffffff;">
-      <p style="margin:0 0 8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:2px;opacity:0.85;">Cadeau de bienvenue</p>
-      <p style="margin:0;font-size:13px;opacity:0.9;">Utilisez le code</p>
-      <p style="margin:8px 0;font-family:Courier,monospace;font-size:32px;font-weight:700;letter-spacing:4px;">${params.promoCode}</p>
-      <p style="margin:0;font-size:13px;opacity:0.95;font-weight:600;">et beneficiez de <span style="font-size:16px;">-20%</span> sur votre premiere commande</p>
     </div>
 
     <!-- CTA -->
@@ -157,7 +147,6 @@ const sendReminder = async (
     subtotal,
     total,
     cartUrl: `${siteUrl}/checkout`,
-    promoCode: PROMO_CODE,
   })
 
   try {
@@ -170,7 +159,7 @@ const sendReminder = async (
       body: JSON.stringify({
         from: 'SO Caftan <contact@socaftan.fr>',
         to: [recipient],
-        subject: 'SO Caftan — Votre selection vous attend (-20% pour finaliser 🎁)',
+        subject: 'SO Caftan — Votre selection vous attend 🌸',
         html,
         reply_to: 'contact@socaftan.fr',
       }),

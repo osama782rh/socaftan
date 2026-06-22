@@ -123,10 +123,10 @@ const NewsletterSignup = ({ variant = 'feature', source = 'website' }) => {
       <div className="relative max-w-xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-gold/15 text-brand-gold text-xs font-semibold uppercase tracking-wide mb-4">
           <Gift size={12} />
-          -20% offert
+          Newsletter SO Caftan
         </div>
         <h2 className="font-serif text-2xl md:text-3xl font-bold leading-tight mb-3">
-          Recevez 20% sur votre premiere commande
+          Restez informee de nos nouveautes
         </h2>
         <p className="text-white/65 text-sm md:text-base leading-relaxed mb-6">
           Inscrivez-vous a la newsletter SO Caftan pour decouvrir nos nouveaux modeles, conseils et offres
@@ -149,7 +149,7 @@ const NewsletterSignup = ({ variant = 'feature', source = 'website' }) => {
                 </p>
                 <p className="text-sm text-white/60 mt-1">
                   {status === 'success'
-                    ? 'Nous vous avons envoye un email pour confirmer votre adresse. Cliquez sur le lien pour recevoir votre code -20%.'
+                    ? 'Nous vous avons envoye un email pour confirmer votre adresse. Cliquez sur le lien pour finaliser votre inscription.'
                     : 'Cette adresse est deja dans nos abonnees. Bonjour la fidele !'}
                 </p>
               </div>
@@ -190,7 +190,7 @@ const NewsletterSignup = ({ variant = 'feature', source = 'website' }) => {
                 ) : (
                   <>
                     <Mail size={14} />
-                    Recevoir mon code -20%
+                    Je m'inscris
                   </>
                 )}
               </button>

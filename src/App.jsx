@@ -9,7 +9,6 @@ import SEOManager from './components/SEOManager'
 import ScrollToTop from './components/ScrollToTop'
 import CartDrawer from './components/CartDrawer'
 import WhatsAppFloatingButton from './components/WhatsAppFloatingButton'
-import PromoPopup from './components/PromoPopup'
 import AnalyticsScripts from './components/AnalyticsScripts'
 import CookieConsent, { CookieReopenButton } from './components/CookieConsent'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -118,7 +117,6 @@ function App() {
               </Suspense>
               <Footer />
               <WhatsAppFloatingButton />
-              <PromoPopup />
               <AnalyticsScripts />
               <CookieConsent />
               <CookieReopenButton />

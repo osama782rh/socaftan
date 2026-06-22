@@ -441,7 +441,7 @@ const routeSeoMap = {
   '/quiz': {
     title: 'Quiz – Quelle tenue est faite pour vous ? | SO Caftan',
     description:
-      'Decouvrez en 1 minute la takchita, le karakou ou le caftan ideal pour votre mariage, henna ou ceremonie orientale. Quiz personnalise + code promo -20%.',
+      'Decouvrez en 1 minute la takchita, le karakou ou le caftan ideal pour votre mariage, henna ou ceremonie orientale. Quiz personnalise gratuit.',
     keywords: [
       'quiz caftan',
       'quel caftan choisir',
