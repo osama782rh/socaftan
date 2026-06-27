@@ -9,7 +9,7 @@ const faq = [
   {
     question: 'Quels sont les tarifs de location en Essonne ?',
     answer:
-      'La location de takchita est a 90€ et la location de karakou a 100€, avec une caution de 100€ remboursee apres restitution. La vente de caftan est a 180€.',
+      'La location de takchita est a 90€ et la location de karakou a 100€. La caution (100€ pour les takchitas, 150€ pour les karakous) est remise et restituee en main propre lors du retrait/livraison, elle n\'est pas encaissee via Stripe. La vente de caftan est a 180€.',
   },
   {
     question: 'Livrez-vous dans toute l Essonne ?',

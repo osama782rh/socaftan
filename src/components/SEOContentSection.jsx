@@ -44,7 +44,7 @@ const faq = [
   },
   {
     question: 'Quel est le montant de la caution location ?',
-    answer: 'La caution est de 100€ par piece louee, integralement remboursee sous 3 a 5 jours apres restitution.',
+    answer: 'La caution est remise en main propre lors du retrait/livraison (100€ pour les takchitas/caftans, 150€ pour les karakous) puis restituee de la meme facon apres retour de la piece en bon etat. Elle n\'est jamais encaissee via Stripe.',
   },
   {
     question: 'Combien de temps a l\'avance dois-je reserver ?',

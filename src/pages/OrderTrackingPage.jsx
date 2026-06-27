@@ -290,8 +290,8 @@ const OrderTrackingPage = () => {
                     <span>{formatPrice(order.subtotal)}</span>
                   </div>
                   {order.deposit > 0 && (
-                    <div className="flex justify-between text-brand-ink/65">
-                      <span>Caution</span>
+                    <div className="flex justify-between text-amber-700 text-xs italic">
+                      <span>Caution main propre (non encaissee)</span>
                       <span>{formatPrice(order.deposit)}</span>
                     </div>
                   )}

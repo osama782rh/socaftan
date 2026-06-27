@@ -128,7 +128,8 @@ const RentalDateModal = ({ product, onConfirm, onClose }) => {
                   <p><strong className="text-brand-ink">Retrait :</strong> {formatDateFr(startDate)}</p>
                   <p><strong className="text-brand-ink">Retour :</strong> {formatDateFr(endDate)}</p>
                   <p className="mt-1.5 text-[11px] text-brand-ink/45">
-                    Caution de 100€ restituee si la piece est rendue en bon etat. Livraison ou retrait sur rendez-vous a Tigery (91).
+                    Caution de {String(product?.category || '').toLowerCase().includes('karakou') ? '150€' : '100€'} a
+                    remettre en main propre au retrait/livraison, restituee de la meme facon apres retour de la piece en bon etat.
                   </p>
                 </div>
               </div>

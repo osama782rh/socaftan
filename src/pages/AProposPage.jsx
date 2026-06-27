@@ -88,7 +88,7 @@ const AProposPage = () => {
             </div>
             <h3 className="font-semibold text-brand-ink mb-1">Confiance</h3>
             <p className="text-xs text-brand-ink/55 leading-relaxed">
-              Paiement securise, caution remboursable, service client reactif.
+              Paiement securise, caution en main propre, service client reactif.
             </p>
           </div>
           <div className="bg-white rounded-2xl border border-brand-sand/60 p-5">
@@ -114,7 +114,7 @@ const AProposPage = () => {
             </div>
             <div>
               <p className="text-3xl font-bold text-brand-gold">100€</p>
-              <p className="text-sm text-white/65 mt-1">Caution remboursee apres restitution</p>
+              <p className="text-sm text-white/65 mt-1">Caution main propre (100€ / 150€ karakou)</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-brand-gold">5/5</p>

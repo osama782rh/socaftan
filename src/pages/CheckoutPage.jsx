@@ -12,7 +12,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
 const SHIPPING_FEE = 6.99 // Frais de livraison Ile-de-France
 
 const CheckoutPage = () => {
-  const { items, subtotal, deposit, total, clearCart } = useCart()
+  const { items, subtotal, deposit, hasKarakouDeposit, total, clearCart } = useCart()
   const { user, profile } = useAuth()
   const { notifyError } = useUiFeedback()
   const navigate = useNavigate()
@@ -190,9 +190,9 @@ const CheckoutPage = () => {
           status: 'pending',
           order_type: orderType,
           subtotal,
-          deposit_amount: deposit,
+          deposit_amount: deposit, // informatif uniquement, encaisse en main propre
           shipping_fee: shippingFee,
-          total: finalTotal,
+          total: finalTotal, // = subtotal + shipping (sans la caution)
           delivery_method: deliveryMethod,
           delivery_address: deliveryMethod === 'delivery' ? deliveryInfo.address : '',
           delivery_city: deliveryMethod === 'delivery' ? deliveryInfo.city : '',
@@ -429,12 +429,8 @@ const CheckoutPage = () => {
                     <span className="text-brand-ink/50">Sous-total</span>
                     <span className="text-brand-ink">{subtotal.toFixed(2)}€</span>
                   </div>
-                  {deposit > 0 && (
-                    <div className="flex justify-between text-sm">
-                      <span className="text-brand-ink/50">Caution location (sous reserve de l'etat au retour)</span>
-                      <span className="text-brand-ink">{deposit.toFixed(2)}€</span>
-                    </div>
-                  )}
+                  {/* La caution n'apparait plus dans le total a payer en ligne :
+                      elle est remise EN MAIN PROPRE au retrait/livraison. */}
                   {shippingFee > 0 && (
                     <div className="flex justify-between text-sm">
                       <span className="text-brand-ink/50 flex items-center gap-1.5">
@@ -454,10 +450,32 @@ const CheckoutPage = () => {
                     </div>
                   )}
                   <div className="flex justify-between text-lg font-bold pt-2 border-t border-brand-sand/40">
-                    <span className="text-brand-ink">Total</span>
+                    <span className="text-brand-ink">Total a payer en ligne</span>
                     <span className="text-brand-ink font-serif">{finalTotal.toFixed(2)}€</span>
                   </div>
                 </div>
+
+                {/* Encart caution informative */}
+                {deposit > 0 && (
+                  <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50/70 p-3.5">
+                    <div className="flex items-start gap-2">
+                      <MapPin size={14} className="text-amber-700 mt-0.5 shrink-0" />
+                      <div className="text-xs text-amber-900 leading-relaxed">
+                        <p className="font-semibold">
+                          Caution de {deposit.toFixed(0)}€ a remettre en main propre
+                        </p>
+                        <p className="mt-1 text-amber-900/85">
+                          {hasKarakouDeposit
+                            ? 'Pour le karakou : 150€. Pour les autres tenues : 100€.'
+                            : '100€ par tenue.'}
+                          {' '}Remise en especes ou par cheque lors du retrait/livraison, et restituee
+                          en main propre apres restitution de la piece en bon etat.
+                          <strong className="block mt-1">Elle n'est PAS encaissee via Stripe.</strong>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Carte cadeau */}
                 <div className="mt-5 pt-5 border-t border-brand-sand/40">
@@ -560,8 +578,8 @@ const CheckoutPage = () => {
                   <div className="flex items-start gap-2 text-[11px] text-brand-ink/55">
                     <ArrowLeft size={13} className="text-emerald-600 mt-0.5 shrink-0 rotate-180" />
                     <div>
-                      <p className="font-semibold text-brand-ink">Caution remboursée</p>
-                      <p className="text-brand-ink/50">Sous 3 à 5 jours</p>
+                      <p className="font-semibold text-brand-ink">Caution en main propre</p>
+                      <p className="text-brand-ink/50">Non encaissée via Stripe</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-2 text-[11px] text-brand-ink/55">

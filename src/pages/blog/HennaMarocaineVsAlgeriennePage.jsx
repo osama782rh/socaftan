@@ -95,8 +95,8 @@ const HennaMarocaineVsAlgeriennePage = () => {
         En Ile-de-France, comptez :
       </p>
       <ul>
-        <li><strong>Takchita</strong> : a partir de <strong>90€</strong> + 100€ de caution remboursable</li>
-        <li><strong>Karakou</strong> : a partir de <strong>100€</strong> + 100€ de caution remboursable</li>
+        <li><strong>Takchita</strong> : a partir de <strong>90€</strong> + 100€ de caution remise et restituee en main propre</li>
+        <li><strong>Karakou</strong> : a partir de <strong>100€</strong> + 150€ de caution remise et restituee en main propre</li>
         <li><strong>Pack 2 tenues</strong> (henna + mariage) : nous contacter pour une offre personnalisee</li>
       </ul>
 

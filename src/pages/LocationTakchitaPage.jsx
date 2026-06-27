@@ -3,7 +3,7 @@ import ServiceLandingPage from '../components/ServiceLandingPage'
 const faq = [
   {
     question: 'Quel est le prix de location d une takchita ?',
-    answer: 'Le tarif est de 90€ par piece, avec une caution de 100€ appliquee a la location.',
+    answer: 'Le tarif est de 90€ par piece. Une caution de 100€ est remise en main propre lors du retrait/livraison, puis restituee de la meme facon apres retour de la piece en bon etat. La caution n\'est PAS encaissee via Stripe.',
   },
   {
     question: 'Quels delais pour reserver une takchita ?',
@@ -12,7 +12,7 @@ const faq = [
   {
     question: 'La caution est-elle rendue ?',
     answer:
-      "Oui, la caution est rendue apres verification de la piece. Si la piece n est pas restituee dans l etat fourni, la caution peut etre retenue.",
+      "Oui, la caution est rendue en main propre apres verification de la piece. Si la piece n est pas restituee dans l etat fourni, la caution peut etre retenue (totalement ou partiellement selon les dommages).",
   },
 ]
 
@@ -23,7 +23,7 @@ const LocationTakchitaPage = () => {
       title="Location takchita en Ile-de-France"
       subtitle="SO Caftan vous propose des takchitas soigneusement selectionnees pour vos mariages, fiancailles et grandes occasions."
       price="90€"
-      details={['Caution: 100€', 'Duree: 3 a 5 jours', 'Retrait sur rendez-vous']}
+      details={['Caution: 100€ en main propre', 'Duree: 3 a 5 jours', 'Retrait sur rendez-vous']}
       benefits={[
         'Pieces elegantes pour ceremonies et soirees',
         'Accompagnement personnalise pour le choix du modele',

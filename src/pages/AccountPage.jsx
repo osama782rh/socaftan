@@ -13,6 +13,7 @@ import { supabase } from '../lib/supabase'
 import { useUiFeedback } from '../contexts/UiFeedbackContext'
 import LoyaltyProgressCard from '../components/LoyaltyProgressCard'
 import WishlistShareCard from '../components/WishlistShareCard'
+import OrderTrackingTimeline from '../components/OrderTrackingTimeline'
 
 const statusLabels = {
   pending: { label: 'En attente', color: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-400' },
@@ -582,7 +583,7 @@ const AccountPage = () => {
                                       <div className="text-[11px] text-brand-ink/35">
                                         {order.delivery_method === 'delivery' ? 'Livraison' : 'Retrait en boutique'}
                                         {order.deposit_amount > 0 && (
-                                          <span className="ml-3">· Caution : {order.deposit_amount?.toFixed(2)}€</span>
+                                          <span className="ml-3">· Caution {order.deposit_amount?.toFixed(0)}€ (main propre)</span>
                                         )}
                                       </div>
                                       <p className="text-base font-bold text-brand-ink font-serif">Total : {order.total?.toFixed(2)}€</p>

@@ -3,7 +3,7 @@ import ServiceLandingPage from '../components/ServiceLandingPage'
 const faq = [
   {
     question: 'Quel est le prix de location d un karakou ?',
-    answer: 'Le tarif est de 100€ par karakou, avec une caution de 100€ par piece.',
+    answer: 'Le tarif est de 100€ par karakou. Une caution de 150€ est remise en main propre lors du retrait/livraison (montant plus eleve que pour une takchita car les karakous sont des pieces premium avec broderies fetla), puis restituee de la meme facon apres retour de la piece en bon etat. La caution n\'est PAS encaissee via Stripe.',
   },
   {
     question: 'Ou se fait le retrait du karakou ?',
@@ -22,7 +22,7 @@ const LocationKarakouPage = () => {
       title="Location karakou en Ile-de-France"
       subtitle="SO Caftan propose des karakous pour vos evenements avec un accompagnement complet de la reservation jusqu au retour."
       price="100€"
-      details={['Caution: 100€', 'Duree: 3 a 5 jours', 'Retrait sur rendez-vous']}
+      details={['Caution: 150€ en main propre', 'Duree: 3 a 5 jours', 'Retrait sur rendez-vous']}
       benefits={[
         'Selection de karakous elegants et modernes',
         'Conseil personnalise selon votre evenement',

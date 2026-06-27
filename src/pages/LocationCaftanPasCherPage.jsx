@@ -14,7 +14,7 @@ const faq = [
   {
     question: 'Y a-t-il des frais caches en plus du prix de location ?',
     answer:
-      'Non, le tarif de location est fixe : 90€ pour une takchita, 100€ pour un karakou. Seule une caution de 100€ est demandee et integralement remboursee apres restitution de la piece en bon etat.',
+      'Non, le tarif de location est fixe : 90€ pour une takchita, 100€ pour un karakou. Une caution est demandee en main propre (100€ pour une takchita, 150€ pour un karakou), restituee en main propre apres retour de la piece en bon etat. La caution n\'est pas encaissee via Stripe.',
   },
   {
     question: 'Proposez-vous des reductions ou des codes promo ?',
@@ -39,7 +39,7 @@ const LocationCaftanPasCherPage = () => {
       benefits={[
         'Les tarifs les plus competitifs en Ile-de-France',
         'Qualite premium a prix accessible grace a la location',
-        'Caution 100% remboursable apres restitution',
+        'Caution en main propre, restituee de la meme facon',
         'Pas de frais caches : prix fixe, sans surprise',
       ]}
       process={[

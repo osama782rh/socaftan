@@ -102,7 +102,7 @@ const ChoisirTakchitaMariageMarocainPage = () => {
         La location est la solution choisie par la majorite des mariees aujourd'hui : elle permet d'avoir
         plusieurs tenues (henna + mariage) sans se ruiner. Chez{' '}
         <Link to="/location-takchita-ile-de-france">SO Caftan</Link>, nos takchitas sont disponibles a 90€,
-        avec caution de 100€ remboursee apres restitution.
+        avec caution de 100€ remise et restituee en main propre.
       </p>
 
       <h2>8. Quand reserver sa takchita ?</h2>

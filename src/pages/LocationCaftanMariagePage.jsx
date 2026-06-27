@@ -22,9 +22,9 @@ const faq = [
       'Oui, nous proposons la livraison en Ile-de-France (departements 91, 92, 93, 94 et Paris). Le retrait sur rendez-vous est egalement possible a Tigery (91250).',
   },
   {
-    question: 'La caution est-elle remboursee apres le mariage ?',
+    question: 'La caution est-elle restituee apres le mariage ?',
     answer:
-      'Oui, la caution de 100€ est integralement remboursee apres verification de l etat de la tenue. La restitution se fait sous 3 a 5 jours apres votre evenement.',
+      'Oui, la caution est integralement restituee en main propre apres verification de l\'etat de la tenue (100€ pour les takchitas/caftans, 150€ pour les karakous). Elle n\'est jamais encaissee via Stripe : vous la remettez en especes ou par cheque au retrait/livraison.',
   },
 ]
 
@@ -35,7 +35,7 @@ const LocationCaftanMariagePage = () => {
       title="Location de caftan pour votre mariage oriental"
       subtitle="Sublimez votre mariage marocain, algerien ou tunisien avec une tenue orientale d exception. SO Caftan vous accompagne pour trouver la robe parfaite pour le plus beau jour de votre vie."
       price="des 90€"
-      details={['Takchita 90€ · Karakou 100€ · Caftan 180€', 'Caution: 100€ (remboursee)', 'Livraison Ile-de-France disponible']}
+      details={['Takchita 90€ · Karakou 100€ · Caftan 180€', 'Caution main propre 100-150€', 'Livraison Ile-de-France disponible']}
       benefits={[
         'Collection selectionnee pour mariages et ceremonies orientales',
         'Tenues disponibles pour la mariee, les soeurs et les invitees',

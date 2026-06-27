@@ -58,8 +58,11 @@ const CoutLocationCaftanIDFPage = () => {
         En Ile-de-France, elle se situe generalement entre <strong>100€ et 300€</strong>.
       </p>
       <p>
-        Chez SO Caftan, la caution est de <strong>100€ par piece</strong>, integralement remboursee sous
-        <strong> 3 a 5 jours</strong> apres restitution dans l'etat fourni. Aucun frais cache.
+        Chez SO Caftan, la caution est <strong>remise en main propre</strong> au retrait/livraison :
+        <strong> 100€ pour une takchita ou un caftan</strong>, <strong>150€ pour un karakou</strong>
+        (piece premium avec broderies). Elle est restituee de la meme facon en main propre
+        apres retour de la tenue en bon etat, et n'est <strong>jamais encaissee via Stripe</strong>.
+        Aucun frais cache.
       </p>
       <blockquote>
         Vigilance : certains prestataires retiennent la caution sous pretexte de "frais de nettoyage".
@@ -115,7 +118,7 @@ const CoutLocationCaftanIDFPage = () => {
       <ol>
         <li><strong>Quelle est la duree de location incluse ?</strong> (idealement 3 a 5 jours)</li>
         <li><strong>Le nettoyage est-il inclus ?</strong> Sinon, prevoir +30€</li>
-        <li><strong>La caution est-elle integralement remboursee ?</strong> Lisez les CGV</li>
+        <li><strong>La caution est-elle integralement restituee ?</strong> Lisez les CGV (chez SO Caftan : restitution en main propre apres retour de la piece en bon etat)</li>
         <li><strong>Y a-t-il une assurance casse / tache ?</strong> Souvent en option a 10-20€</li>
         <li><strong>Que se passe-t-il si la tenue ne me va pas ?</strong> Prevoyez un essayage avant le jour J</li>
       </ol>

@@ -6,8 +6,21 @@ import { useAuth } from './AuthContext'
 const CartContext = createContext(null)
 
 const CART_STORAGE_KEY = 'socaftan_cart'
-const RENTAL_DEPOSIT = 100
 const CART_SYNC_DEBOUNCE_MS = 1500
+
+/**
+ * Caution remise EN MAIN PROPRE lors du retrait/livraison (NON encaissee via Stripe).
+ *  - Karakou : 150€ (piece premium)
+ *  - Takchita / Caftan / autres : 100€
+ */
+const KARAKOU_DEPOSIT = 150
+const STANDARD_DEPOSIT = 100
+
+export const getDepositForItem = (item) => {
+  if (!item || item.type !== 'location') return 0
+  const cat = String(item.category || '').toLowerCase()
+  return cat.includes('karakou') ? KARAKOU_DEPOSIT : STANDARD_DEPOSIT
+}
 
 export const useCart = () => {
   const ctx = useContext(CartContext)
@@ -98,10 +111,7 @@ export const CartProvider = ({ children }) => {
     syncTimerRef.current = setTimeout(async () => {
       try {
         const subtotalLocal = items.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0)
-        const depositLocal = items
-          .filter((i) => i.type === 'location')
-          .reduce((sum, i) => sum + RENTAL_DEPOSIT * i.quantity, 0)
-        const totalLocal = subtotalLocal + depositLocal
+        // La caution est remise EN MAIN PROPRE, elle n'entre pas dans le total a payer.
 
         await supabase
           .from('user_carts')
@@ -109,7 +119,7 @@ export const CartProvider = ({ children }) => {
             user_id: user.id,
             items,
             subtotal: subtotalLocal,
-            total: totalLocal,
+            total: subtotalLocal,
           }, { onConflict: 'user_id' })
       } catch (err) {
         console.warn('[cart] Sync error:', err)
@@ -203,11 +213,14 @@ export const CartProvider = ({ children }) => {
 
   const subtotal = items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0)
 
-  const deposit = items
-    .filter(item => item.type === 'location')
-    .reduce((sum, item) => sum + RENTAL_DEPOSIT * item.quantity, 0)
+  // Caution informationnelle (remise en main propre, NON encaissee)
+  const deposit = items.reduce((sum, item) => sum + getDepositForItem(item) * item.quantity, 0)
+  const hasKarakouDeposit = items.some(
+    (item) => item.type === 'location' && String(item.category || '').toLowerCase().includes('karakou'),
+  )
 
-  const total = subtotal + deposit
+  // Total a payer en ligne : SANS la caution
+  const total = subtotal
 
   return (
     <CartContext.Provider value={{
@@ -215,6 +228,7 @@ export const CartProvider = ({ children }) => {
       itemCount,
       subtotal,
       deposit,
+      hasKarakouDeposit,
       total,
       isCartOpen,
       setIsCartOpen,

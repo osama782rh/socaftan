@@ -180,23 +180,9 @@ serve(async (req) => {
       })
     }
 
-    // Add deposit as separate line item if rental
-    const depositAmount = Number(order.deposit_amount || 0)
-    if (Number.isFinite(depositAmount) && depositAmount > 0) {
-      const depositCents = Math.round(depositAmount * 100)
-      if (depositCents < 50) {
-        throw new Error('Montant de caution invalide pour Stripe.')
-      }
-
-      lineItems.push({
-        price_data: {
-          currency: 'eur',
-          product_data: { name: 'Caution location (validee selon etat au retour)' },
-          unit_amount: depositCents,
-        },
-        quantity: 1,
-      })
-    }
+    // La caution n'est PLUS encaissee via Stripe : elle est remise en main propre
+    // au retrait/livraison et restituee de la meme facon (cf. CheckoutPage.jsx).
+    // Le champ orders.deposit_amount reste rempli pour info dans le back-office.
 
     // Add shipping fee as separate line item if delivery
     const shippingFee = Number(order.shipping_fee || 0)

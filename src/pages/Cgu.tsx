@@ -77,8 +77,12 @@ const CGU = () => {
               </p>
               <p>Le paiement en ligne est securise via Stripe.</p>
               <p>
-                Pour les locations, une caution de 100€ est appliquee. Si la piece n'est pas rendue dans l'etat fourni
-                (tache qui ne part pas, defaut, deterioration), la caution ne sera pas rendue.
+                Pour les locations, une caution est demandee en main propre lors du retrait ou de la livraison :
+                100€ pour les takchitas et caftans, 150€ pour les karakous (pieces premium).
+                Cette caution n'est jamais encaissee via Stripe ; elle est remise en especes ou par cheque
+                et restituee de la meme facon en main propre apres retour de la piece en bon etat.
+                Si la piece n'est pas rendue dans l'etat fourni (tache qui ne part pas, defaut, deterioration),
+                la caution pourra etre retenue totalement ou partiellement selon les dommages.
               </p>
             </div>
           </section>

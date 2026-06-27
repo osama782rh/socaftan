@@ -65,7 +65,11 @@ const CGV = () => {
                 precisees par SO Caftan.
               </p>
               <p>
-                Pour toute location, une <strong>caution de 100€ par piece</strong> est ajoutee a la commande.
+                Pour toute location, une <strong>caution est demandee en main propre</strong> lors du retrait
+                ou de la livraison : <strong>100€ pour une takchita ou un caftan</strong>,
+                <strong> 150€ pour un karakou</strong>. Cette caution n'est <strong>pas encaissee via Stripe</strong> :
+                elle est remise en especes ou par cheque, et restituee de la meme facon en main propre
+                apres retour de la piece en bon etat.
               </p>
             </div>
           </section>

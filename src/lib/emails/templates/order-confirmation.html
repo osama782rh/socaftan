@@ -56,9 +56,9 @@
         <span style="color:#2b201a;font-size:14px;font-weight:600;">{{subtotal}}</span>
       </div>
       {{#if deposit}}
-      <div style="display:flex;justify-content:space-between;padding:6px 0;">
-        <span style="color:#2b201a99;font-size:14px;">Caution location (sous reserve de l'etat au retour)</span>
-        <span style="color:#2b201a;font-size:14px;font-weight:600;">{{deposit}}</span>
+      <div style="padding:8px 12px;margin:6px 0;background-color:#fef3c7;border-radius:6px;font-size:12px;color:#78350f;line-height:1.5;">
+        ⚠️ Caution de <strong>{{deposit}}</strong> a remettre <strong>en main propre</strong> au retrait/livraison.
+        Elle n'est PAS encaissee via Stripe. Restituee de la meme facon apres retour de la piece en bon etat.
       </div>
       {{/if}}
       <div style="display:flex;justify-content:space-between;padding:12px 0 0;border-top:2px solid #2b201a;">

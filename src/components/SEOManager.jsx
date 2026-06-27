@@ -60,7 +60,7 @@ const buildBlogPostSeo = (slug, breadcrumbLabel) => {
 const homeFaqs = [
   {
     question: 'Quels sont les tarifs des locations SO Caftan ?',
-    answer: 'Les takchitas sont en location a 90€, les karakous a 100€, avec une caution de 100€ par piece. Les caftans sont disponibles a l\'achat a 180€.',
+    answer: 'Les takchitas sont en location a 90€, les karakous a 100€. Une caution est demandee en main propre (100€ pour les takchitas/caftans, 150€ pour les karakous), restituee en main propre apres retour de la piece en bon etat. Les caftans sont disponibles a l\'achat a 180€.',
   },
   {
     question: 'Quel est le prix de vente des caftans ?',
@@ -75,8 +75,8 @@ const homeFaqs = [
     answer: "Nous recommandons de reserver 3 a 4 semaines avant votre evenement, surtout en haute saison (mai a septembre). Pour les mariages, plus c'est tot, mieux c'est.",
   },
   {
-    question: 'La caution est-elle vraiment remboursee ?',
-    answer: 'Oui, la caution de 100€ est integralement remboursee apres restitution de la piece en bon etat, sous 3 a 5 jours. Aucun frais cache.',
+    question: 'La caution est-elle vraiment restituee ?',
+    answer: 'Oui, la caution est integralement restituee en main propre apres retour de la piece en bon etat (100€ pour les takchitas/caftans, 150€ pour les karakous). Elle est remise lors du retrait/livraison en especes ou par cheque, et n\'est jamais encaissee via Stripe. Aucun frais cache.',
   },
   {
     question: 'Et si la robe ne me va pas le jour de l\'essayage ?',

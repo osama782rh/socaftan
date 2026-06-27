@@ -35,7 +35,7 @@ const LocationTenueHennaPage = () => {
       title="Location de tenue pour votre soiree henna"
       subtitle="La henna est un moment sacre de votre celebration. SO Caftan vous propose des takchitas et karakous pour sublimer votre nuit du henne, que ce soit pour une tradition marocaine ou algerienne."
       price="des 90€"
-      details={['Takchita henna: 90€', 'Karakou henna: 100€', 'Caution remboursable: 100€']}
+      details={['Takchita henna: 90€', 'Karakou henna: 100€', 'Caution main propre 100-150€']}
       benefits={[
         'Takchitas pour henna marocaine et karakous pour henna algerienne',
         'Possibilite de louer 2 tenues (henna + mariage)',
